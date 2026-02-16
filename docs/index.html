@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Coding Agents: Industry Adoption Analysis</title>
+    <meta name="description" content="Research analysis tracking industry adoption of AI coding assistants (Claude Code, GitHub Copilot, OpenAI Codex) across 880,000+ GitHub repositories.">
+    <meta property="og:title" content="AI Coding Agents: Industry Adoption Analysis">
+    <meta property="og:description" content="Tracking how industries adopt AI-powered coding assistants across 880,000+ repositories">
+    <meta property="og:type" content="website">
+    <link href="https://fonts.googleapis.com/css2?family=Mona+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-tertiary: #21262d;
+            --border-default: #30363d;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --text-muted: #6e7681;
+            --accent-purple: #a371f7;
+            --accent-blue: #58a6ff;
+            --accent-green: #3fb950;
+            --accent-pink: #db61a2;
+            --accent-orange: #f78166;
+            --gradient-purple: linear-gradient(135deg, #6e40c9 0%, #a371f7 100%);
+            --gradient-blue: linear-gradient(135deg, #0969da 0%, #58a6ff 100%);
+            --gradient-green: linear-gradient(135deg, #238636 0%, #3fb950 100%);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Mona Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(13, 17, 23, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-default);
+            z-index: 100;
+            padding: 16px 24px;
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover { color: var(--text-primary); }
+        .nav-links a.active { color: var(--accent-purple); }
+
+        /* Hero */
+        .hero {
+            padding: 140px 24px 80px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 500px;
+            background: radial-gradient(ellipse at 50% 0%, rgba(110, 64, 201, 0.15) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-default);
+            border-radius: 100px;
+            padding: 8px 20px;
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+
+        .hero-badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-green);
+            border-radius: 50%;
+        }
+
+        h1 {
+            font-size: clamp(40px, 6vw, 72px);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            margin-bottom: 24px;
+        }
+
+        .gradient-text {
+            background: var(--gradient-purple);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 20px;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 48px;
+            line-height: 1.6;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            flex-wrap: wrap;
+        }
+
+        .hero-stat {
+            text-align: center;
+        }
+
+        .hero-stat-value {
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--accent-purple);
+        }
+
+        .hero-stat-label {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Section */
+        .section {
+            padding: 80px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .section-subtitle {
+            font-size: 16px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Agent Cards */
+        .agent-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+        }
+
+        .agent-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-default);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: transform 0.2s, border-color 0.2s;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .agent-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-purple);
+        }
+
+        .agent-card-header {
+            padding: 32px;
+            border-bottom: 1px solid var(--border-default);
+        }
+
+        .agent-card-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .agent-card.claude .agent-card-badge { background: var(--gradient-purple); }
+        .agent-card.copilot .agent-card-badge { background: var(--gradient-blue); }
+        .agent-card.codex .agent-card-badge { background: var(--gradient-green); }
+
+        .agent-card-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .agent-card-company {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .agent-card-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            padding: 24px 32px;
+        }
+
+        .agent-stat {
+            text-align: center;
+        }
+
+        .agent-stat-value {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .agent-card.claude .agent-stat-value { color: var(--accent-purple); }
+        .agent-card.copilot .agent-stat-value { color: var(--accent-blue); }
+        .agent-card.codex .agent-stat-value { color: var(--accent-green); }
+
+        .agent-stat-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .agent-card-footer {
+            padding: 16px 32px;
+            background: var(--bg-tertiary);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .agent-card-cta {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .agent-card-arrow {
+            color: var(--text-muted);
+        }
+
+        /* Comparison Chart */
+        .comparison-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-default);
+            border-radius: 16px;
+            padding: 32px;
+            margin-top: 48px;
+        }
+
+        .comparison-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .comparison-title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+        }
+
+        /* Info Cards Grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-top: 48px;
+        }
+
+        .info-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-default);
+            border-radius: 16px;
+            padding: 32px;
+            text-decoration: none;
+            color: inherit;
+            transition: border-color 0.2s;
+        }
+
+        .info-card:hover {
+            border-color: var(--accent-purple);
+        }
+
+        .info-card-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .info-card-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .info-card-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Key Findings */
+        .findings-list {
+            display: grid;
+            gap: 16px;
+        }
+
+        .finding-item {
+            display: flex;
+            gap: 16px;
+            padding: 20px 24px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-default);
+            border-radius: 12px;
+        }
+
+        .finding-number {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--accent-purple);
+            min-width: 40px;
+        }
+
+        .finding-content h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .finding-content p {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border-default);
+            padding: 48px 24px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        footer a {
+            color: var(--accent-purple);
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hero-stats { gap: 24px; }
+            .hero-stat-value { font-size: 36px; }
+            .agent-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">AI Agents Analysis</a>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">Overview</a></li>
+                <li><a href="claude.html">Claude</a></li>
+                <li><a href="copilot.html">Copilot</a></li>
+                <li><a href="codex.html">Codex</a></li>
+                <li><a href="methodology.html">Methodology</a></li>
+                <li><a href="industries.html">Industries</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-badge">
+            <span class="hero-badge-dot"></span>
+            Research Data • Jan 2025 - Feb 2026
+        </div>
+        <h1>
+            <span class="gradient-text">AI Coding Agents</span><br>
+            Industry Adoption Analysis
+        </h1>
+        <p class="hero-subtitle">
+            Comprehensive research tracking how different industries adopt AI-powered coding
+            assistants across 880,000+ public GitHub repositories, classified by NAICS industry codes.
+        </p>
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <div class="hero-stat-value">886K+</div>
+                <div class="hero-stat-label">Repositories Analyzed</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-value">19</div>
+                <div class="hero-stat-label">Industries Tracked</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-value">3</div>
+                <div class="hero-stat-label">AI Agents Compared</div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">Explore by Agent</h2>
+                <p class="section-subtitle">
+                    Deep-dive into adoption patterns for each AI coding assistant
+                </p>
+            </div>
+
+            <div class="agent-grid">
+                <a href="claude.html" class="agent-card claude">
+                    <div class="agent-card-header">
+                        <div class="agent-card-badge">CLAUDE CODE</div>
+                        <h3 class="agent-card-title">Claude Code</h3>
+                        <p class="agent-card-company">by Anthropic</p>
+                    </div>
+                    <div class="agent-card-stats">
+                        <div class="agent-stat">
+                            <div class="agent-stat-value">391K</div>
+                            <div class="agent-stat-label">Repositories</div>
+                        </div>
+                        <div class="agent-stat">
+                            <div class="agent-stat-value">28%</div>
+                            <div class="agent-stat-label">Prof. Services</div>
+                        </div>
+                        <div class="agent-stat">
+                            <div class="agent-stat-value">13</div>
+                            <div class="agent-stat-label">Months Data</div>
+                        </div>
+                        <div class="agent-stat">
+                            <div class="agent-stat-value">#1</div>
+                            <div class="agent-stat-label">Growth Rate</div>
+                        </div>
+                    </div>
+                    <div class="agent-card-footer">
+                        <span class="agent-card-cta">View detailed analysis</span>
+                        <span class="agent-card-arrow">→</span>
+                    </div>
+                </a>
+
+                <a href="copilot.html" class="agent-card copilot">
+                    <div class="agent-card-header">
+                        <div class="agent-card-badge">GITHUB COPILOT</div>
+                        <h3 class="agent-card-title">GitHub Copilot</h3>
+                        <p class="agent-card-company">by GitHub / Microsoft</p>
+                    </div>
+                    <div class="agent-card-stats">
+                        <div class="agent-stat">
+                            <div class="agent-stat-value">247K</div>
+                            <div class="agent-stat-label">Repositories</div>
+                        </div>
+                        <div class="agent-stat">
+                            <div class="agent-stat-value">25%</div>
+                            <div class="agent-stat-label">Prof. Services</div>
+                        </div>
+                        <div class="agent-stat">
+                            <div class="agent-stat-value">14</div>
+                            <div class="agent-stat-label">Months Data</div>
+                        </div>
+                        <div class="agent-stat">
+                            <div class="agent-stat-value">#2</div>
+                            <div class="agent-stat-label">Growth Rate</div>
+                        </div>
+                    </div>
+                    <div class="agent-card-footer">
+                        <span class="agent-card-cta">View detailed analysis</span>
+                        <span class="agent-card-arrow">→</span>
+                    </div>
+                </a>
+
+                <a href="codex.html" class="agent-card codex">
+                    <div class="agent-card-header">
+                        <div class="agent-card-badge">OPENAI CODEX</div>
+                        <h3 class="agent-card-title">OpenAI Codex</h3>
+                        <p class="agent-card-company">by OpenAI</p>
+                    </div>
+                    <div class="agent-card-stats">
+                        <div class="agent-stat">
+                            <div class="agent-stat-value">249K</div>
+                            <div class="agent-stat-label">Repositories</div>
+                        </div>
+                        <div class="agent-stat">
+                            <div class="agent-stat-value">22%</div>
+                            <div class="agent-stat-label">Prof. Services</div>
+                        </div>
+                        <div class="agent-stat">
+                            <div class="agent-stat-value">14</div>
+                            <div class="agent-stat-label">Months Data</div>
+                        </div>
+                        <div class="agent-stat">
+                            <div class="agent-stat-value">#3</div>
+                            <div class="agent-stat-label">Growth Rate</div>
+                        </div>
+                    </div>
+                    <div class="agent-card-footer">
+                        <span class="agent-card-cta">View detailed analysis</span>
+                        <span class="agent-card-arrow">→</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Comparison Chart -->
+            <div class="comparison-section">
+                <div class="comparison-header">
+                    <h3 class="comparison-title">Cumulative Adoption Comparison</h3>
+                </div>
+                <div class="chart-container">
+                    <canvas id="comparison-chart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">Key Findings</h2>
+                <p class="section-subtitle">
+                    Insights from analyzing industry adoption patterns
+                </p>
+            </div>
+
+            <div class="findings-list">
+                <div class="finding-item">
+                    <div class="finding-number">01</div>
+                    <div class="finding-content">
+                        <h4>Professional Services Dominates</h4>
+                        <p>NAICS sector 54 (Professional, Scientific, and Technical Services) leads adoption across all three agents, representing 22-28% of repositories. This is expected as software development is a core activity in this sector.</p>
+                    </div>
+                </div>
+                <div class="finding-item">
+                    <div class="finding-number">02</div>
+                    <div class="finding-content">
+                        <h4>Information Sector Strong Second</h4>
+                        <p>NAICS sector 51 (Information) consistently ranks second across all agents, representing tech companies, publishers, and data processing organizations heavily invested in software development.</p>
+                    </div>
+                </div>
+                <div class="finding-item">
+                    <div class="finding-number">03</div>
+                    <div class="finding-content">
+                        <h4>Claude Code Shows Fastest Growth</h4>
+                        <p>Claude Code demonstrates the steepest adoption curve, particularly in late 2025, with January 2026 alone seeing 111,000+ new repositories—more than double Copilot's and Codex's monthly growth.</p>
+                    </div>
+                </div>
+                <div class="finding-item">
+                    <div class="finding-number">04</div>
+                    <div class="finding-content">
+                        <h4>Finance and Healthcare Accelerating</h4>
+                        <p>Sectors 52 (Finance) and 62 (Healthcare) show accelerating adoption rates, suggesting growing trust in AI coding tools for regulated industries.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">Documentation</h2>
+                <p class="section-subtitle">
+                    Learn about our data collection and analysis methods
+                </p>
+            </div>
+
+            <div class="info-grid">
+                <a href="methodology.html" class="info-card">
+                    <div class="info-card-icon">📊</div>
+                    <h3 class="info-card-title">Methodology</h3>
+                    <p class="info-card-desc">
+                        Detailed documentation of our data collection process, classification model,
+                        confidence calibration, and analysis pipeline.
+                    </p>
+                </a>
+                <a href="industries.html" class="info-card">
+                    <div class="info-card-icon">🏭</div>
+                    <h3 class="info-card-title">Industry Reference</h3>
+                    <p class="info-card-desc">
+                        Complete NAICS industry code reference with descriptions, examples,
+                        and explanation of excluded sectors.
+                    </p>
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>
+            Data represents public GitHub repositories • NAICS Industry Classification<br>
+            <a href="https://github.com">View on GitHub</a>
+        </p>
+    </footer>
+
+    <script>
+        // Load all agent data and create comparison chart
+        Promise.all([
+            fetch('claude_cumulative.json').then(r => r.json()),
+            fetch('copilot_cumulative.json').then(r => r.json()),
+            fetch('codex_cumulative.json').then(r => r.json())
+        ]).then(([claude, copilot, codex]) => {
+            createComparisonChart(claude, copilot, codex);
+        });
+
+        function formatNumber(num) {
+            if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+            if (num >= 1000) return (num / 1000).toFixed(0) + 'K';
+            return num.toLocaleString();
+        }
+
+        function createComparisonChart(claude, copilot, codex) {
+            const ctx = document.getElementById('comparison-chart').getContext('2d');
+
+            // Calculate totals per month
+            const claudeTotals = claude.months.map((_, i) =>
+                claude.industries.reduce((sum, ind) => sum + ind.values[i], 0)
+            );
+            const copilotTotals = copilot.months.map((_, i) =>
+                copilot.industries.reduce((sum, ind) => sum + ind.values[i], 0)
+            );
+            const codexTotals = codex.months.map((_, i) =>
+                codex.industries.reduce((sum, ind) => sum + ind.values[i], 0)
+            );
+
+            // Use the longest month array for labels
+            const allMonths = [...new Set([...claude.months, ...copilot.months, ...codex.months])].sort();
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: allMonths.map(m => {
+                        const [year, month] = m.split('-');
+                        const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                        return `${monthNames[parseInt(month) - 1]} ${year}`;
+                    }),
+                    datasets: [
+                        {
+                            label: 'Claude Code',
+                            data: allMonths.map(m => {
+                                const idx = claude.months.indexOf(m);
+                                return idx >= 0 ? claudeTotals[idx] : null;
+                            }),
+                            borderColor: '#a371f7',
+                            backgroundColor: '#a371f720',
+                            borderWidth: 3,
+                            pointRadius: 5,
+                            pointHoverRadius: 8,
+                            tension: 0.3
+                        },
+                        {
+                            label: 'GitHub Copilot',
+                            data: allMonths.map(m => {
+                                const idx = copilot.months.indexOf(m);
+                                return idx >= 0 ? copilotTotals[idx] : null;
+                            }),
+                            borderColor: '#58a6ff',
+                            backgroundColor: '#58a6ff20',
+                            borderWidth: 3,
+                            pointRadius: 5,
+                            pointHoverRadius: 8,
+                            tension: 0.3
+                        },
+                        {
+                            label: 'OpenAI Codex',
+                            data: allMonths.map(m => {
+                                const idx = codex.months.indexOf(m);
+                                return idx >= 0 ? codexTotals[idx] : null;
+                            }),
+                            borderColor: '#3fb950',
+                            backgroundColor: '#3fb95020',
+                            borderWidth: 3,
+                            pointRadius: 5,
+                            pointHoverRadius: 8,
+                            tension: 0.3
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: {
+                                color: '#8b949e',
+                                usePointStyle: true,
+                                padding: 20
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(22, 27, 34, 0.95)',
+                            titleColor: '#e6edf3',
+                            bodyColor: '#8b949e',
+                            borderColor: '#30363d',
+                            borderWidth: 1,
+                            padding: 12,
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${formatNumber(context.parsed.y)} repos`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: '#21262d' },
+                            ticks: { color: '#8b949e' }
+                        },
+                        y: {
+                            grid: { color: '#21262d' },
+                            ticks: {
+                                color: '#8b949e',
+                                callback: function(value) { return formatNumber(value); }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>

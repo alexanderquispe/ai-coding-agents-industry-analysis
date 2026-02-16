@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude Code Industry Adoption | 2025</title>
+    <link href="https://fonts.googleapis.com/css2?family=Mona+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            /* GitHub Octoverse-inspired colors */
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-tertiary: #21262d;
+            --border-default: #30363d;
+            --border-muted: #21262d;
+
+            /* Accent colors */
+            --accent-purple: #a371f7;
+            --accent-pink: #db61a2;
+            --accent-blue: #58a6ff;
+            --accent-teal: #3fb950;
+            --accent-orange: #d29922;
+            --accent-coral: #f78166;
+
+            /* Text colors */
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --text-muted: #6e7681;
+
+            /* Gradients */
+            --gradient-purple: linear-gradient(135deg, #6e40c9 0%, #a371f7 50%, #db61a2 100%);
+            --gradient-hero: linear-gradient(180deg, rgba(110, 64, 201, 0.15) 0%, transparent 50%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Mona Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            background: var(--bg-primary);
+            min-height: 100vh;
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        /* Hero gradient overlay */
+        .hero-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 600px;
+            background: var(--gradient-hero);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Animated background orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.3;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: #6e40c9;
+            top: -200px;
+            right: -100px;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            background: #db61a2;
+            bottom: -100px;
+            left: -100px;
+            animation: float 25s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30px, -30px); }
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 48px 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-default);
+            border-radius: 100px;
+            padding: 6px 16px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-teal);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        h1 {
+            font-size: clamp(32px, 5vw, 56px);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+
+        h1 .gradient-text {
+            background: var(--gradient-purple);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 48px 0;
+        }
+
+        .stat-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-default);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            transition: border-color 0.2s, transform 0.2s;
+        }
+
+        .stat-card:hover {
+            border-color: var(--border-muted);
+            transform: translateY(-2px);
+        }
+
+        .stat-value {
+            font-size: 48px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .stat-value.purple { color: var(--accent-purple); }
+        .stat-value.pink { color: var(--accent-pink); }
+        .stat-value.blue { color: var(--accent-blue); }
+        .stat-value.teal { color: var(--accent-teal); }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Main Chart Area */
+        .chart-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-default);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 32px;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 32px;
+            border-bottom: 1px solid var(--border-default);
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .chart-title {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .chart-title-text {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .month-badge {
+            background: var(--gradient-purple);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .chart-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: inherit;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--gradient-purple);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-default);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border-default);
+        }
+
+        .speed-select {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-default);
+            color: var(--text-primary);
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        /* Bar Chart */
+        .chart-body {
+            padding: 32px;
+        }
+
+        .bar-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .bar-item {
+            display: grid;
+            grid-template-columns: 40px 200px 1fr 100px;
+            align-items: center;
+            gap: 16px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .bar-rank {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        .bar-rank.top-3 {
+            color: var(--accent-purple);
+        }
+
+        .bar-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+            text-align: right;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .bar-track {
+            height: 32px;
+            background: var(--bg-tertiary);
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 6px;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            min-width: 4px;
+        }
+
+        .bar-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%);
+        }
+
+        .bar-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Progress Bar */
+        .progress-section {
+            padding: 24px 32px;
+            border-top: 1px solid var(--border-default);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .progress-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .progress-track {
+            height: 4px;
+            background: var(--bg-tertiary);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-purple);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Time Series Charts */
+        .timeseries-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-default);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 32px;
+        }
+
+        .timeseries-header {
+            padding: 24px 32px;
+            border-bottom: 1px solid var(--border-default);
+        }
+
+        .timeseries-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .timeseries-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .timeseries-controls {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .control-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .control-select {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-default);
+            color: var(--text-primary);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .timeseries-body {
+            padding: 32px;
+        }
+
+        .chart-canvas-container {
+            position: relative;
+            height: 400px;
+        }
+
+        /* Legend */
+        .chart-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            padding: 24px 32px;
+            border-top: 1px solid var(--border-default);
+            justify-content: center;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .legend-item:hover {
+            color: var(--text-primary);
+        }
+
+        .legend-item.hidden {
+            opacity: 0.3;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 48px 24px;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        footer a {
+            color: var(--accent-purple);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .bar-item {
+                grid-template-columns: 30px 120px 1fr 70px;
+                gap: 8px;
+            }
+
+            .bar-label {
+                font-size: 12px;
+            }
+
+            .chart-header {
+                padding: 16px 20px;
+            }
+
+            .chart-body {
+                padding: 20px;
+            }
+
+            .month-badge {
+                font-size: 18px;
+                padding: 8px 16px;
+            }
+
+            .chart-canvas-container {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero-gradient"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <div class="container">
+        <header>
+            <div class="badge">
+                <span class="badge-dot"></span>
+                <span>Live Data Visualization</span>
+            </div>
+            <h1>
+                <span class="gradient-text">Claude Code</span> Industry Adoption
+            </h1>
+            <p class="subtitle">
+                Tracking how different industries adopt AI coding assistants across
+                391,000+ repositories on GitHub
+            </p>
+        </header>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value purple" id="total-repos">0</div>
+                <div class="stat-label">Total Repositories</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value pink" id="industries-count">19</div>
+                <div class="stat-label">Industries Tracked</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value blue" id="current-month-stat">-</div>
+                <div class="stat-label">Current Period</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value teal" id="top-industry">-</div>
+                <div class="stat-label">Leading Industry</div>
+            </div>
+        </div>
+
+        <!-- Bar Race Section -->
+        <div class="chart-section">
+            <div class="chart-header">
+                <div class="chart-title">
+                    <div class="month-badge" id="month-display">Jan 2025</div>
+                    <span style="color: var(--text-secondary); font-size: 14px;">Cumulative adoption by NAICS sector</span>
+                </div>
+                <div class="chart-controls">
+                    <button class="btn btn-primary" id="play-btn">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M4 2.5v11l9-5.5-9-5.5z"/>
+                        </svg>
+                        Play
+                    </button>
+                    <button class="btn btn-secondary" id="reset-btn">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                            <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+                            <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+                        </svg>
+                        Reset
+                    </button>
+                    <select class="speed-select" id="speed-select">
+                        <option value="1200">0.5x Speed</option>
+                        <option value="800" selected>1x Speed</option>
+                        <option value="400">2x Speed</option>
+                        <option value="200">4x Speed</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="chart-body">
+                <div class="bar-list" id="bars"></div>
+            </div>
+
+            <div class="progress-section">
+                <div class="progress-header">
+                    <span class="progress-label">Timeline Progress</span>
+                    <span class="progress-label" id="progress-text">1 of 13 months</span>
+                </div>
+                <div class="progress-track">
+                    <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cumulative Time Series Chart -->
+        <div class="timeseries-section">
+            <div class="timeseries-header">
+                <div class="timeseries-title">Cumulative Repository Count by Industry</div>
+                <div class="timeseries-subtitle">Total repositories using Claude Code over time, broken down by NAICS sector</div>
+                <div class="timeseries-controls">
+                    <div class="control-group">
+                        <span class="control-label">Industries:</span>
+                        <select class="control-select" id="cumulative-industries-select">
+                            <option value="top5">Top 5</option>
+                            <option value="top10" selected>Top 10</option>
+                            <option value="all">All 19</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <span class="control-label">Scale:</span>
+                        <select class="control-select" id="cumulative-scale-select">
+                            <option value="linear" selected>Linear</option>
+                            <option value="logarithmic">Logarithmic</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="timeseries-body">
+                <div class="chart-canvas-container">
+                    <canvas id="cumulative-chart"></canvas>
+                </div>
+            </div>
+            <div class="chart-legend" id="cumulative-legend"></div>
+        </div>
+
+        <!-- Monthly New Repos Chart -->
+        <div class="timeseries-section">
+            <div class="timeseries-header">
+                <div class="timeseries-title">Monthly New Repositories by Industry</div>
+                <div class="timeseries-subtitle">New repositories adopting Claude Code each month</div>
+                <div class="timeseries-controls">
+                    <div class="control-group">
+                        <span class="control-label">Industries:</span>
+                        <select class="control-select" id="monthly-industries-select">
+                            <option value="top5">Top 5</option>
+                            <option value="top10" selected>Top 10</option>
+                            <option value="all">All 19</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <span class="control-label">Chart Type:</span>
+                        <select class="control-select" id="monthly-type-select">
+                            <option value="line" selected>Line</option>
+                            <option value="bar">Stacked Bar</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="timeseries-body">
+                <div class="chart-canvas-container">
+                    <canvas id="monthly-chart"></canvas>
+                </div>
+            </div>
+            <div class="chart-legend" id="monthly-legend"></div>
+        </div>
+
+        <footer>
+            <p>
+                Data represents public GitHub repositories using Claude Code •
+                Classified by <a href="#">NAICS Industry Codes</a>
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        let data;
+        let isPlaying = false;
+        let animationInterval;
+        let currentIndex = 0;
+        let speed = 800;
+        let cumulativeChart, monthlyChart;
+
+        const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+        // Industry colors - 19 distinct colors for each NAICS sector
+        const industryColors = {
+            "54": { gradient: "linear-gradient(90deg, #7c3aed, #a78bfa)", solid: "#a78bfa" },  // Purple - Professional Services
+            "51": { gradient: "linear-gradient(90deg, #2563eb, #60a5fa)", solid: "#60a5fa" },  // Blue - Information
+            "52": { gradient: "linear-gradient(90deg, #ca8a04, #facc15)", solid: "#facc15" },  // Yellow - Finance
+            "61": { gradient: "linear-gradient(90deg, #dc2626, #f87171)", solid: "#f87171" },  // Red - Education
+            "71": { gradient: "linear-gradient(90deg, #db2777, #f472b6)", solid: "#f472b6" },  // Pink - Entertainment
+            "56": { gradient: "linear-gradient(90deg, #16a34a, #4ade80)", solid: "#4ade80" },  // Green - Admin Services
+            "81": { gradient: "linear-gradient(90deg, #0891b2, #22d3ee)", solid: "#22d3ee" },  // Cyan - Other Services
+            "48-49": { gradient: "linear-gradient(90deg, #7c3aed, #c4b5fd)", solid: "#c4b5fd" },  // Lavender - Transportation
+            "44-45": { gradient: "linear-gradient(90deg, #0d9488, #2dd4bf)", solid: "#2dd4bf" },  // Teal - Retail
+            "62": { gradient: "linear-gradient(90deg, #ea580c, #fb923c)", solid: "#fb923c" },  // Orange - Healthcare
+            "31-33": { gradient: "linear-gradient(90deg, #475569, #94a3b8)", solid: "#94a3b8" },  // Slate - Manufacturing
+            "92": { gradient: "linear-gradient(90deg, #0284c7, #38bdf8)", solid: "#38bdf8" },  // Sky Blue - Public Admin
+            "11": { gradient: "linear-gradient(90deg, #65a30d, #a3e635)", solid: "#a3e635" },  // Lime - Agriculture
+            "72": { gradient: "linear-gradient(90deg, #e11d48, #fb7185)", solid: "#fb7185" },  // Rose - Accommodation
+            "53": { gradient: "linear-gradient(90deg, #059669, #34d399)", solid: "#34d399" },  // Emerald - Real Estate
+            "22": { gradient: "linear-gradient(90deg, #4f46e5, #818cf8)", solid: "#818cf8" },  // Indigo - Utilities
+            "23": { gradient: "linear-gradient(90deg, #d97706, #fbbf24)", solid: "#fbbf24" },  // Amber - Construction
+            "42": { gradient: "linear-gradient(90deg, #57534e, #a8a29e)", solid: "#a8a29e" },  // Stone - Wholesale Trade
+            "21": { gradient: "linear-gradient(90deg, #78350f, #b45309)", solid: "#b45309" }   // Brown - Mining
+        };
+
+        fetch('claude_cumulative.json')
+            .then(response => response.json())
+            .then(jsonData => {
+                data = jsonData;
+                initializeBarChart();
+                initializeTimeSeriesCharts();
+            })
+            .catch(error => {
+                console.error('Error loading data:', error);
+                document.getElementById('bars').innerHTML = `
+                    <p style="text-align:center; padding:40px; color: var(--text-secondary);">
+                        Error loading data. Ensure claude_cumulative.json is available.
+                    </p>`;
+            });
+
+        function formatNumber(num) {
+            if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+            if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+            return num.toLocaleString();
+        }
+
+        function parseMonth(monthStr) {
+            const [year, month] = monthStr.split('-');
+            return {
+                name: monthNames[parseInt(month) - 1],
+                year: year,
+                short: `${monthNames[parseInt(month) - 1]} ${year}`
+            };
+        }
+
+        function getShortName(name) {
+            return name.split(': ')[1] || name;
+        }
+
+        // ============ BAR CHART RACE ============
+        function initializeBarChart() {
+            const barsContainer = document.getElementById('bars');
+            barsContainer.innerHTML = '';
+
+            data.industries.forEach((ind, i) => {
+                const row = document.createElement('div');
+                row.className = 'bar-item';
+                row.id = `bar-${ind.code}`;
+
+                const colors = industryColors[ind.code] || { gradient: 'linear-gradient(90deg, #6e7681, #8b949e)', solid: '#8b949e' };
+                const shortName = getShortName(ind.name);
+
+                row.innerHTML = `
+                    <div class="bar-rank ${i < 3 ? 'top-3' : ''}">${i + 1}</div>
+                    <div class="bar-label" title="${ind.name}">${shortName}</div>
+                    <div class="bar-track">
+                        <div class="bar-fill" style="background: ${colors.gradient}; width: 0%;"></div>
+                    </div>
+                    <div class="bar-value">0</div>
+                `;
+                barsContainer.appendChild(row);
+            });
+
+            document.getElementById('industries-count').textContent = data.industries.length;
+            updateBarChart(0);
+        }
+
+        function updateBarChart(monthIndex) {
+            const month = data.months[monthIndex];
+            const parsed = parseMonth(month);
+
+            document.getElementById('month-display').textContent = parsed.short;
+            document.getElementById('current-month-stat').textContent = parsed.short;
+            document.getElementById('progress-text').textContent = `${monthIndex + 1} of ${data.months.length} months`;
+            document.getElementById('progress-fill').style.width = `${((monthIndex + 1) / data.months.length) * 100}%`;
+
+            const values = data.industries.map(ind => ({
+                code: ind.code,
+                name: ind.name,
+                value: ind.values[monthIndex]
+            }));
+            values.sort((a, b) => b.value - a.value);
+
+            const maxValue = values[0].value || 1;
+            const totalRepos = values.reduce((sum, v) => sum + v.value, 0);
+
+            document.getElementById('total-repos').textContent = formatNumber(totalRepos);
+
+            const topShortName = getShortName(values[0].name);
+            document.getElementById('top-industry').textContent = topShortName.substring(0, 12);
+
+            values.forEach((item, newIndex) => {
+                const row = document.getElementById(`bar-${item.code}`);
+                if (row) {
+                    const rank = row.querySelector('.bar-rank');
+                    const fill = row.querySelector('.bar-fill');
+                    const valueSpan = row.querySelector('.bar-value');
+
+                    rank.textContent = newIndex + 1;
+                    rank.className = `bar-rank ${newIndex < 3 ? 'top-3' : ''}`;
+                    fill.style.width = `${(item.value / maxValue) * 100}%`;
+                    valueSpan.textContent = formatNumber(item.value);
+                    row.style.order = newIndex;
+                }
+            });
+        }
+
+        // ============ TIME SERIES CHARTS ============
+        function initializeTimeSeriesCharts() {
+            createCumulativeChart();
+            createMonthlyChart();
+
+            // Event listeners for controls
+            document.getElementById('cumulative-industries-select').addEventListener('change', createCumulativeChart);
+            document.getElementById('cumulative-scale-select').addEventListener('change', createCumulativeChart);
+            document.getElementById('monthly-industries-select').addEventListener('change', createMonthlyChart);
+            document.getElementById('monthly-type-select').addEventListener('change', createMonthlyChart);
+        }
+
+        function getSelectedIndustries(selectId) {
+            const value = document.getElementById(selectId).value;
+            if (value === 'top5') return data.industries.slice(0, 5);
+            if (value === 'top10') return data.industries.slice(0, 10);
+            return data.industries;
+        }
+
+        function createCumulativeChart() {
+            const ctx = document.getElementById('cumulative-chart').getContext('2d');
+            const industries = getSelectedIndustries('cumulative-industries-select');
+            const scale = document.getElementById('cumulative-scale-select').value;
+
+            if (cumulativeChart) cumulativeChart.destroy();
+
+            const datasets = industries.map(ind => {
+                const colors = industryColors[ind.code] || { solid: '#8b949e' };
+                return {
+                    label: getShortName(ind.name),
+                    data: ind.values,
+                    borderColor: colors.solid,
+                    backgroundColor: colors.solid + '20',
+                    borderWidth: 2.5,
+                    pointRadius: 4,
+                    pointHoverRadius: 7,
+                    pointBackgroundColor: colors.solid,
+                    pointBorderColor: '#161b22',
+                    pointBorderWidth: 2,
+                    tension: 0.3,
+                    fill: false
+                };
+            });
+
+            cumulativeChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.months.map(m => parseMonth(m).short),
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(22, 27, 34, 0.95)',
+                            titleColor: '#e6edf3',
+                            bodyColor: '#8b949e',
+                            borderColor: '#30363d',
+                            borderWidth: 1,
+                            padding: 12,
+                            displayColors: true,
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${formatNumber(context.parsed.y)}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: '#21262d' },
+                            ticks: { color: '#8b949e' }
+                        },
+                        y: {
+                            type: scale,
+                            grid: { color: '#21262d' },
+                            ticks: {
+                                color: '#8b949e',
+                                callback: function(value) { return formatNumber(value); }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Build legend
+            buildLegend('cumulative-legend', industries, cumulativeChart);
+        }
+
+        function createMonthlyChart() {
+            const ctx = document.getElementById('monthly-chart').getContext('2d');
+            const industries = getSelectedIndustries('monthly-industries-select');
+            const chartType = document.getElementById('monthly-type-select').value;
+
+            if (monthlyChart) monthlyChart.destroy();
+
+            const datasets = industries.map(ind => {
+                const colors = industryColors[ind.code] || { solid: '#8b949e' };
+                return {
+                    label: getShortName(ind.name),
+                    data: ind.monthly,
+                    borderColor: colors.solid,
+                    backgroundColor: chartType === 'bar' ? colors.solid + 'cc' : colors.solid + '20',
+                    borderWidth: chartType === 'bar' ? 0 : 2.5,
+                    pointRadius: chartType === 'bar' ? 0 : 4,
+                    pointHoverRadius: chartType === 'bar' ? 0 : 7,
+                    pointBackgroundColor: colors.solid,
+                    pointBorderColor: '#161b22',
+                    pointBorderWidth: 2,
+                    tension: 0.3,
+                    fill: chartType === 'bar'
+                };
+            });
+
+            monthlyChart = new Chart(ctx, {
+                type: chartType === 'bar' ? 'bar' : 'line',
+                data: {
+                    labels: data.months.map(m => parseMonth(m).short),
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(22, 27, 34, 0.95)',
+                            titleColor: '#e6edf3',
+                            bodyColor: '#8b949e',
+                            borderColor: '#30363d',
+                            borderWidth: 1,
+                            padding: 12,
+                            displayColors: true,
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${formatNumber(context.parsed.y)}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            stacked: chartType === 'bar',
+                            grid: { color: '#21262d' },
+                            ticks: { color: '#8b949e' }
+                        },
+                        y: {
+                            stacked: chartType === 'bar',
+                            grid: { color: '#21262d' },
+                            ticks: {
+                                color: '#8b949e',
+                                callback: function(value) { return formatNumber(value); }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Build legend
+            buildLegend('monthly-legend', industries, monthlyChart);
+        }
+
+        function buildLegend(containerId, industries, chart) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+
+            industries.forEach((ind, i) => {
+                const colors = industryColors[ind.code] || { solid: '#8b949e' };
+                const item = document.createElement('div');
+                item.className = 'legend-item';
+                item.innerHTML = `
+                    <div class="legend-color" style="background: ${colors.solid}"></div>
+                    <span>${getShortName(ind.name)}</span>
+                `;
+
+                item.addEventListener('click', () => {
+                    const meta = chart.getDatasetMeta(i);
+                    meta.hidden = !meta.hidden;
+                    item.classList.toggle('hidden', meta.hidden);
+                    chart.update();
+                });
+
+                container.appendChild(item);
+            });
+        }
+
+        // ============ PLAY CONTROLS ============
+        document.getElementById('play-btn').addEventListener('click', () => {
+            const btn = document.getElementById('play-btn');
+
+            if (isPlaying) {
+                clearInterval(animationInterval);
+                isPlaying = false;
+                btn.innerHTML = `
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M4 2.5v11l9-5.5-9-5.5z"/>
+                    </svg>
+                    Play`;
+            } else {
+                if (currentIndex >= data.months.length - 1) {
+                    currentIndex = 0;
+                }
+                isPlaying = true;
+                btn.innerHTML = `
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M5.5 3.5A1.5 1.5 0 0 1 7 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5zm5 0A1.5 1.5 0 0 1 12 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5z"/>
+                    </svg>
+                    Pause`;
+
+                animationInterval = setInterval(() => {
+                    currentIndex++;
+                    if (currentIndex >= data.months.length) {
+                        clearInterval(animationInterval);
+                        isPlaying = false;
+                        btn.innerHTML = `
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                <path d="M4 2.5v11l9-5.5-9-5.5z"/>
+                            </svg>
+                            Replay`;
+                        currentIndex = data.months.length - 1;
+                        return;
+                    }
+                    updateBarChart(currentIndex);
+                }, speed);
+            }
+        });
+
+        document.getElementById('reset-btn').addEventListener('click', () => {
+            clearInterval(animationInterval);
+            isPlaying = false;
+            document.getElementById('play-btn').innerHTML = `
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M4 2.5v11l9-5.5-9-5.5z"/>
+                </svg>
+                Play`;
+            currentIndex = 0;
+            updateBarChart(0);
+        });
+
+        document.getElementById('speed-select').addEventListener('change', (e) => {
+            speed = parseInt(e.target.value);
+            if (isPlaying) {
+                clearInterval(animationInterval);
+                animationInterval = setInterval(() => {
+                    currentIndex++;
+                    if (currentIndex >= data.months.length) {
+                        clearInterval(animationInterval);
+                        isPlaying = false;
+                        document.getElementById('play-btn').innerHTML = `
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                <path d="M4 2.5v11l9-5.5-9-5.5z"/>
+                            </svg>
+                            Replay`;
+                        currentIndex = data.months.length - 1;
+                        return;
+                    }
+                    updateBarChart(currentIndex);
+                }, speed);
+            }
+        });
+    </script>
+</body>
+</html>

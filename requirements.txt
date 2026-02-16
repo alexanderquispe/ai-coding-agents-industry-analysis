@@ -1,0 +1,13 @@
+# AI Coding Agents Industry Analysis
+# Python dependencies
+
+# Data processing
+pandas>=2.0.0
+pyarrow>=14.0.0
+
+# Visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# Utilities
+numpy>=1.24.0

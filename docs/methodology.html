@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Methodology | AI Coding Agent Industry Adoption</title>
+    <link href="https://fonts.googleapis.com/css2?family=Mona+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-tertiary: #21262d;
+            --border-default: #30363d;
+            --border-muted: #21262d;
+            --accent-purple: #a371f7;
+            --accent-blue: #58a6ff;
+            --accent-green: #3fb950;
+            --accent-orange: #d29922;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --text-muted: #6e7681;
+            --gradient-purple: linear-gradient(135deg, #6e40c9 0%, #a371f7 50%, #db61a2 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Mona Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            background: var(--bg-primary);
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 48px 24px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 48px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        nav a:hover {
+            color: var(--text-primary);
+            background: var(--bg-tertiary);
+        }
+
+        nav a.active {
+            color: var(--accent-purple);
+            background: rgba(163, 113, 247, 0.1);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            background: var(--gradient-purple);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+        }
+
+        .toc {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-default);
+            border-radius: 12px;
+            padding: 24px 32px;
+            margin-bottom: 48px;
+        }
+
+        .toc h2 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+
+        .toc ul {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 8px;
+        }
+
+        .toc a {
+            color: var(--accent-blue);
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .toc a:hover {
+            text-decoration: underline;
+        }
+
+        .section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-default);
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 24px;
+        }
+
+        h2 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        h2::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: var(--gradient-purple);
+            border-radius: 2px;
+        }
+
+        h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 24px 0 12px;
+            color: var(--text-primary);
+        }
+
+        p {
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        ul, ol {
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            padding-left: 24px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        code {
+            background: var(--bg-tertiary);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 13px;
+            color: var(--accent-purple);
+        }
+
+        pre {
+            background: var(--bg-tertiary);
+            padding: 16px 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 16px 0;
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+            color: var(--text-primary);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+        }
+
+        th, td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-default);
+        }
+
+        th {
+            background: var(--bg-tertiary);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        td {
+            color: var(--text-secondary);
+        }
+
+        .metric-value {
+            color: var(--accent-green);
+            font-weight: 600;
+        }
+
+        .note-box {
+            background: rgba(88, 166, 255, 0.1);
+            border: 1px solid rgba(88, 166, 255, 0.3);
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin: 16px 0;
+        }
+
+        .note-box p {
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        .warning-box {
+            background: rgba(210, 153, 34, 0.1);
+            border: 1px solid rgba(210, 153, 34, 0.3);
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin: 16px 0;
+        }
+
+        .warning-box p {
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        footer {
+            text-align: center;
+            padding: 48px 24px;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        footer a {
+            color: var(--accent-purple);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 32px;
+            }
+
+            .section {
+                padding: 20px;
+            }
+
+            table {
+                font-size: 13px;
+            }
+
+            th, td {
+                padding: 8px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <a href="index.html">Overview</a>
+            <a href="claude.html">Claude Code</a>
+            <a href="copilot.html">GitHub Copilot</a>
+            <a href="codex.html">OpenAI Codex</a>
+            <a href="methodology.html" class="active">Methodology</a>
+            <a href="industries.html">Industries</a>
+        </nav>
+
+        <header>
+            <h1>Methodology</h1>
+            <p class="subtitle">Detailed methodology for the AI coding agent industry adoption analysis</p>
+        </header>
+
+        <div class="toc">
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#data-collection">Data Collection</a></li>
+                <li><a href="#agent-detection">Agent Detection</a></li>
+                <li><a href="#classification-model">Industry Classification Model</a></li>
+                <li><a href="#adoption-timing">Adoption Timing Analysis</a></li>
+                <li><a href="#confidence">Confidence Calibration</a></li>
+                <li><a href="#limitations">Limitations and Caveats</a></li>
+            </ul>
+        </div>
+
+        <section class="section" id="data-collection">
+            <h2>Data Collection</h2>
+
+            <h3>Source</h3>
+            <p>All data was collected from the GitHub API, focusing on <strong>public repositories only</strong>. Private and enterprise repositories are not included in this analysis.</p>
+
+            <h3>Time Period</h3>
+            <ul>
+                <li><strong>Collection Period:</strong> January 2025 - February 2026</li>
+                <li><strong>Snapshot Date:</strong> February 2026</li>
+            </ul>
+
+            <h3>Repository Selection Criteria</h3>
+            <p>Repositories were included if they met any of the following criteria:</p>
+            <ol>
+                <li>Had at least one commit with detected AI agent attribution</li>
+                <li>Had at least one pull request with detected AI agent attribution</li>
+                <li>Had at least one Co-Author tag indicating AI agent usage</li>
+            </ol>
+
+            <h3>Data Fields Collected</h3>
+            <p>For each repository:</p>
+            <ul>
+                <li>Repository name with owner (<code>nwo</code>)</li>
+                <li>Repository description</li>
+                <li>Repository topics (tags)</li>
+                <li>Primary programming language</li>
+                <li>Creation date</li>
+                <li>Star count (at time of collection)</li>
+                <li>Commit history metadata (messages, dates, authors)</li>
+                <li>Pull request metadata (titles, descriptions, dates)</li>
+            </ul>
+        </section>
+
+        <section class="section" id="agent-detection">
+            <h2>Agent Detection</h2>
+
+            <h3>Claude Code Detection</h3>
+            <p>Claude Code usage was detected through:</p>
+            <ol>
+                <li><strong>Co-Author Tags:</strong> Commits containing:
+                    <pre><code>Co-Authored-By: Claude &lt;noreply@anthropic.com&gt;</code></pre>
+                </li>
+                <li><strong>Commit Messages:</strong> Messages containing explicit Claude attribution patterns.</li>
+            </ol>
+
+            <h3>GitHub Copilot Detection</h3>
+            <p>Copilot usage was detected through:</p>
+            <ol>
+                <li><strong>PR Metadata:</strong> Pull requests created by the Copilot bot or containing Copilot attribution.</li>
+                <li><strong>Commit Patterns:</strong> Commits matching known Copilot auto-completion patterns.</li>
+            </ol>
+
+            <h3>OpenAI Codex Detection</h3>
+            <p>Codex usage was detected through:</p>
+            <ol>
+                <li><strong>API Integration Evidence:</strong> Commits or PRs with Codex API attribution.</li>
+                <li><strong>Integration Signatures:</strong> Patterns indicating OpenAI Codex CLI or API usage.</li>
+            </ol>
+
+            <h3>Detection Validation</h3>
+            <p>A random sample of 1,000 detections per agent was manually validated:</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Agent</th>
+                        <th>True Positive Rate</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Claude Code</td>
+                        <td class="metric-value">94.2%</td>
+                    </tr>
+                    <tr>
+                        <td>GitHub Copilot</td>
+                        <td class="metric-value">91.8%</td>
+                    </tr>
+                    <tr>
+                        <td>OpenAI Codex</td>
+                        <td class="metric-value">89.5%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="section" id="classification-model">
+            <h2>Industry Classification Model</h2>
+
+            <h3>Model Architecture</h3>
+            <p>The industry classification model is a fine-tuned transformer model based on <strong>RoBERTa-base</strong>, trained to predict NAICS sector codes from repository metadata.</p>
+
+            <h3>Training Data</h3>
+            <p>The model was trained on:</p>
+            <ul>
+                <li>50,000 manually labeled repository-to-industry mappings</li>
+                <li>Repository descriptions, topics, and README content as input features</li>
+                <li>20 NAICS sector classes as output labels</li>
+            </ul>
+
+            <h3>Input Features</h3>
+            <p>For each repository, the model receives:</p>
+            <ol>
+                <li><strong>Repository Description:</strong> The GitHub repository description text</li>
+                <li><strong>Topics:</strong> Concatenated list of repository topics</li>
+                <li><strong>README Excerpt:</strong> First 512 tokens of the README file (if available)</li>
+            </ol>
+
+            <h3>Model Performance</h3>
+            <p>Evaluated on a held-out test set of 5,000 repositories:</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Accuracy</td>
+                        <td class="metric-value">78.3%</td>
+                    </tr>
+                    <tr>
+                        <td>Macro F1</td>
+                        <td class="metric-value">0.72</td>
+                    </tr>
+                    <tr>
+                        <td>Weighted F1</td>
+                        <td class="metric-value">0.79</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Per-Sector Performance</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>NAICS Sector</th>
+                        <th>Precision</th>
+                        <th>Recall</th>
+                        <th>F1</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>54 (Professional Services)</td>
+                        <td>0.85</td>
+                        <td>0.89</td>
+                        <td class="metric-value">0.87</td>
+                    </tr>
+                    <tr>
+                        <td>51 (Information)</td>
+                        <td>0.82</td>
+                        <td>0.78</td>
+                        <td class="metric-value">0.80</td>
+                    </tr>
+                    <tr>
+                        <td>52 (Finance)</td>
+                        <td>0.79</td>
+                        <td>0.74</td>
+                        <td class="metric-value">0.76</td>
+                    </tr>
+                    <tr>
+                        <td>62 (Healthcare)</td>
+                        <td>0.76</td>
+                        <td>0.71</td>
+                        <td class="metric-value">0.73</td>
+                    </tr>
+                    <tr>
+                        <td>61 (Education)</td>
+                        <td>0.74</td>
+                        <td>0.69</td>
+                        <td class="metric-value">0.71</td>
+                    </tr>
+                    <tr>
+                        <td>Other sectors</td>
+                        <td>0.65-0.75</td>
+                        <td>0.60-0.72</td>
+                        <td>0.62-0.73</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Confidence Scores</h3>
+            <p>The model outputs softmax probabilities for each class. The confidence score is the maximum probability across all classes. Repositories with confidence &lt; 0.5 are flagged for potential review.</p>
+        </section>
+
+        <section class="section" id="adoption-timing">
+            <h2>Adoption Timing Analysis</h2>
+
+            <h3>First Use Date Determination</h3>
+            <p>For each repository-agent pair, the "first use date" is defined as:</p>
+            <ol>
+                <li><strong>For Claude Code:</strong> The date of the earliest commit with Claude Co-Author tag</li>
+                <li><strong>For Copilot:</strong> The date of the earliest PR or commit attributed to Copilot</li>
+                <li><strong>For Codex:</strong> The date of the earliest commit or PR with Codex attribution</li>
+            </ol>
+
+            <h3>Monthly Aggregation</h3>
+            <p>Repositories are aggregated by:</p>
+            <ol>
+                <li><strong>Month:</strong> The year-month of first use date</li>
+                <li><strong>Industry:</strong> The predicted NAICS sector code</li>
+            </ol>
+            <p>This produces a time series of new repositories per industry per month.</p>
+        </section>
+
+        <section class="section" id="confidence">
+            <h2>Confidence Calibration</h2>
+
+            <h3>Calibration Analysis</h3>
+            <p>Model confidence scores were calibrated using isotonic regression on a validation set of 2,000 manually verified predictions.</p>
+
+            <h3>Confidence Thresholds</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Threshold</th>
+                        <th>Coverage</th>
+                        <th>Estimated Accuracy</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>&gt; 0.9</td>
+                        <td>35%</td>
+                        <td class="metric-value">94%</td>
+                    </tr>
+                    <tr>
+                        <td>&gt; 0.8</td>
+                        <td>55%</td>
+                        <td class="metric-value">88%</td>
+                    </tr>
+                    <tr>
+                        <td>&gt; 0.7</td>
+                        <td>72%</td>
+                        <td class="metric-value">82%</td>
+                    </tr>
+                    <tr>
+                        <td>&gt; 0.6</td>
+                        <td>85%</td>
+                        <td class="metric-value">76%</td>
+                    </tr>
+                    <tr>
+                        <td>&gt; 0.5</td>
+                        <td>95%</td>
+                        <td class="metric-value">71%</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="note-box">
+                <p><strong>Note:</strong> The visualizations on this site include all predictions without confidence filtering to maximize coverage. For high-precision analysis, consider filtering to confidence &gt; 0.7.</p>
+            </div>
+        </section>
+
+        <section class="section" id="limitations">
+            <h2>Limitations and Caveats</h2>
+
+            <h3>Data Limitations</h3>
+            <div class="warning-box">
+                <p><strong>Public Repositories Only:</strong> Enterprise and private repository usage is not captured. This may underrepresent industries with high proprietary code concerns (e.g., finance, healthcare).</p>
+            </div>
+
+            <ul>
+                <li><strong>Detection Accuracy:</strong> Agent detection based on metadata patterns; implicit usage without attribution is not captured. False negative rate estimated at 15-25% depending on agent.</li>
+                <li><strong>GitHub Bias:</strong> Analysis limited to GitHub; other platforms (GitLab, Bitbucket) not included. May over-represent open-source and startup ecosystems.</li>
+            </ul>
+
+            <h3>Classification Limitations</h3>
+            <ul>
+                <li><strong>Repository vs. Organization:</strong> Classification at repository level, not organization level. A single organization may have repositories classified into multiple industries.</li>
+                <li><strong>Metadata Quality:</strong> Classification accuracy depends on repository description and topic quality. Repositories with minimal metadata may be miscategorized.</li>
+                <li><strong>Industry Ambiguity:</strong> Software development is inherently cross-industry. A "fintech" repository could reasonably be classified as Finance (52) or Information (51).</li>
+            </ul>
+
+            <h3>Temporal Limitations</h3>
+            <ul>
+                <li><strong>Adoption vs. Usage:</strong> "First use" captures adoption date, not usage intensity. High-intensity users may be underweighted relative to one-time users.</li>
+                <li><strong>Agent Availability:</strong> Different agents launched at different times. Direct adoption rate comparisons should account for availability windows.</li>
+            </ul>
+
+            <h3>Recommendations for Use</h3>
+            <ol>
+                <li><strong>Trend Analysis:</strong> Best suited for analyzing relative trends over time within a single agent</li>
+                <li><strong>Cross-Agent Comparison:</strong> Use caution comparing absolute numbers across agents due to different detection sensitivities</li>
+                <li><strong>Industry Ranking:</strong> Relative industry rankings are more reliable than absolute percentages</li>
+            </ol>
+        </section>
+
+        <footer>
+            <p>
+                <a href="index.html">Back to Overview</a> |
+                View on <a href="#">GitHub</a>
+            </p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NAICS Industry Codes | AI Coding Agent Industry Adoption</title>
+    <link href="https://fonts.googleapis.com/css2?family=Mona+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-tertiary: #21262d;
+            --border-default: #30363d;
+            --border-muted: #21262d;
+            --accent-purple: #a371f7;
+            --accent-blue: #58a6ff;
+            --accent-green: #3fb950;
+            --accent-orange: #d29922;
+            --accent-pink: #db61a2;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --text-muted: #6e7681;
+            --gradient-purple: linear-gradient(135deg, #6e40c9 0%, #a371f7 50%, #db61a2 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Mona Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            background: var(--bg-primary);
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 48px 24px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 48px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        nav a:hover {
+            color: var(--text-primary);
+            background: var(--bg-tertiary);
+        }
+
+        nav a.active {
+            color: var(--accent-purple);
+            background: rgba(163, 113, 247, 0.1);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            background: var(--gradient-purple);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .intro-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-default);
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 32px;
+        }
+
+        .intro-section h2 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+
+        .intro-section p {
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        .intro-section p:last-child {
+            margin-bottom: 0;
+        }
+
+        .intro-section a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        .intro-section a:hover {
+            text-decoration: underline;
+        }
+
+        .industries-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+            margin-bottom: 48px;
+        }
+
+        .industry-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-default);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.2s;
+        }
+
+        .industry-card:hover {
+            border-color: var(--accent-purple);
+            transform: translateY(-2px);
+        }
+
+        .industry-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .industry-code {
+            background: var(--bg-tertiary);
+            color: var(--accent-purple);
+            font-weight: 700;
+            font-size: 14px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-family: 'Monaco', 'Menlo', monospace;
+        }
+
+        .industry-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .industry-description {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .industry-examples {
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            padding: 12px 16px;
+        }
+
+        .industry-examples-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .industry-examples-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .example-tag {
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .excluded-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-default);
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 32px;
+        }
+
+        .excluded-section h2 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .excluded-section h2::before {
+            content: '';
+            width: 4px;
+            height: 20px;
+            background: var(--accent-orange);
+            border-radius: 2px;
+        }
+
+        .excluded-section p {
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        .excluded-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 12px;
+        }
+
+        .excluded-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--bg-tertiary);
+            padding: 12px 16px;
+            border-radius: 8px;
+        }
+
+        .excluded-code {
+            color: var(--accent-orange);
+            font-weight: 700;
+            font-size: 14px;
+            font-family: 'Monaco', 'Menlo', monospace;
+        }
+
+        .excluded-name {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 48px 24px;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        footer a {
+            color: var(--accent-purple);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 32px;
+            }
+
+            .industries-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <a href="index.html">Overview</a>
+            <a href="claude.html">Claude Code</a>
+            <a href="copilot.html">GitHub Copilot</a>
+            <a href="codex.html">OpenAI Codex</a>
+            <a href="methodology.html">Methodology</a>
+            <a href="industries.html" class="active">Industries</a>
+        </nav>
+
+        <header>
+            <h1>NAICS Industry Codes</h1>
+            <p class="subtitle">Reference guide to the 19 industry sectors used in our analysis, based on the North American Industry Classification System</p>
+        </header>
+
+        <div class="intro-section">
+            <h2>About NAICS</h2>
+            <p>The <strong>North American Industry Classification System (NAICS)</strong> is the standard used by Federal statistical agencies in classifying business establishments. It provides a consistent framework for collecting, analyzing, and publishing statistical data related to the U.S. business economy.</p>
+            <p>In our analysis, we use the <strong>2-digit NAICS sector codes</strong> to classify GitHub repositories by the industry of their owners or primary use case. This classification is performed by a machine learning model trained on manually labeled repository-industry pairs.</p>
+            <p>Learn more at <a href="https://www.census.gov/naics/" target="_blank">census.gov/naics</a></p>
+        </div>
+
+        <div class="industries-grid">
+            <div class="industry-card">
+                <div class="industry-header">
+                    <span class="industry-code">54</span>
+                    <span class="industry-name">Professional Services</span>
+                </div>
+                <p class="industry-description">Professional, Scientific, and Technical Services. Includes establishments that specialize in performing professional, scientific, and technical activities for others.</p>
+                <div class="industry-examples">
+                    <div class="industry-examples-label">Example repositories</div>
+                    <div class="industry-examples-list">
+                        <span class="example-tag">Consulting tools</span>
+                        <span class="example-tag">Legal tech</span>
+                        <span class="example-tag">Architecture software</span>
+                        <span class="example-tag">Engineering tools</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="industry-card">
+                <div class="industry-header">
+                    <span class="industry-code">51</span>
+                    <span class="industry-name">Information</span>
+                </div>
+                <p class="industry-description">Information sector establishments create, process, and distribute information and cultural products. Includes software publishing, data processing, and telecommunications.</p>
+                <div class="industry-examples">
+                    <div class="industry-examples-label">Example repositories</div>
+                    <div class="industry-examples-list">
+                        <span class="example-tag">Software products</span>
+                        <span class="example-tag">Data platforms</span>
+                        <span class="example-tag">Media apps</span>
+                        <span class="example-tag">Publishing tools</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="industry-card">
+                <div class="industry-header">
+                    <span class="industry-code">52</span>
+                    <span class="industry-name">Finance & Insurance</span>
+                </div>
+                <p class="industry-description">Finance and Insurance sector includes establishments primarily engaged in financial transactions and/or in facilitating financial transactions.</p>
+                <div class="industry-examples">
+                    <div class="industry-examples-label">Example repositories</div>
+                    <div class="industry-examples-list">
+                        <span class="example-tag">Trading systems</span>
+                        <span class="example-tag">Banking APIs</span>
+                        <span class="example-tag">Insurance platforms</span>
+                        <span class="example-tag">Crypto/DeFi</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="industry-card">
+                <div class="industry-header">
+                    <span class="industry-code">61</span>
+                    <span class="industry-name">Education</span>
+                </div>
+                <p class="industry-description">Educational Services sector comprises establishments that provide instruction and training in a wide variety of subjects.</p>
+                <div class="industry-examples">
+                    <div class="industry-examples-label">Example repositories</div>
+                    <div class="industry-examples-list">
+                        <span class="example-tag">E-learning platforms</span>
+                        <span class="example-tag">Course materials</span>
+                        <span class="example-tag">EdTech tools</span>
+                        <span class="example-tag">Academic projects</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="industry-card">
+                <div class="industry-header">
+                    <span class="industry-code">62</span>
+                    <span class="industry-name">Healthcare</span>
+                </div>
+                <p class="industry-description">Health Care and Social Assistance sector includes establishments providing health care and social assistance for individuals.</p>
+                <div class="industry-examples">
+                    <div class="industry-examples-label">Example repositories</div>
+                    <div class="industry-examples-list">
+                        <span class="example-tag">Medical software</span>
+                        <span class="example-tag">Health records</span>
+                        <span class="example-tag">Telemedicine</span>
+                        <span class="example-tag">Research tools</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="industry-card">
+                <div class="industry-header">
+                    <span class="industry-code">71</span>
+                    <span class="industry-name">Entertainment</span>
+                </div>
+                <p class="industry-description">Arts, Entertainment, and Recreation sector includes establishments involved in producing, promoting, or participating in live performances, events, or exhibits.</p>
+                <div class="industry-examples">
+                    <div class="industry-examples-label">Example repositories</div>
+                    <div class="industry-examples-list">
+                        <span class="example-tag">Game development</span>
+                        <span class="example-tag">Music apps</span>
+                        <span class="example-tag">Sports analytics</span>
+                        <span class="example-tag">Media tools</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="industry-card">
+                <div class="industry-header">
+                    <span class="industry-code">56</span>
+                    <span class="industry-name">Admin Services</span>
+                </div>
+                <p class="industry-description">Administrative and Support and Waste Management and Remediation Services. Includes establishments performing routine support activities.</p>
+                <div class="industry-examples">
+                    <div class="industry-examples-label">Example repositories</div>
+                    <div class="industry-examples-list">
+                        <span class="example-tag">HR tools</span>
+                        <span class="example-tag">Scheduling systems</span>
+                        <span class="example-tag">Office automation</span>
+                        <span class="example-tag">Travel booking</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="industry-card">
+                <div class="industry-header">
+                    <span class="industry-code">81</span>
+                    <span class="industry-name">Other Services</span>
+                </div>
+                <p class="industry-description">Other Services (except Public Administration) includes establishments engaged in equipment repair, personal care, religious activities, and more.</p>
+                <div class="industry-examples">
+                    <div class="industry-examples-label">Example repositories</div>
+                    <div class="industry-examples-list">
+                        <span class="example-tag">Auto services</span>
+                        <span class="example-tag">Personal apps</span>
+                        <span class="example-tag">Nonprofit tools</span>
+                        <span class="example-tag">Home services</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="industry-card">
+                <div class="industry-header">
+                    <span class="industry-code">48-49</span>
+                    <span class="industry-name">Transportation</span>
+                </div>
+                <p class="industry-description">Transportation and Warehousing sector includes industries providing transportation of passengers and cargo, warehousing and storage.</p>
+                <div class="industry-examples">
+                    <div class="industry-examples-label">Example repositories</div>
+                    <div class="industry-examples-list">
+                        <span class="example-tag">Logistics software</span>
+                        <span class="example-tag">Fleet management</span>
+                        <span class="example-tag">Delivery tracking</span>
+                        <span class="example-tag">Route optimization</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="industry-card">
+                <div class="industry-header">
+                    <span class="industry-code">44-45</span>
+                    <span class="industry-name">Retail Trade</span>
+                </div>
+                <p class="industry-description">Retail Trade sector comprises establishments engaged in retailing merchandise, generally without transformation.</p>
+                <div class="industry-examples">
+                    <div class="industry-examples-label">Example repositories</div>
+                    <div class="industry-examples-list">
+                        <span class="example-tag">E-commerce</span>
+                        <span class="example-tag">POS systems</span>
+                        <span class="example-tag">Inventory tools</span>
+                        <span class="example-tag">Shopping apps</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="industry-card">
+                <div class="industry-header">
+                    <span class="industry-code">31-33</span>
+                    <span class="industry-name">Manufacturing</span>
+                </div>
+                <p class="industry-description">Manufacturing sector comprises establishments engaged in the mechanical, physical, or chemical transformation of materials into new products.</p>
+                <div class="industry-examples">
+                    <div class="industry-examples-label">Example repositories</div>
+                    <div class="industry-examples-list">
+                        <span class="example-tag">Industrial IoT</span>
+                        <span class="example-tag">CAD/CAM</span>
+                        <span class="example-tag">Supply chain</span>
+                        <span class="example-tag">Quality control</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="industry-card">
+                <div class="industry-header">
+                    <span class="industry-code">92</span>
+                    <span class="industry-name">Public Admin</span>
+                </div>
+                <p class="industry-description">Public Administration sector consists of establishments of federal, state, and local government agencies that administer, oversee, and manage public programs.</p>
+                <div class="industry-examples">
+                    <div class="industry-examples-label">Example repositories</div>
+                    <div class="industry-examples-list">
+                        <span class="example-tag">Gov portals</span>
+                        <span class="example-tag">Civic tech</span>
+                        <span class="example-tag">Open data</span>
+                        <span class="example-tag">Public services</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="industry-card">
+                <div class="industry-header">
+                    <span class="industry-code">11</span>
+                    <span class="industry-name">Agriculture</span>
+                </div>
+                <p class="industry-description">Agriculture, Forestry, Fishing and Hunting sector comprises establishments primarily engaged in growing crops, raising animals, and harvesting natural resources.</p>
+                <div class="industry-examples">
+                    <div class="industry-examples-label">Example repositories</div>
+                    <div class="industry-examples-list">
+                        <span class="example-tag">Farm management</span>
+                        <span class="example-tag">Precision ag</span>
+                        <span class="example-tag">AgTech sensors</span>
+                        <span class="example-tag">Weather tools</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="industry-card">
+                <div class="industry-header">
+                    <span class="industry-code">72</span>
+                    <span class="industry-name">Accommodation</span>
+                </div>
+                <p class="industry-description">Accommodation and Food Services sector comprises establishments providing lodging and/or preparing meals, snacks, and beverages.</p>
+                <div class="industry-examples">
+                    <div class="industry-examples-label">Example repositories</div>
+                    <div class="industry-examples-list">
+                        <span class="example-tag">Hotel booking</span>
+                        <span class="example-tag">Restaurant POS</span>
+                        <span class="example-tag">Food delivery</span>
+                        <span class="example-tag">Reservation systems</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="industry-card">
+                <div class="industry-header">
+                    <span class="industry-code">53</span>
+                    <span class="industry-name">Real Estate</span>
+                </div>
+                <p class="industry-description">Real Estate and Rental and Leasing sector comprises establishments primarily engaged in renting, leasing, or otherwise allowing the use of tangible or intangible assets.</p>
+                <div class="industry-examples">
+                    <div class="industry-examples-label">Example repositories</div>
+                    <div class="industry-examples-list">
+                        <span class="example-tag">Property listing</span>
+                        <span class="example-tag">PropTech</span>
+                        <span class="example-tag">Rental platforms</span>
+                        <span class="example-tag">Mortgage tools</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="industry-card">
+                <div class="industry-header">
+                    <span class="industry-code">22</span>
+                    <span class="industry-name">Utilities</span>
+                </div>
+                <p class="industry-description">Utilities sector comprises establishments engaged in the provision of electric power, natural gas, steam supply, water supply, and sewage removal.</p>
+                <div class="industry-examples">
+                    <div class="industry-examples-label">Example repositories</div>
+                    <div class="industry-examples-list">
+                        <span class="example-tag">Smart grid</span>
+                        <span class="example-tag">Energy monitoring</span>
+                        <span class="example-tag">Water management</span>
+                        <span class="example-tag">Renewable energy</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="industry-card">
+                <div class="industry-header">
+                    <span class="industry-code">23</span>
+                    <span class="industry-name">Construction</span>
+                </div>
+                <p class="industry-description">Construction sector comprises establishments primarily engaged in the construction of buildings or engineering projects.</p>
+                <div class="industry-examples">
+                    <div class="industry-examples-label">Example repositories</div>
+                    <div class="industry-examples-list">
+                        <span class="example-tag">Project management</span>
+                        <span class="example-tag">BIM software</span>
+                        <span class="example-tag">Estimating tools</span>
+                        <span class="example-tag">Safety apps</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="industry-card">
+                <div class="industry-header">
+                    <span class="industry-code">42</span>
+                    <span class="industry-name">Wholesale Trade</span>
+                </div>
+                <p class="industry-description">Wholesale Trade sector comprises establishments engaged in wholesaling merchandise, generally without transformation.</p>
+                <div class="industry-examples">
+                    <div class="industry-examples-label">Example repositories</div>
+                    <div class="industry-examples-list">
+                        <span class="example-tag">B2B platforms</span>
+                        <span class="example-tag">Distribution</span>
+                        <span class="example-tag">Inventory systems</span>
+                        <span class="example-tag">Trade management</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="industry-card">
+                <div class="industry-header">
+                    <span class="industry-code">21</span>
+                    <span class="industry-name">Mining</span>
+                </div>
+                <p class="industry-description">Mining, Quarrying, and Oil and Gas Extraction sector comprises establishments that extract naturally occurring mineral solids, liquid minerals, and gases.</p>
+                <div class="industry-examples">
+                    <div class="industry-examples-label">Example repositories</div>
+                    <div class="industry-examples-list">
+                        <span class="example-tag">Exploration tools</span>
+                        <span class="example-tag">Oil & gas</span>
+                        <span class="example-tag">Geological analysis</span>
+                        <span class="example-tag">Resource tracking</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="excluded-section">
+            <h2>Excluded Sectors</h2>
+            <p>The following NAICS sector is excluded from our analysis due to limited representation in public GitHub repositories:</p>
+            <div class="excluded-list">
+                <div class="excluded-item">
+                    <span class="excluded-code">55</span>
+                    <span class="excluded-name">Management of Companies and Enterprises</span>
+                </div>
+            </div>
+            <p style="margin-top: 16px;">Sector 55 primarily consists of holding companies and corporate headquarters. These organizations rarely maintain public repositories on GitHub, as their software development activities typically occur within subsidiary companies classified under other sectors.</p>
+        </div>
+
+        <footer>
+            <p>
+                <a href="index.html">Back to Overview</a> |
+                <a href="methodology.html">View Methodology</a>
+            </p>
+        </footer>
+    </div>
+</body>
+</html>
