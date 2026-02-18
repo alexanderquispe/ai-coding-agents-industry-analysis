@@ -385,29 +385,46 @@
             font-weight: 700;
         }
 
-        .month-badge {
+        .month-select {
             background: var(--gradient-primary);
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-size: 24px;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 16px;
             font-weight: 700;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='white'%3E%3Cpath d='M2 4l4 4 4-4'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 32px;
+        }
+
+        .month-select option {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            padding: 8px;
         }
 
         .chart-controls {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 8px;
+            flex-wrap: wrap;
         }
 
         .btn {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            padding: 10px 20px;
-            font-size: 14px;
+            gap: 6px;
+            padding: 8px 14px;
+            font-size: 13px;
             font-weight: 600;
             font-family: inherit;
-            border-radius: 8px;
+            border-radius: 6px;
             cursor: pointer;
             transition: all 0.2s;
             border: none;
@@ -433,13 +450,26 @@
             background: var(--border-default);
         }
 
+        .btn-toggle {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-default);
+            color: var(--text-secondary);
+            font-size: 12px;
+            padding: 8px 12px;
+        }
+
+        .btn-toggle.active {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+
         .speed-select {
             background: var(--bg-tertiary);
             border: 1px solid var(--border-default);
             color: var(--text-primary);
-            padding: 10px 16px;
-            border-radius: 8px;
-            font-size: 14px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
             font-family: inherit;
             cursor: pointer;
         }
@@ -460,7 +490,19 @@
             grid-template-columns: 28px 140px 1fr 60px;
             align-items: center;
             gap: 10px;
-            transition: all 0.7s cubic-bezier(0.25, 0.1, 0.25, 1);
+            transition: all 0.7s cubic-bezier(0.25, 0.1, 0.25, 1),
+                        opacity 0.4s ease,
+                        max-height 0.4s ease;
+            max-height: 40px;
+            opacity: 1;
+            overflow: hidden;
+        }
+
+        .bar-item.hidden {
+            max-height: 0;
+            opacity: 0;
+            margin: 0;
+            padding: 0;
         }
 
         .bar-rank {
@@ -669,38 +711,91 @@
             .nav-links { display: none; }
             .menu-toggle { display: flex; }
 
-            .bar-item {
-                grid-template-columns: 24px 100px 1fr 50px;
-                gap: 6px;
+            .stats-grid {
+                gap: 8px;
+                margin: 24px 0;
             }
 
-            .bar-label {
+            .stat-card {
+                padding: 14px;
+            }
+
+            .stat-label {
                 font-size: 11px;
-            }
-
-            .bar-rank, .bar-value {
-                font-size: 11px;
-            }
-
-            .bar-track {
-                height: 18px;
             }
 
             .chart-header {
-                padding: 14px 16px;
+                padding: 10px 12px;
+                gap: 10px;
+            }
+
+            .chart-title {
+                gap: 8px;
+                flex-wrap: wrap;
+            }
+
+            .chart-title span {
+                font-size: 11px !important;
+            }
+
+            .month-select {
+                font-size: 13px;
+                padding: 6px 10px;
+                padding-right: 26px;
+                background-position: right 8px center;
+            }
+
+            .chart-controls {
+                gap: 4px;
+                width: 100%;
+                justify-content: flex-start;
+            }
+
+            .btn {
+                padding: 6px 10px;
+                font-size: 11px;
+                gap: 4px;
+            }
+
+            .btn svg {
+                width: 12px;
+                height: 12px;
+            }
+
+            .btn-toggle {
+                padding: 6px 8px;
+                font-size: 10px;
+            }
+
+            .speed-select {
+                padding: 6px 8px;
+                font-size: 11px;
+            }
+
+            .bar-item {
+                grid-template-columns: 22px 90px 1fr 45px;
+                gap: 5px;
+                max-height: 32px;
+            }
+
+            .bar-label {
+                font-size: 10px;
+            }
+
+            .bar-rank, .bar-value {
+                font-size: 10px;
+            }
+
+            .bar-track {
+                height: 16px;
             }
 
             .chart-body {
-                padding: 16px;
-            }
-
-            .month-badge {
-                font-size: 18px;
-                padding: 8px 16px;
+                padding: 12px;
             }
 
             .chart-canvas-container {
-                height: 300px;
+                height: 280px;
             }
         }
     </style>
@@ -715,9 +810,9 @@
             <a href="index.html" class="nav-logo">AI Agents Analysis</a>
             <ul class="nav-links">
                 <li><a href="index.html">Overview</a></li>
-                <li><a href="claude.html">Claude</a></li>
-                <li><a href="copilot.html" class="active">Copilot</a></li>
-                <li><a href="codex.html">Codex</a></li>
+                <li><a href="claude.html">Claude Code</a></li>
+                <li><a href="copilot.html" class="active">GitHub Copilot</a></li>
+                <li><a href="codex.html">OpenAI Codex</a></li>
                 <li><a href="methodology.html">Methodology</a></li>
                 <li><a href="industries.html">Industries</a></li>
             </ul>
@@ -733,9 +828,9 @@
     <div class="mobile-menu">
         <ul class="mobile-menu-links">
             <li><a href="index.html">Overview</a></li>
-            <li><a href="claude.html">Claude</a></li>
-            <li><a href="copilot.html" class="active">Copilot</a></li>
-            <li><a href="codex.html">Codex</a></li>
+            <li><a href="claude.html">Claude Code</a></li>
+            <li><a href="copilot.html" class="active">GitHub Copilot</a></li>
+            <li><a href="codex.html">OpenAI Codex</a></li>
             <li><a href="methodology.html">Methodology</a></li>
             <li><a href="industries.html">Industries</a></li>
         </ul>
@@ -780,29 +875,30 @@
         <div class="chart-section">
             <div class="chart-header">
                 <div class="chart-title">
-                    <div class="month-badge" id="month-display">Jan 2025</div>
-                    <span style="color: var(--text-secondary); font-size: 14px;">Cumulative adoption by NAICS sector</span>
+                    <select class="month-select" id="month-select"></select>
+                    <span style="color: var(--text-secondary); font-size: 12px;">Cumulative adoption by NAICS sector</span>
                 </div>
                 <div class="chart-controls">
                     <button class="btn btn-primary" id="play-btn">
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
                             <path d="M4 2.5v11l9-5.5-9-5.5z"/>
                         </svg>
                         Play
                     </button>
                     <button class="btn btn-secondary" id="reset-btn">
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
                             <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
                             <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
                         </svg>
                         Reset
                     </button>
                     <select class="speed-select" id="speed-select">
-                        <option value="1200">0.5x Speed</option>
-                        <option value="800" selected>1x Speed</option>
-                        <option value="400">2x Speed</option>
-                        <option value="200">4x Speed</option>
+                        <option value="1200">0.5x</option>
+                        <option value="800" selected>1x</option>
+                        <option value="400">2x</option>
+                        <option value="200">4x</option>
                     </select>
+                    <button class="btn btn-toggle" id="toggle-view">Top 10</button>
                 </div>
             </div>
 
@@ -899,8 +995,33 @@
         let currentIndex = 0;
         let speed = 800;
         let cumulativeChart, monthlyChart;
+        let showAllIndustries = false;
 
         const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+        function populateMonthSelect() {
+            const select = document.getElementById('month-select');
+            select.innerHTML = '';
+            data.months.forEach((month, index) => {
+                const parsed = parseMonth(month);
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = parsed.short;
+                select.appendChild(option);
+            });
+        }
+
+        function updateVisibleBars() {
+            const bars = document.querySelectorAll('.bar-item');
+            bars.forEach(bar => {
+                const order = parseInt(bar.style.order || 0);
+                if (!showAllIndustries && order >= 10) {
+                    bar.classList.add('hidden');
+                } else {
+                    bar.classList.remove('hidden');
+                }
+            });
+        }
 
         // Industry colors - 19 distinct colors for each NAICS sector
         const industryColors = {
@@ -984,14 +1105,16 @@
             });
 
             document.getElementById('industries-count').textContent = data.industries.length;
+            populateMonthSelect();
             updateBarChart(0);
+            updateVisibleBars();
         }
 
         function updateBarChart(monthIndex) {
             const month = data.months[monthIndex];
             const parsed = parseMonth(month);
 
-            document.getElementById('month-display').textContent = parsed.short;
+            document.getElementById('month-select').value = monthIndex;
             document.getElementById('current-month-stat').textContent = parsed.short;
             document.getElementById('progress-text').textContent = `${monthIndex + 1} of ${data.months.length} months`;
             document.getElementById('progress-fill').style.width = `${((monthIndex + 1) / data.months.length) * 100}%`;
@@ -1025,6 +1148,8 @@
                     row.style.order = newIndex;
                 }
             });
+
+            updateVisibleBars();
         }
 
         // ============ TIME SERIES CHARTS ============
@@ -1296,6 +1421,30 @@
                     updateBarChart(currentIndex);
                 }, speed);
             }
+        });
+
+        // Month Select Handler
+        document.getElementById('month-select').addEventListener('change', (e) => {
+            if (isPlaying) {
+                clearInterval(animationInterval);
+                isPlaying = false;
+                document.getElementById('play-btn').innerHTML = `
+                    <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M4 2.5v11l9-5.5-9-5.5z"/>
+                    </svg>
+                    Play`;
+            }
+            currentIndex = parseInt(e.target.value);
+            updateBarChart(currentIndex);
+        });
+
+        // Toggle View Handler (Top 10 / All 19)
+        document.getElementById('toggle-view').addEventListener('click', () => {
+            showAllIndustries = !showAllIndustries;
+            const btn = document.getElementById('toggle-view');
+            btn.textContent = showAllIndustries ? 'All 19' : 'Top 10';
+            btn.classList.toggle('active', showAllIndustries);
+            updateVisibleBars();
         });
 
         // Mobile Menu Toggle
