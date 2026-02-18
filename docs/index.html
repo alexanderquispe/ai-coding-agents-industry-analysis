@@ -414,9 +414,151 @@
             text-decoration: none;
         }
 
+        /* Mobile Menu Button */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 44px;
+            height: 44px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+            z-index: 200;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: var(--text-primary);
+            border-radius: 2px;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                        opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                        background 0.3s ease;
+        }
+
+        .menu-toggle span:nth-child(1) {
+            transform-origin: center;
+            margin-bottom: 6px;
+        }
+
+        .menu-toggle span:nth-child(2) {
+            margin-bottom: 6px;
+        }
+
+        .menu-toggle span:nth-child(3) {
+            transform-origin: center;
+        }
+
+        /* Hamburger to X animation */
+        .menu-toggle.active span:nth-child(1) {
+            transform: translateY(8px) rotate(45deg);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+            transform: scaleX(0);
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: translateY(-8px) rotate(-45deg);
+        }
+
+        /* Mobile Menu Overlay */
+        .mobile-menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 90;
+        }
+
+        .mobile-menu-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Mobile Menu Panel */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 280px;
+            max-width: 85vw;
+            height: 100vh;
+            background: var(--bg-secondary);
+            border-left: 1px solid var(--border-default);
+            transform: translateX(100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 150;
+            padding: 80px 24px 32px;
+            overflow-y: auto;
+        }
+
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+
+        .mobile-menu-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .mobile-menu-links li {
+            opacity: 0;
+            transform: translateX(20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .mobile-menu.active .mobile-menu-links li {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .mobile-menu.active .mobile-menu-links li:nth-child(1) { transition-delay: 0.1s; }
+        .mobile-menu.active .mobile-menu-links li:nth-child(2) { transition-delay: 0.15s; }
+        .mobile-menu.active .mobile-menu-links li:nth-child(3) { transition-delay: 0.2s; }
+        .mobile-menu.active .mobile-menu-links li:nth-child(4) { transition-delay: 0.25s; }
+        .mobile-menu.active .mobile-menu-links li:nth-child(5) { transition-delay: 0.3s; }
+        .mobile-menu.active .mobile-menu-links li:nth-child(6) { transition-delay: 0.35s; }
+
+        .mobile-menu-links a {
+            display: block;
+            padding: 16px 20px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: 12px;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+
+        .mobile-menu-links a:hover,
+        .mobile-menu-links a:focus {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .mobile-menu-links a.active {
+            color: var(--accent-purple);
+            background: rgba(163, 113, 247, 0.1);
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .nav-links { display: none; }
+            .menu-toggle { display: flex; }
             .hero-stats { gap: 24px; }
             .hero-stat-value { font-size: 36px; }
             .agent-grid { grid-template-columns: 1fr; }
@@ -435,8 +577,26 @@
                 <li><a href="methodology.html">Methodology</a></li>
                 <li><a href="industries.html">Industries</a></li>
             </ul>
+            <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
     </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu-overlay"></div>
+    <div class="mobile-menu">
+        <ul class="mobile-menu-links">
+            <li><a href="index.html" class="active">Overview</a></li>
+            <li><a href="claude.html">Claude</a></li>
+            <li><a href="copilot.html">Copilot</a></li>
+            <li><a href="codex.html">Codex</a></li>
+            <li><a href="methodology.html">Methodology</a></li>
+            <li><a href="industries.html">Industries</a></li>
+        </ul>
+    </div>
 
     <section class="hero">
         <div class="hero-badge">
@@ -785,6 +945,50 @@
                 }
             });
         }
+
+        // Mobile Menu Toggle
+        const menuToggle = document.querySelector('.menu-toggle');
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const mobileOverlay = document.querySelector('.mobile-menu-overlay');
+
+        function toggleMenu() {
+            const isActive = mobileMenu.classList.contains('active');
+            menuToggle.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+            mobileOverlay.classList.toggle('active');
+            menuToggle.setAttribute('aria-expanded', !isActive);
+            document.body.style.overflow = isActive ? '' : 'hidden';
+        }
+
+        function closeMenu() {
+            menuToggle.classList.remove('active');
+            mobileMenu.classList.remove('active');
+            mobileOverlay.classList.remove('active');
+            menuToggle.setAttribute('aria-expanded', 'false');
+            document.body.style.overflow = '';
+        }
+
+        menuToggle.addEventListener('click', toggleMenu);
+        mobileOverlay.addEventListener('click', closeMenu);
+
+        // Close menu on link click
+        document.querySelectorAll('.mobile-menu-links a').forEach(link => {
+            link.addEventListener('click', closeMenu);
+        });
+
+        // Close menu on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
+                closeMenu();
+            }
+        });
+
+        // Close menu on resize to desktop
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768 && mobileMenu.classList.contains('active')) {
+                closeMenu();
+            }
+        });
     </script>
 </body>
 </html>
