@@ -3,25 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GitHub Copilot Industry Adoption | 2025</title>
+    <title>Cursor AI Industry Adoption | 2026</title>
     <link href="https://fonts.googleapis.com/css2?family=Mona+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            /* GitHub Copilot blue colors */
+            /* Cursor AI coral/orange colors */
             --bg-primary: #0d1117;
             --bg-secondary: #161b22;
             --bg-tertiary: #21262d;
             --border-default: #30363d;
             --border-muted: #21262d;
 
-            /* Blue accent colors */
-            --accent-primary: #58a6ff;
-            --accent-secondary: #388bfd;
-            --accent-tertiary: #79c0ff;
+            /* Coral accent colors (Cursor theme) */
+            --accent-primary: #f78166;
+            --accent-secondary: #ffa657;
+            --accent-tertiary: #ffb780;
             --accent-teal: #3fb950;
-            --accent-orange: #d29922;
-            --accent-coral: #f78166;
+            --accent-blue: #58a6ff;
 
             /* Text colors */
             --text-primary: #e6edf3;
@@ -29,8 +28,8 @@
             --text-muted: #6e7681;
 
             /* Gradients */
-            --gradient-primary: linear-gradient(135deg, #0969da 0%, #58a6ff 50%, #79c0ff 100%);
-            --gradient-hero: linear-gradient(180deg, rgba(9, 105, 218, 0.15) 0%, transparent 50%);
+            --gradient-primary: linear-gradient(135deg, #d97706 0%, #f78166 50%, #ffa657 100%);
+            --gradient-hero: linear-gradient(180deg, rgba(247, 129, 102, 0.15) 0%, transparent 50%);
         }
 
         * {
@@ -72,7 +71,7 @@
         .orb-1 {
             width: 600px;
             height: 600px;
-            background: #0969da;
+            background: #d97706;
             top: -200px;
             right: -100px;
             animation: float 20s ease-in-out infinite;
@@ -81,7 +80,7 @@
         .orb-2 {
             width: 400px;
             height: 400px;
-            background: #58a6ff;
+            background: #f78166;
             bottom: -100px;
             left: -100px;
             animation: float 25s ease-in-out infinite reverse;
@@ -229,6 +228,7 @@
         .mobile-menu.active .mobile-menu-links li:nth-child(4) { transition-delay: 0.25s; }
         .mobile-menu.active .mobile-menu-links li:nth-child(5) { transition-delay: 0.3s; }
         .mobile-menu.active .mobile-menu-links li:nth-child(6) { transition-delay: 0.35s; }
+        .mobile-menu.active .mobile-menu-links li:nth-child(7) { transition-delay: 0.4s; }
 
         .mobile-menu-links a {
             display: block;
@@ -248,7 +248,7 @@
 
         .mobile-menu-links a.active {
             color: var(--accent-primary);
-            background: rgba(88, 166, 255, 0.1);
+            background: rgba(247, 129, 102, 0.1);
         }
 
         /* Header */
@@ -811,9 +811,9 @@
             <ul class="nav-links">
                 <li><a href="index.html">Overview</a></li>
                 <li><a href="claude.html">Claude Code</a></li>
-                <li><a href="copilot.html" class="active">GitHub Copilot</a></li>
+                <li><a href="copilot.html">GitHub Copilot</a></li>
                 <li><a href="codex.html">OpenAI Codex</a></li>
-                <li><a href="cursor.html">Cursor AI</a></li>
+                <li><a href="cursor.html" class="active">Cursor AI</a></li>
                 <li><a href="methodology.html">Methodology</a></li>
                 <li><a href="industries.html">Industries</a></li>
             </ul>
@@ -830,9 +830,9 @@
         <ul class="mobile-menu-links">
             <li><a href="index.html">Overview</a></li>
             <li><a href="claude.html">Claude Code</a></li>
-            <li><a href="copilot.html" class="active">GitHub Copilot</a></li>
+            <li><a href="copilot.html">GitHub Copilot</a></li>
             <li><a href="codex.html">OpenAI Codex</a></li>
-            <li><a href="cursor.html">Cursor AI</a></li>
+            <li><a href="cursor.html" class="active">Cursor AI</a></li>
             <li><a href="methodology.html">Methodology</a></li>
             <li><a href="industries.html">Industries</a></li>
         </ul>
@@ -846,11 +846,11 @@
                 <span>Live Data Visualization</span>
             </div>
             <h1>
-                <span class="gradient-text">GitHub Copilot</span> Industry Adoption
+                <span class="gradient-text">Cursor AI</span> Industry Adoption
             </h1>
             <p class="subtitle">
                 Tracking how different industries adopt AI coding assistants across
-                246,000+ repositories on GitHub
+                128,761+ repositories on GitHub
             </p>
         </header>
 
@@ -923,7 +923,7 @@
         <div class="timeseries-section">
             <div class="timeseries-header">
                 <div class="timeseries-title">Cumulative Repository Count by Industry</div>
-                <div class="timeseries-subtitle">Total repositories using GitHub Copilot over time, broken down by NAICS sector</div>
+                <div class="timeseries-subtitle">Total repositories using Cursor AI over time, broken down by NAICS sector</div>
                 <div class="timeseries-controls">
                     <div class="control-group">
                         <span class="control-label">Industries:</span>
@@ -954,7 +954,7 @@
         <div class="timeseries-section">
             <div class="timeseries-header">
                 <div class="timeseries-title">Monthly New Repositories by Industry</div>
-                <div class="timeseries-subtitle">New repositories adopting GitHub Copilot each month</div>
+                <div class="timeseries-subtitle">New repositories adopting Cursor AI each month</div>
                 <div class="timeseries-controls">
                     <div class="control-group">
                         <span class="control-label">Industries:</span>
@@ -983,7 +983,7 @@
 
         <footer>
             <p>
-                Data represents public GitHub repositories using GitHub Copilot |
+                Data represents public GitHub repositories using Cursor AI |
                 Classified by <a href="industries.html">NAICS Industry Codes</a> |
                 <a href="methodology.html">Methodology</a>
             </p>
@@ -1048,7 +1048,7 @@
             "21": { gradient: "linear-gradient(90deg, #78350f, #b45309)", solid: "#b45309" }   // Brown - Mining
         };
 
-        fetch('copilot_cumulative.json')
+        fetch('cursor_cumulative.json')
             .then(response => response.json())
             .then(jsonData => {
                 data = jsonData;
@@ -1059,7 +1059,7 @@
                 console.error('Error loading data:', error);
                 document.getElementById('bars').innerHTML = `
                     <p style="text-align:center; padding:40px; color: var(--text-secondary);">
-                        Error loading data. Ensure copilot_cumulative.json is available.
+                        Error loading data. Ensure cursor_cumulative.json is available.
                     </p>`;
             });
 

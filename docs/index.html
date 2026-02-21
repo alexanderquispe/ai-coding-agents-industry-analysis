@@ -237,6 +237,7 @@
         .agent-card.claude .agent-card-badge { background: var(--gradient-purple); }
         .agent-card.copilot .agent-card-badge { background: var(--gradient-blue); }
         .agent-card.codex .agent-card-badge { background: var(--gradient-green); }
+        .agent-card.cursor .agent-card-badge { background: linear-gradient(135deg, #d97706 0%, #f78166 100%); }
 
         .agent-card-title {
             font-size: 24px;
@@ -268,6 +269,7 @@
         .agent-card.claude .agent-stat-value { color: var(--accent-purple); }
         .agent-card.copilot .agent-stat-value { color: var(--accent-blue); }
         .agent-card.codex .agent-stat-value { color: var(--accent-green); }
+        .agent-card.cursor .agent-stat-value { color: var(--accent-orange); }
 
         .agent-stat-label {
             font-size: 12px;
@@ -574,6 +576,7 @@
                 <li><a href="claude.html">Claude Code</a></li>
                 <li><a href="copilot.html">GitHub Copilot</a></li>
                 <li><a href="codex.html">OpenAI Codex</a></li>
+                <li><a href="cursor.html">Cursor AI</a></li>
                 <li><a href="methodology.html">Methodology</a></li>
                 <li><a href="industries.html">Industries</a></li>
             </ul>
@@ -593,6 +596,7 @@
             <li><a href="claude.html">Claude Code</a></li>
             <li><a href="copilot.html">GitHub Copilot</a></li>
             <li><a href="codex.html">OpenAI Codex</a></li>
+            <li><a href="cursor.html">Cursor AI</a></li>
             <li><a href="methodology.html">Methodology</a></li>
             <li><a href="industries.html">Industries</a></li>
         </ul>
@@ -621,7 +625,7 @@
                 <div class="hero-stat-label">Industries Tracked</div>
             </div>
             <div class="hero-stat">
-                <div class="hero-stat-value">3</div>
+                <div class="hero-stat-value">4</div>
                 <div class="hero-stat-label">AI Agents Compared</div>
             </div>
         </div>
@@ -726,6 +730,36 @@
                         <span class="agent-card-arrow">→</span>
                     </div>
                 </a>
+
+                <a href="cursor.html" class="agent-card cursor">
+                    <div class="agent-card-header">
+                        <div class="agent-card-badge">CURSOR AI</div>
+                        <h3 class="agent-card-title">Cursor AI</h3>
+                        <p class="agent-card-company">by Anysphere</p>
+                    </div>
+                    <div class="agent-card-stats">
+                        <div class="agent-stat">
+                            <div class="agent-stat-value">129K</div>
+                            <div class="agent-stat-label">Repositories</div>
+                        </div>
+                        <div class="agent-stat">
+                            <div class="agent-stat-value">24%</div>
+                            <div class="agent-stat-label">Prof. Services</div>
+                        </div>
+                        <div class="agent-stat">
+                            <div class="agent-stat-value">14</div>
+                            <div class="agent-stat-label">Months Data</div>
+                        </div>
+                        <div class="agent-stat">
+                            <div class="agent-stat-value">#4</div>
+                            <div class="agent-stat-label">Growth Rate</div>
+                        </div>
+                    </div>
+                    <div class="agent-card-footer">
+                        <span class="agent-card-cta">View detailed analysis</span>
+                        <span class="agent-card-arrow">→</span>
+                    </div>
+                </a>
             </div>
 
             <!-- Comparison Chart -->
@@ -820,9 +854,10 @@
         Promise.all([
             fetch('claude_cumulative.json').then(r => r.json()),
             fetch('copilot_cumulative.json').then(r => r.json()),
-            fetch('codex_cumulative.json').then(r => r.json())
-        ]).then(([claude, copilot, codex]) => {
-            createComparisonChart(claude, copilot, codex);
+            fetch('codex_cumulative.json').then(r => r.json()),
+            fetch('cursor_cumulative.json').then(r => r.json())
+        ]).then(([claude, copilot, codex, cursor]) => {
+            createComparisonChart(claude, copilot, codex, cursor);
         });
 
         function formatNumber(num) {
@@ -831,7 +866,7 @@
             return num.toLocaleString();
         }
 
-        function createComparisonChart(claude, copilot, codex) {
+        function createComparisonChart(claude, copilot, codex, cursor) {
             const ctx = document.getElementById('comparison-chart').getContext('2d');
 
             // Calculate totals per month
@@ -844,9 +879,12 @@
             const codexTotals = codex.months.map((_, i) =>
                 codex.industries.reduce((sum, ind) => sum + ind.values[i], 0)
             );
+            const cursorTotals = cursor.months.map((_, i) =>
+                cursor.industries.reduce((sum, ind) => sum + ind.values[i], 0)
+            );
 
             // Use the longest month array for labels
-            const allMonths = [...new Set([...claude.months, ...copilot.months, ...codex.months])].sort();
+            const allMonths = [...new Set([...claude.months, ...copilot.months, ...codex.months, ...cursor.months])].sort();
 
             new Chart(ctx, {
                 type: 'line',
@@ -891,6 +929,19 @@
                             }),
                             borderColor: '#3fb950',
                             backgroundColor: '#3fb95020',
+                            borderWidth: 3,
+                            pointRadius: 5,
+                            pointHoverRadius: 8,
+                            tension: 0.3
+                        },
+                        {
+                            label: 'Cursor AI',
+                            data: allMonths.map(m => {
+                                const idx = cursor.months.indexOf(m);
+                                return idx >= 0 ? cursorTotals[idx] : null;
+                            }),
+                            borderColor: '#f78166',
+                            backgroundColor: '#f7816620',
                             borderWidth: 3,
                             pointRadius: 5,
                             pointHoverRadius: 8,

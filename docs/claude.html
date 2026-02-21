@@ -847,6 +847,7 @@
                 <li><a href="claude.html" class="active">Claude Code</a></li>
                 <li><a href="copilot.html">GitHub Copilot</a></li>
                 <li><a href="codex.html">OpenAI Codex</a></li>
+                <li><a href="cursor.html">Cursor AI</a></li>
                 <li><a href="methodology.html">Methodology</a></li>
                 <li><a href="industries.html">Industries</a></li>
             </ul>
@@ -866,6 +867,7 @@
             <li><a href="claude.html" class="active">Claude Code</a></li>
             <li><a href="copilot.html">GitHub Copilot</a></li>
             <li><a href="codex.html">OpenAI Codex</a></li>
+            <li><a href="cursor.html">Cursor AI</a></li>
             <li><a href="methodology.html">Methodology</a></li>
             <li><a href="industries.html">Industries</a></li>
         </ul>
@@ -933,7 +935,7 @@
                         <option value="400">2x</option>
                         <option value="200">4x</option>
                     </select>
-                    <button class="btn btn-toggle" id="toggle-view">Top 10</button>
+                    <button class="btn btn-toggle active" id="toggle-view">All 19</button>
                 </div>
             </div>
 
@@ -1030,7 +1032,7 @@
         let currentIndex = 0;
         let speed = 800;
         let cumulativeChart, monthlyChart;
-        let showAllIndustries = false;
+        let showAllIndustries = true;
 
         const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 

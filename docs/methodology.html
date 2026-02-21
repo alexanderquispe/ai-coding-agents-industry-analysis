@@ -405,6 +405,7 @@
                 <li><a href="claude.html">Claude Code</a></li>
                 <li><a href="copilot.html">GitHub Copilot</a></li>
                 <li><a href="codex.html">OpenAI Codex</a></li>
+                <li><a href="cursor.html">Cursor AI</a></li>
                 <li><a href="methodology.html" class="active">Methodology</a></li>
                 <li><a href="industries.html">Industries</a></li>
             </ul>
@@ -423,6 +424,7 @@
             <li><a href="claude.html">Claude Code</a></li>
             <li><a href="copilot.html">GitHub Copilot</a></li>
             <li><a href="codex.html">OpenAI Codex</a></li>
+            <li><a href="cursor.html">Cursor AI</a></li>
             <li><a href="methodology.html" class="active">Methodology</a></li>
             <li><a href="industries.html">Industries</a></li>
         </ul>
@@ -507,6 +509,18 @@
                 <li><strong>Integration Signatures:</strong> Patterns indicating OpenAI Codex CLI or API usage.</li>
             </ol>
 
+            <h3>Cursor AI Detection</h3>
+            <p>Cursor AI usage was detected through:</p>
+            <ol>
+                <li><strong>Branch Naming Convention:</strong> Pull requests from branches with <code>cursor/</code> prefix:
+                    <pre><code>is:pr head:cursor</code></pre>
+                </li>
+                <li><strong>Co-Author Tags:</strong> Commits containing:
+                    <pre><code>Co-Authored-By: cursoragent@cursor.com</code></pre>
+                </li>
+            </ol>
+            <p>This yielded <strong>292,461 PRs</strong> and <strong>497,949 commits</strong> across <strong>128,791 unique repositories</strong>.</p>
+
             <h3>Detection Validation</h3>
             <p>A random sample of 1,000 detections per agent was manually validated:</p>
             <table>
@@ -528,6 +542,10 @@
                     <tr>
                         <td>OpenAI Codex</td>
                         <td class="metric-value">89.5%</td>
+                    </tr>
+                    <tr>
+                        <td>Cursor AI</td>
+                        <td class="metric-value">Pending</td>
                     </tr>
                 </tbody>
             </table>
