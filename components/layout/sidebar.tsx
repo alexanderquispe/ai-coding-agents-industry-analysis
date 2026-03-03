@@ -4,16 +4,30 @@ import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { useAgentSelection, AgentSelection } from '@/lib/agent-context'
 import { AGENTS } from '@/lib/constants'
-import { Filter, X } from 'lucide-react'
+import {
+  Filter, X, Eye, GitCompareArrows, Building2,
+  TrendingUp, Lightbulb, BookOpen,
+} from 'lucide-react'
 
 const agentOptions: { id: AgentSelection; name: string; color: string }[] = [
   { id: 'all', name: 'All Agents', color: '#a78bfa' },
   ...AGENTS.map(a => ({ id: a.id as AgentSelection, name: a.name, color: a.color })),
 ]
 
+const navSections = [
+  { id: 'hero', label: 'Overview', icon: Eye },
+  { id: 'comparison', label: 'Comparison', icon: GitCompareArrows },
+  { id: 'industries', label: 'Industries', icon: Building2 },
+  { id: 'trends', label: 'Trends', icon: TrendingUp },
+  { id: 'findings', label: 'Findings', icon: Lightbulb },
+  { id: 'methodology', label: 'Methodology', icon: BookOpen },
+]
+
 export function Sidebar() {
   const { selectedAgent, setSelectedAgent } = useAgentSelection()
   const [mobileOpen, setMobileOpen] = useState(false)
+
+  const closeMobile = () => setMobileOpen(false)
 
   return (
     <>
@@ -26,15 +40,16 @@ export function Sidebar() {
         <span className="text-sm font-medium">Agents</span>
       </button>
 
-      {/* Mobile overlay */}
-      {mobileOpen && (
-        <div
-          className="lg:hidden fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
-          onClick={() => setMobileOpen(false)}
-        />
-      )}
+      {/* Mobile overlay – always rendered, transitions opacity */}
+      <div
+        className={cn(
+          'lg:hidden fixed inset-0 z-40 bg-black/50 backdrop-blur-sm transition-opacity duration-300 ease-in-out',
+          mobileOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none',
+        )}
+        onClick={closeMobile}
+      />
 
-      {/* Sidebar panel */}
+      {/* Sidebar panel (desktop) */}
       <aside
         className={cn(
           'hidden lg:block lg:sticky lg:top-16 lg:h-[calc(100vh-4rem)] lg:w-56 lg:shrink-0',
@@ -52,13 +67,13 @@ export function Sidebar() {
       <aside
         className={cn(
           'lg:hidden fixed inset-y-0 left-0 z-50 w-64 bg-[var(--bg-primary)] border-r border-[var(--border)]',
-          'transform transition-transform duration-300 ease-out',
+          'transform transition-transform duration-300 ease-in-out',
           mobileOpen ? 'translate-x-0' : '-translate-x-full',
         )}
       >
         <div className="flex items-center justify-between p-4 border-b border-[var(--border)]">
           <span className="text-sm font-semibold text-[var(--text-secondary)]">Filter Agents</span>
-          <button onClick={() => setMobileOpen(false)} className="text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
+          <button onClick={closeMobile} className="text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -66,8 +81,9 @@ export function Sidebar() {
           selectedAgent={selectedAgent}
           onSelect={(agent) => {
             setSelectedAgent(agent)
-            setMobileOpen(false)
+            closeMobile()
           }}
+          onClose={closeMobile}
         />
       </aside>
     </>
@@ -77,9 +93,11 @@ export function Sidebar() {
 function SidebarContent({
   selectedAgent,
   onSelect,
+  onClose,
 }: {
   selectedAgent: AgentSelection
   onSelect: (agent: AgentSelection) => void
+  onClose?: () => void
 }) {
   return (
     <div className="p-4 space-y-6">
@@ -121,25 +139,23 @@ function SidebarContent({
         <h3 className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider mb-3">
           Sections
         </h3>
-        <div className="space-y-1">
-          {[
-            { id: 'hero', label: 'Overview' },
-            { id: 'comparison', label: 'Comparison' },
-            { id: 'industries', label: 'Industries' },
-            { id: 'trends', label: 'Trends' },
-            { id: 'findings', label: 'Findings' },
-            { id: 'methodology', label: 'Methodology' },
-          ].map((section) => (
-            <button
-              key={section.id}
-              onClick={() => {
-                document.getElementById(section.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-              }}
-              className="w-full text-left px-3 py-1.5 rounded-md text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]/30 transition-colors"
-            >
-              {section.label}
-            </button>
-          ))}
+        <div className="space-y-0.5">
+          {navSections.map((section) => {
+            const Icon = section.icon
+            return (
+              <button
+                key={section.id}
+                onClick={() => {
+                  document.getElementById(section.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                  onClose?.()
+                }}
+                className="group w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-purple-500/10 transition-colors"
+              >
+                <Icon className="h-3.5 w-3.5 text-purple-500/50 group-hover:text-purple-400 transition-colors shrink-0" />
+                <span>{section.label}</span>
+              </button>
+            )
+          })}
         </div>
       </div>
     </div>

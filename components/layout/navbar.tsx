@@ -90,9 +90,15 @@ export function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Navigation */}
-      {isOpen && (
-        <div className="md:hidden border-t border-[var(--border)] bg-[var(--bg-primary)]/95 backdrop-blur-md">
+      {/* Mobile Navigation – smooth height transition */}
+      <div
+        className={cn(
+          'md:hidden border-t border-[var(--border)] bg-[var(--bg-primary)]/95 backdrop-blur-md',
+          'grid transition-[grid-template-rows] duration-300 ease-in-out',
+          isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]',
+        )}
+      >
+        <div className="overflow-hidden">
           <div className="space-y-1 px-4 py-3">
             {navSections.map((section) => (
               <button
@@ -110,7 +116,7 @@ export function Navbar() {
             ))}
           </div>
         </div>
-      )}
+      </div>
     </nav>
   )
 }
