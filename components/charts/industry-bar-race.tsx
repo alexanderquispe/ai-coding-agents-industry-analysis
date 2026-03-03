@@ -43,6 +43,8 @@ export function IndustryBarRace({ data, maxItems = 10, timeData, months }: Indus
   const [speed, setSpeed] = useState(800)
   const [showAll, setShowAll] = useState(true)
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const pulseTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const selectRef = useRef<HTMLSelectElement>(null)
 
   // Compute current values based on month index
   const currentData: IndustryValue[] = hasTimeSeries
@@ -79,37 +81,58 @@ export function IndustryBarRace({ data, maxItems = 10, timeData, months }: Indus
     setIsResetting(true)
   }, [currentIndex])
 
+  // Pulse helper: animates the select, then changes index at the peak
+  const pulseAndChange = useCallback((changeFn: () => void, pulseDuration: number, peakDelay: number) => {
+    selectRef.current?.animate([
+      { transform: 'scale(1)', borderColor: 'var(--border)' },
+      { transform: 'scale(0.97)', borderColor: 'rgba(168, 85, 247, 0.5)' },
+      { transform: 'scale(1.05)', borderColor: 'rgba(168, 85, 247, 0.8)' },
+      { transform: 'scale(1)', borderColor: 'var(--border)' },
+    ], { duration: pulseDuration, easing: 'ease-in-out' })
+
+    pulseTimeoutRef.current = setTimeout(changeFn, peakDelay)
+  }, [])
+
+  // Play: pulse first → change month at the peak
   useEffect(() => {
     if (isPlaying && hasTimeSeries) {
       intervalRef.current = setInterval(() => {
-        setCurrentIndex((prev) => {
-          if (prev >= months!.length - 1) {
-            setIsPlaying(false)
-            return prev
-          }
-          return prev + 1
-        })
+        pulseAndChange(() => {
+          setCurrentIndex((prev) => {
+            if (prev >= months!.length - 1) {
+              setIsPlaying(false)
+              return prev
+            }
+            return prev + 1
+          })
+        }, 300, 160)
       }, speed)
     }
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current)
+      if (pulseTimeoutRef.current) clearTimeout(pulseTimeoutRef.current)
     }
-  }, [isPlaying, speed, hasTimeSeries, months])
+  }, [isPlaying, speed, hasTimeSeries, months, pulseAndChange])
 
-  // Animated rewind effect
+  // Animated rewind: quick pulse + change at peak
   useEffect(() => {
     if (!isResetting) return
     const id = setInterval(() => {
-      setCurrentIndex((prev) => {
-        if (prev <= 0) {
-          setIsResetting(false)
-          return 0
-        }
-        return prev - 1
-      })
-    }, 70)
-    return () => clearInterval(id)
-  }, [isResetting])
+      pulseAndChange(() => {
+        setCurrentIndex((prev) => {
+          if (prev <= 0) {
+            setIsResetting(false)
+            return 0
+          }
+          return prev - 1
+        })
+      }, 180, 80)
+    }, 100)
+    return () => {
+      clearInterval(id)
+      if (pulseTimeoutRef.current) clearTimeout(pulseTimeoutRef.current)
+    }
+  }, [isResetting, pulseAndChange])
 
   const progressPct = hasTimeSeries ? ((currentIndex + 1) / months!.length) * 100 : 100
 
@@ -120,6 +143,7 @@ export function IndustryBarRace({ data, maxItems = 10, timeData, months }: Indus
         <div className="flex flex-wrap items-center gap-3">
           {/* Month Selector */}
           <select
+            ref={selectRef}
             className="bg-[var(--bg-tertiary)] border border-[var(--border)] text-[var(--text-primary)] text-sm rounded-md px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed"
             value={currentIndex}
             disabled={isResetting}
