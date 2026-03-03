@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useMemo } from 'react'
+import { useMobileTooltipDismiss } from '@/lib/use-mobile-tooltip-dismiss'
 import {
   AreaChart,
   Area,
@@ -21,6 +22,7 @@ interface CumulativeChartProps {
 
 export function CumulativeChart({ data, industries }: CumulativeChartProps) {
   const colors = useChartColors()
+  const { ref: chartRef, onTouchEnd } = useMobileTooltipDismiss()
   const [topN, setTopN] = useState<'top5' | 'top10' | 'all'>('top10')
   const [scale, setScale] = useState<'linear' | 'log'>('linear')
   const [hiddenCodes, setHiddenCodes] = useState<Set<string>>(new Set())
@@ -93,7 +95,7 @@ export function CumulativeChart({ data, industries }: CumulativeChartProps) {
       </div>
 
       {/* Chart */}
-      <div className="h-[400px] w-full">
+      <div className="h-[400px] w-full" ref={chartRef} onTouchEnd={onTouchEnd}>
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
             data={data}

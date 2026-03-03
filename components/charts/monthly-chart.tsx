@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useMemo } from 'react'
+import { useMobileTooltipDismiss } from '@/lib/use-mobile-tooltip-dismiss'
 import {
   BarChart,
   Bar,
@@ -23,6 +24,7 @@ interface MonthlyChartProps {
 
 export function MonthlyChart({ data, industries }: MonthlyChartProps) {
   const colors = useChartColors()
+  const { ref: chartRef, onTouchEnd } = useMobileTooltipDismiss()
   const [topN, setTopN] = useState<'top5' | 'top10' | 'all'>('top10')
   const [chartType, setChartType] = useState<'line' | 'bar'>('line')
   const [hiddenCodes, setHiddenCodes] = useState<Set<string>>(new Set())
@@ -97,7 +99,7 @@ export function MonthlyChart({ data, industries }: MonthlyChartProps) {
       </div>
 
       {/* Chart */}
-      <div className="h-[400px] w-full">
+      <div className="h-[400px] w-full" ref={chartRef} onTouchEnd={onTouchEnd}>
         <ResponsiveContainer width="100%" height="100%">
           {chartType === 'bar' ? (
             <BarChart

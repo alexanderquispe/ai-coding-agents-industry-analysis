@@ -39,6 +39,7 @@ export function IndustryBarRace({ data, maxItems = 10, timeData, months }: Indus
   const hasTimeSeries = timeData && months && months.length > 0
   const [currentIndex, setCurrentIndex] = useState(hasTimeSeries ? months!.length - 1 : 0)
   const [isPlaying, setIsPlaying] = useState(false)
+  const [isResetting, setIsResetting] = useState(false)
   const [speed, setSpeed] = useState(800)
   const [showAll, setShowAll] = useState(true)
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
@@ -62,8 +63,11 @@ export function IndustryBarRace({ data, maxItems = 10, timeData, months }: Indus
   // Animation controls
   const play = useCallback(() => {
     if (!hasTimeSeries) return
+    if (currentIndex >= months!.length - 1) {
+      setCurrentIndex(0)
+    }
     setIsPlaying(true)
-  }, [hasTimeSeries])
+  }, [hasTimeSeries, currentIndex, months])
 
   const pause = useCallback(() => {
     setIsPlaying(false)
@@ -71,8 +75,9 @@ export function IndustryBarRace({ data, maxItems = 10, timeData, months }: Indus
 
   const reset = useCallback(() => {
     setIsPlaying(false)
-    setCurrentIndex(0)
-  }, [])
+    if (currentIndex === 0) return
+    setIsResetting(true)
+  }, [currentIndex])
 
   useEffect(() => {
     if (isPlaying && hasTimeSeries) {
@@ -91,6 +96,21 @@ export function IndustryBarRace({ data, maxItems = 10, timeData, months }: Indus
     }
   }, [isPlaying, speed, hasTimeSeries, months])
 
+  // Animated rewind effect
+  useEffect(() => {
+    if (!isResetting) return
+    const id = setInterval(() => {
+      setCurrentIndex((prev) => {
+        if (prev <= 0) {
+          setIsResetting(false)
+          return 0
+        }
+        return prev - 1
+      })
+    }, 70)
+    return () => clearInterval(id)
+  }, [isResetting])
+
   const progressPct = hasTimeSeries ? ((currentIndex + 1) / months!.length) * 100 : 100
 
   return (
@@ -100,8 +120,9 @@ export function IndustryBarRace({ data, maxItems = 10, timeData, months }: Indus
         <div className="flex flex-wrap items-center gap-3">
           {/* Month Selector */}
           <select
-            className="bg-[var(--bg-tertiary)] border border-[var(--border)] text-[var(--text-primary)] text-sm rounded-md px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-purple-500"
+            className="bg-[var(--bg-tertiary)] border border-[var(--border)] text-[var(--text-primary)] text-sm rounded-md px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed"
             value={currentIndex}
+            disabled={isResetting}
             onChange={(e) => {
               setIsPlaying(false)
               setCurrentIndex(Number(e.target.value))
@@ -119,7 +140,8 @@ export function IndustryBarRace({ data, maxItems = 10, timeData, months }: Indus
           {/* Play/Pause */}
           <button
             onClick={isPlaying ? pause : play}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-purple-600 hover:bg-purple-500 text-white text-xs font-medium transition-colors"
+            disabled={isResetting}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-purple-600 hover:bg-purple-500 text-white text-xs font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isPlaying ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
             {isPlaying ? 'Pause' : 'Play'}
@@ -128,7 +150,8 @@ export function IndustryBarRace({ data, maxItems = 10, timeData, months }: Indus
           {/* Reset */}
           <button
             onClick={reset}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[var(--bg-tertiary)] hover:brightness-110 text-[var(--text-primary)] text-xs font-medium transition-colors"
+            disabled={isResetting}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[var(--bg-tertiary)] hover:brightness-110 text-[var(--text-primary)] text-xs font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <RotateCcw className="h-3.5 w-3.5" />
             Reset
@@ -167,11 +190,11 @@ export function IndustryBarRace({ data, maxItems = 10, timeData, months }: Indus
           return (
             <div
               key={item.code}
-              className="relative h-7 bg-[var(--bar-bg)] rounded overflow-hidden transition-all duration-300"
+              className="relative h-7 bg-[var(--bar-bg)] rounded overflow-hidden transition-[height,opacity] duration-500 ease-in-out"
             >
               {/* Bar fill */}
               <div
-                className="absolute inset-y-0 left-0 rounded transition-all duration-500"
+                className="absolute inset-y-0 left-0 rounded transition-[width] duration-700 ease-in-out"
                 style={{
                   width: `${pct}%`,
                   background: `linear-gradient(90deg, ${item.color}80, ${item.color})`,
@@ -207,7 +230,7 @@ export function IndustryBarRace({ data, maxItems = 10, timeData, months }: Indus
           </div>
           <div className="h-1 bg-[var(--bg-tertiary)] rounded-full overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-purple-600 to-pink-500 rounded-full transition-all duration-300"
+              className="h-full bg-gradient-to-r from-purple-600 to-pink-500 rounded-full transition-[width] duration-700 ease-in-out"
               style={{ width: `${progressPct}%` }}
             />
           </div>
