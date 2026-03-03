@@ -78,3 +78,8 @@ web/
 # TypeScript
 *.tsbuildinfo
 next-env.d.ts
+
+# Excalidraw diagrams (local only, pending approval)
+figures/sistema-completo.excalidraw
+figures/sistema-completo.png
+figures/sistema-completo.svg
