@@ -1,0 +1,133 @@
+@import "tailwindcss";
+
+/* ── Light theme (default in :root) ── */
+:root {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f4f4f5;
+  --bg-tertiary: #e4e4e7;
+  --bg-glass: rgba(255, 255, 255, 0.7);
+  --border: rgba(228, 228, 231, 0.8);
+  --text-primary: #18181b;
+  --text-secondary: #52525b;
+  --text-muted: #a1a1aa;
+  --chart-grid: #e4e4e7;
+  --chart-axis: #a1a1aa;
+  --chart-tick: #71717a;
+  --chart-tooltip-bg: #ffffff;
+  --chart-tooltip-border: #e4e4e7;
+  --scrollbar-track: #f4f4f5;
+  --scrollbar-thumb: #d4d4d8;
+  --scrollbar-thumb-hover: #a1a1aa;
+  --glass-bg: rgba(255, 255, 255, 0.6);
+  --glass-border: rgba(228, 228, 231, 0.6);
+  --glass-shadow: rgba(0, 0, 0, 0.08);
+  --selection-bg: rgba(124, 58, 237, 0.2);
+  --bar-bg: rgba(228, 228, 231, 0.5);
+}
+
+/* ── Dark theme ── */
+.dark {
+  --bg-primary: #09090b;
+  --bg-secondary: #18181b;
+  --bg-tertiary: #27272a;
+  --bg-glass: rgba(24, 24, 27, 0.3);
+  --border: rgba(39, 39, 42, 0.5);
+  --text-primary: #fafafa;
+  --text-secondary: #a1a1aa;
+  --text-muted: #71717a;
+  --chart-grid: #27272a;
+  --chart-axis: #71717a;
+  --chart-tick: #a1a1aa;
+  --chart-tooltip-bg: #18181b;
+  --chart-tooltip-border: #27272a;
+  --scrollbar-track: #18181b;
+  --scrollbar-thumb: #3f3f46;
+  --scrollbar-thumb-hover: #52525b;
+  --glass-bg: rgba(24, 24, 27, 0.7);
+  --glass-border: rgba(63, 63, 70, 0.4);
+  --glass-shadow: rgba(0, 0, 0, 0.3);
+  --selection-bg: rgba(124, 58, 237, 0.3);
+  --bar-bg: rgba(39, 39, 42, 0.5);
+}
+
+@theme inline {
+  --color-background: var(--bg-primary);
+  --color-foreground: var(--text-primary);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  min-height: 100vh;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Scroll offset for sticky navbar */
+section[id] {
+  scroll-margin-top: 5rem;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+/* Sidebar thin scrollbar */
+aside::-webkit-scrollbar {
+  width: 4px;
+}
+
+/* Selection color */
+::selection {
+  background: var(--selection-bg);
+}
+
+/* Chart tooltip z-index fix */
+.recharts-tooltip-wrapper {
+  z-index: 50 !important;
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #a371f7 0%, #58a6ff 50%, #3fb950 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glass effect */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+}
+
+/* Details/summary styling for methodology */
+details summary::-webkit-details-marker {
+  display: none;
+}
+
+details summary {
+  list-style: none;
+}

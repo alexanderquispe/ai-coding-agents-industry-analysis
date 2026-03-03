@@ -1,0 +1,1 @@
+(globalThis.TURBOPACK||(globalThis.TURBOPACK=[])).push(["object"==typeof document?document.currentScript:void 0,2464,e=>{"use strict";var t=e.i(71645);function c({url:e}){return(0,t.useEffect)(()=>{window.location.replace(e)},[e]),null}e.s(["ClientRedirect",()=>c])}]);

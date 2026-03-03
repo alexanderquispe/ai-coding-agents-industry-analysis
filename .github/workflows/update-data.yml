@@ -1,0 +1,71 @@
+name: Update Agent Data
+
+on:
+  schedule:
+    - cron: '5 6 * * *'  # 06:05 UTC daily (after midnight PT)
+  workflow_dispatch:      # Manual trigger
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # ── Python: Data Pipeline ──────────────────────────────
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Python dependencies
+        run: |
+          pip install requests supabase transformers --quiet
+          pip install torch --index-url https://download.pytorch.org/whl/cpu --quiet
+
+      - name: Fetch yesterday's data from GitHub
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: python scripts/fetch_daily.py
+
+      - name: Classify new repos (CPU)
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: python scripts/classify_new_repos.py
+
+      - name: Update JSONs and Supabase
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        run: python scripts/update_data.py
+
+      # ── Node.js: Static Build ──────────────────────────────
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install Node.js dependencies
+        run: npm ci
+
+      - name: Build static site
+        run: npm run build
+
+      # ── Deploy: Copy to docs/ and push ─────────────────────
+
+      - name: Deploy to docs/
+        run: |
+          rm -rf docs/*
+          cp -r out/* docs/
+          cp public/.nojekyll docs/.nojekyll
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/ public/data/*.json data/classified_repos.txt
+          git diff --cached --quiet || git commit -m "data: update $(date -u +%Y-%m-%d) + rebuild site"
+          git push

@@ -1,16 +1,25 @@
 # AI Coding Agents: Industry Adoption Analysis
 
-This repository contains industry classification data and analysis for GitHub repositories using AI coding agents. The analysis covers three major agents: **Claude Code** (Anthropic), **GitHub Copilot** (GitHub/Microsoft), and **OpenAI Codex** (OpenAI).
+## Live Dashboard
+
+Interactive dashboard: [https://alexanderquispe.github.io/ai-coding-agents-industry-analysis/](https://alexanderquispe.github.io/ai-coding-agents-industry-analysis/)
+
+Built with Next.js 16, Recharts, and NAICS classification. Data updates daily via GitHub Actions.
+
+---
+
+This repository contains industry classification data and analysis for GitHub repositories using AI coding agents. The analysis covers four major agents: **Claude Code** (Anthropic), **GitHub Copilot** (GitHub/Microsoft), **OpenAI Codex** (OpenAI), and **Cursor AI** (Anysphere).
 
 ## Executive Summary
 
-We analyzed adoption patterns of AI coding agents across ~887,000 unique GitHub repositories, classifying each repository by industry using the NAICS (North American Industry Classification System) framework. Key findings:
+We analyzed adoption patterns of AI coding agents across ~1,000,000+ unique GitHub repositories, classifying each repository by industry using the NAICS (North American Industry Classification System) framework. Key findings:
 
 | Agent | Repos Analyzed | Date Range | Top Industry |
 |-------|---------------|------------|--------------|
-| Claude Code | 391,492 | Jan 2025 - Jan 2026 | Professional Services (28%) |
-| GitHub Copilot | 246,906 | Jan 2025 - Feb 2026 | Professional Services (25%) |
-| OpenAI Codex | 248,530 | Jan 2025 - Feb 2026 | Professional Services (22%) |
+| Claude Code | 391,492 | Jan 2025 - Mar 2026 | Professional Services (28%) |
+| GitHub Copilot | 246,906 | Jan 2025 - Mar 2026 | Professional Services (25%) |
+| OpenAI Codex | 248,530 | Jan 2025 - Mar 2026 | Professional Services (22%) |
+| Cursor AI | 128,761 | Jan 2025 - Mar 2026 | Professional Services (24%) |
 
 ### Key Findings
 
