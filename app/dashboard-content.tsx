@@ -82,7 +82,20 @@ function DashboardInner({ agents, industries, allAgentStats, comparisonData, mon
             <Tabs defaultValue={agents[0]?.id}>
               <TabsList>
                 {agents.map(agent => (
-                  <TabsTrigger key={agent.id} value={agent.id}>
+                  <TabsTrigger
+                    key={agent.id}
+                    value={agent.id}
+                    className="gap-1.5 border border-transparent data-[state=active]:shadow-sm"
+                    style={{
+                      '--tab-active-bg': `color-mix(in srgb, ${agent.color} 15%, var(--bg-secondary))`,
+                      '--tab-active-text': agent.color,
+                      borderColor: `color-mix(in srgb, ${agent.color} 30%, transparent)`,
+                    } as React.CSSProperties}
+                  >
+                    <span
+                      className="w-2 h-2 rounded-full shrink-0"
+                      style={{ backgroundColor: agent.color }}
+                    />
                     {agent.name}
                   </TabsTrigger>
                 ))}
@@ -122,7 +135,20 @@ function DashboardInner({ agents, industries, allAgentStats, comparisonData, mon
             <Tabs defaultValue={agents[0]?.id}>
               <TabsList>
                 {agents.map(agent => (
-                  <TabsTrigger key={agent.id} value={agent.id}>
+                  <TabsTrigger
+                    key={agent.id}
+                    value={agent.id}
+                    className="gap-1.5 border border-transparent data-[state=active]:shadow-sm"
+                    style={{
+                      '--tab-active-bg': `color-mix(in srgb, ${agent.color} 15%, var(--bg-secondary))`,
+                      '--tab-active-text': agent.color,
+                      borderColor: `color-mix(in srgb, ${agent.color} 30%, transparent)`,
+                    } as React.CSSProperties}
+                  >
+                    <span
+                      className="w-2 h-2 rounded-full shrink-0"
+                      style={{ backgroundColor: agent.color }}
+                    />
                     {agent.name}
                   </TabsTrigger>
                 ))}

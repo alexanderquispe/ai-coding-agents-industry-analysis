@@ -13,7 +13,7 @@ const TabsList = React.forwardRef<
   <TabsPrimitive.List
     ref={ref}
     className={cn(
-      'flex w-full overflow-x-auto h-10 items-center rounded-lg bg-[var(--bg-tertiary)]/50 p-1 text-[var(--text-secondary)]',
+      'flex flex-wrap gap-1 w-full h-auto items-center rounded-lg bg-[var(--bg-tertiary)]/50 p-1.5 text-[var(--text-secondary)]',
       className
     )}
     {...props}
@@ -28,7 +28,7 @@ const TabsTrigger = React.forwardRef<
   <TabsPrimitive.Trigger
     ref={ref}
     className={cn(
-      'inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-medium ring-offset-[var(--bg-primary)] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--text-secondary)] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-[var(--bg-secondary)] data-[state=active]:text-[var(--text-primary)] data-[state=active]:shadow-sm',
+      'inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-medium ring-offset-[var(--bg-primary)] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--text-secondary)] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-[var(--tab-active-bg,var(--bg-secondary))] data-[state=active]:text-[var(--tab-active-text,var(--text-primary))] data-[state=active]:shadow-sm',
       className
     )}
     {...props}
