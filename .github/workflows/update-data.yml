@@ -30,6 +30,8 @@ jobs:
         run: python scripts/fetch_daily.py
 
       - name: Classify new repos (HF Inference API)
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: python scripts/classify_new_repos.py
 
       - name: Update cumulative JSONs

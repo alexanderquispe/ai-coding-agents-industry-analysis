@@ -7,6 +7,7 @@ Automatically finds ALL unclassified daily files.
 """
 
 import json
+import os
 import time
 import requests
 from pathlib import Path
@@ -14,7 +15,9 @@ from pathlib import Path
 DEDUP_FILE = Path('data/classified_repos.txt')
 DAILY_DIR = Path('data/daily')
 
-HF_API_URL = 'https://api-inference.huggingface.co/models/aquiro1994/naics-github-classifier'
+HF_TOKEN = os.environ.get('HF_TOKEN', '')
+
+HF_API_URL = 'https://router.huggingface.co/hf-inference/models/aquiro1994/naics-github-classifier/pipeline/text-classification'
 BATCH_SIZE = 32
 MAX_RETRIES = 3
 RETRY_DELAY = 20  # seconds (model cold start)
@@ -49,10 +52,13 @@ def get_repo_text(repo: dict) -> str:
 def classify_batch(texts: list[str]) -> list[dict]:
     """Classify a batch of texts via HF Inference API."""
     for attempt in range(MAX_RETRIES):
+        headers = {'Content-Type': 'application/json'}
+        if HF_TOKEN:
+            headers['Authorization'] = f'Bearer {HF_TOKEN}'
         response = requests.post(
             HF_API_URL,
             json={'inputs': texts},
-            headers={'Content-Type': 'application/json'},
+            headers=headers,
         )
 
         if response.status_code == 200:
