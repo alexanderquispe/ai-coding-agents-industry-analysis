@@ -118,21 +118,31 @@ export function CumulativeChart({ data, industries }: CumulativeChartProps) {
               domain={scale === 'log' ? [1, 'auto'] : [0, 'auto']}
               allowDataOverflow={scale === 'log'}
             />
-            <Tooltip
-              contentStyle={{
-                backgroundColor: colors.tooltipBg,
-                border: `1px solid ${colors.tooltipBorder}`,
-                borderRadius: '8px',
-                maxHeight: '300px',
-                overflowY: 'auto',
-              }}
-              labelStyle={{ color: colors.tooltipLabel }}
-              labelFormatter={(label) => formatMonth(String(label))}
-              formatter={(value, name) => {
-                const industry = industries.find((i) => i.code === name)
-                return [formatNumber(Number(value) || 0), industry?.name || String(name)]
-              }}
-            />
+            <Tooltip content={({ active, payload, label }) => {
+              if (!active || !payload?.length) return null
+              return (
+                <div style={{
+                  backgroundColor: colors.tooltipBg,
+                  border: `1px solid ${colors.tooltipBorder}`,
+                  borderRadius: 6, padding: '8px 10px', fontSize: 11
+                }}>
+                  <p style={{ margin: '0 0 4px', fontWeight: 600, color: colors.tooltipLabel }}>
+                    {formatMonth(String(label))}
+                  </p>
+                  {payload.map((entry, i) => {
+                    const industry = industries.find(ind => ind.code === entry.dataKey)
+                    return (
+                      <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 6, lineHeight: '1.3' }}>
+                        <span style={{ color: entry.color }}>●</span>
+                        <span style={{ color: colors.tooltipLabel }}>
+                          {industry?.name || entry.name}: {formatNumber(Number(entry.value) || 0)}
+                        </span>
+                      </div>
+                    )
+                  })}
+                </div>
+              )
+            }} />
             {stackedIndustries.map((industry) => (
               <Area
                 key={industry.code}

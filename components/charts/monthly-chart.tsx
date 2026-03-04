@@ -61,12 +61,31 @@ export function MonthlyChart({ data, industries }: MonthlyChartProps) {
     })
   }
 
-  const tooltipContentStyle = {
-    backgroundColor: colors.tooltipBg,
-    border: `1px solid ${colors.tooltipBorder}`,
-    borderRadius: '8px',
-    maxHeight: '300px',
-    overflowY: 'auto' as const,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const renderTooltip = ({ active, payload, label }: any) => {
+    if (!active || !payload?.length) return null
+    return (
+      <div style={{
+        backgroundColor: colors.tooltipBg,
+        border: `1px solid ${colors.tooltipBorder}`,
+        borderRadius: 6, padding: '8px 10px', fontSize: 11
+      }}>
+        <p style={{ margin: '0 0 4px', fontWeight: 600, color: colors.tooltipLabel }}>
+          {formatMonth(String(label))}
+        </p>
+        {payload.map((entry: any, i: number) => {
+          const industry = industries.find(ind => ind.code === entry.dataKey)
+          return (
+            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 6, lineHeight: '1.3' }}>
+              <span style={{ color: entry.color }}>●</span>
+              <span style={{ color: colors.tooltipLabel }}>
+                {industry?.name || entry.name}: {formatNumber(Number(entry.value) || 0)}
+              </span>
+            </div>
+          )
+        })}
+      </div>
+    )
   }
 
   return (
@@ -120,15 +139,7 @@ export function MonthlyChart({ data, industries }: MonthlyChartProps) {
                 tickFormatter={formatNumber}
                 tick={{ fill: colors.tick }}
               />
-              <Tooltip
-                contentStyle={tooltipContentStyle}
-                labelStyle={{ color: colors.tooltipLabel }}
-                labelFormatter={(label) => formatMonth(String(label))}
-                formatter={(value, name) => {
-                  const industry = industries.find((i) => i.code === name)
-                  return [formatNumber(Number(value) || 0), industry?.name || String(name)]
-                }}
-              />
+              <Tooltip content={renderTooltip} />
               {visibleIndustries.map((industry) => (
                 <Bar
                   key={industry.code}
@@ -158,15 +169,7 @@ export function MonthlyChart({ data, industries }: MonthlyChartProps) {
                 tickFormatter={formatNumber}
                 tick={{ fill: colors.tick }}
               />
-              <Tooltip
-                contentStyle={tooltipContentStyle}
-                labelStyle={{ color: colors.tooltipLabel }}
-                labelFormatter={(label) => formatMonth(String(label))}
-                formatter={(value, name) => {
-                  const industry = industries.find((i) => i.code === name)
-                  return [formatNumber(Number(value) || 0), industry?.name || String(name)]
-                }}
-              />
+              <Tooltip content={renderTooltip} />
               {visibleIndustries.map((industry) => (
                 <Line
                   key={industry.code}
