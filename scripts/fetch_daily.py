@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
-Fetch yesterday's PRs/commits from GitHub API for all AI coding agents.
+Fetch PRs/commits from GitHub API for all AI coding agents.
+Automatically detects missing dates and fills gaps (up to 7 days back).
 Uses hour-splitting when results exceed 1000 (GitHub Search API limit).
 """
 
@@ -222,44 +223,74 @@ def extract_repos_from_prs(items):
     return repos
 
 
+def find_missing_dates(max_days=7):
+    """Find all missing dates between last fetched day and yesterday."""
+    yesterday = datetime.now(timezone.utc) - timedelta(days=1)
+
+    # Scan existing files to find already-fetched dates
+    existing_dates = set()
+    for f in OUTPUT_DIR.glob('*.json'):
+        name = f.stem
+        if '_classified' not in name and len(name) == 10:  # YYYY-MM-DD
+            existing_dates.add(name)
+
+    # Find all missing dates (up to max_days back)
+    missing = []
+    for days_ago in range(1, max_days + 1):
+        d = (yesterday - timedelta(days=days_ago - 1)).strftime('%Y-%m-%d')
+        if d not in existing_dates:
+            missing.append(d)
+
+    # Return oldest first so we process chronologically
+    return sorted(missing)
+
+
 def main():
-    yesterday = (datetime.now(timezone.utc) - timedelta(days=1)).strftime('%Y-%m-%d')
+    dates = find_missing_dates()
 
-    print(f'Fetching data for {yesterday}...\n')
+    if not dates:
+        print('All dates already fetched, nothing to do')
+        return
 
-    results = {}
+    print(f'Missing dates to fetch: {", ".join(dates)}\n')
 
-    for agent_id, config in AGENTS.items():
-        print(f'=== {agent_id} ===')
+    for date_str in dates:
+        print(f'Fetching data for {date_str}...\n')
 
-        items = search_with_splitting(
-            config['query_base'],
-            config['date_field'],
-            yesterday,
-            config['search_type']
-        )
-        print(f'  Found {len(items)} items')
+        results = {}
 
-        if config['search_type'] == 'commits':
-            repos = extract_repos_from_commits(items)
-        else:
-            repos = extract_repos_from_prs(items)
+        for agent_id, config in AGENTS.items():
+            print(f'=== {agent_id} ===')
 
-        results[agent_id] = {
-            'date': yesterday,
-            'item_count': len(items),
-            'repo_count': len(repos),
-            'repos': list(repos.values())
-        }
-        print(f'  Unique repos: {len(repos)}\n')
+            items = search_with_splitting(
+                config['query_base'],
+                config['date_field'],
+                date_str,
+                config['search_type']
+            )
+            print(f'  Found {len(items)} items')
 
-    output_file = OUTPUT_DIR / f'{yesterday}.json'
-    with open(output_file, 'w') as f:
-        json.dump(results, f)
+            if config['search_type'] == 'commits':
+                repos = extract_repos_from_commits(items)
+            else:
+                repos = extract_repos_from_prs(items)
 
-    print(f'Saved to {output_file}')
-    for agent_id, data in results.items():
-        print(f'  {agent_id}: {data["repo_count"]} repos ({data["item_count"]} items)')
+            results[agent_id] = {
+                'date': date_str,
+                'item_count': len(items),
+                'repo_count': len(repos),
+                'repos': list(repos.values())
+            }
+            print(f'  Unique repos: {len(repos)}\n')
+
+        output_file = OUTPUT_DIR / f'{date_str}.json'
+        with open(output_file, 'w') as f:
+            json.dump(results, f)
+
+        print(f'Saved to {output_file}')
+        for agent_id, data in results.items():
+            print(f'  {agent_id}: {data["repo_count"]} repos ({data["item_count"]} items)')
+        print()
 
 
 if __name__ == '__main__':

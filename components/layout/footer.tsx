@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { Github, ExternalLink } from 'lucide-react'
+import { VisitCounter } from '@/components/visit-counter'
 
 export function Footer() {
   return (
@@ -35,10 +36,11 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-6 border-t border-[var(--border)] pt-6 text-center">
+        <div className="mt-6 border-t border-[var(--border)] pt-6 flex items-center justify-between">
           <p className="text-xs text-[var(--text-muted)]">
-            Built with Next.js, Supabase, and Recharts. Classification powered by NAICS codes.
+            Built with Next.js and Recharts. Classification powered by NAICS codes.
           </p>
+          <VisitCounter />
         </div>
       </div>
     </footer>
