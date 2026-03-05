@@ -1,10 +1,12 @@
 'use client'
 
+import { useState } from 'react'
 import { useAgentSelection } from '@/lib/agent-context'
 import { INDUSTRIES, AGENT_COMPANIES, AGENT_STATS } from '@/lib/constants'
 import { formatNumber } from '@/lib/utils'
 import { Agent } from '@/lib/types'
 import { ProcessedAgentData } from '@/lib/data-processing'
+import { Download } from 'lucide-react'
 
 interface HeroSectionProps {
   agents: Agent[]
@@ -14,6 +16,45 @@ interface HeroSectionProps {
 
 export function HeroSection({ agents, allAgentStats, monthRange }: HeroSectionProps) {
   const { selectedAgent } = useAgentSelection()
+  const [downloading, setDownloading] = useState(false)
+
+  async function downloadAllData() {
+    setDownloading(true)
+    try {
+      const basePath = '/ai-coding-agents-industry-analysis'
+      const agentIds = ['claude', 'copilot', 'codex', 'cursor']
+      const responses = await Promise.all(
+        agentIds.map(id => fetch(`${basePath}/data/${id}_cumulative.json`).then(r => r.json()))
+      )
+
+      const rows: string[] = ['month,agent,industry_code,industry_name,cumulative,new_repos']
+      agentIds.forEach((agentId, ai) => {
+        const data = responses[ai]
+        const months: string[] = data.months
+        for (const industry of data.industries) {
+          const code = industry.code
+          const name = industry.name.replace(/^\d[\d-]*:\s*/, '')
+          months.forEach((month: string, mi: number) => {
+            const cumulative = industry.values[mi] ?? 0
+            const newRepos = industry.monthly[mi] ?? 0
+            rows.push(`${month},${agentId},${code},"${name}",${cumulative},${newRepos}`)
+          })
+        }
+      })
+
+      const blob = new Blob([rows.join('\n')], { type: 'text/csv' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = 'ai-coding-agents-data.csv'
+      a.click()
+      URL.revokeObjectURL(url)
+    } catch (e) {
+      console.error('Download failed:', e)
+    } finally {
+      setDownloading(false)
+    }
+  }
 
   if (selectedAgent === 'all') {
     const totalRepos = agents.reduce((sum, a) => sum + a.total_repos, 0)
@@ -39,6 +80,15 @@ export function HeroSection({ agents, allAgentStats, monthRange }: HeroSectionPr
           <StatCounter value={String(INDUSTRIES.length)} label="Industries Tracked" />
           <StatCounter value={String(agents.length)} label="AI Agents Compared" />
         </div>
+
+        <button
+          onClick={downloadAllData}
+          disabled={downloading}
+          className="inline-flex items-center gap-2 mt-8 px-5 py-2.5 rounded-lg border border-[var(--border)] bg-[var(--bg-secondary)]/50 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-secondary)] transition-colors disabled:opacity-50"
+        >
+          <Download className="h-4 w-4" />
+          {downloading ? 'Downloading...' : 'Download All Data (CSV)'}
+        </button>
       </div>
     )
   }
