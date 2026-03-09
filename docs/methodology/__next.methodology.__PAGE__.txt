@@ -2,5 +2,5 @@
 2:I[2464,["/ai-coding-agents-industry-analysis/_next/static/chunks/a54d18f37267764d.js","/ai-coding-agents-industry-analysis/_next/static/chunks/1da7b9a75ea2fad4.js","/ai-coding-agents-industry-analysis/_next/static/chunks/a95fba3fbedd3cf5.js"],"ClientRedirect"]
 3:I[97367,["/ai-coding-agents-industry-analysis/_next/static/chunks/ff1a16fafef87110.js","/ai-coding-agents-industry-analysis/_next/static/chunks/a2dfb6fc5208ab9b.js"],"OutletBoundary"]
 4:"$Sreact.suspense"
-0:{"buildId":"VFRFI9C8AOue2hGxk08GZ","rsc":["$","$1","c",{"children":[["$","$L2",null,{"url":"/ai-coding-agents-industry-analysis/#methodology"}],[["$","script","script-0",{"src":"/ai-coding-agents-industry-analysis/_next/static/chunks/a95fba3fbedd3cf5.js","async":true}]],["$","$L3",null,{"children":["$","$4",null,{"name":"Next.MetadataOutlet","children":"$@5"}]}]]}],"loading":null,"isPartial":false}
+0:{"buildId":"VYidU9jG8TwleFaH-kfkv","rsc":["$","$1","c",{"children":[["$","$L2",null,{"url":"/ai-coding-agents-industry-analysis/#methodology"}],[["$","script","script-0",{"src":"/ai-coding-agents-industry-analysis/_next/static/chunks/a95fba3fbedd3cf5.js","async":true}]],["$","$L3",null,{"children":["$","$4",null,{"name":"Next.MetadataOutlet","children":"$@5"}]}]]}],"loading":null,"isPartial":false}
 5:null
