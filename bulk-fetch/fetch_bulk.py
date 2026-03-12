@@ -319,7 +319,7 @@ def atomic_write_json(path, data):
         json.dump(data, f, indent=2)
         f.flush()
         os.fsync(f.fileno())
-    tmp.rename(path)
+    tmp.replace(path)  # replace() works on Windows (overwrites existing)
 
 
 def atomic_write_text(path, lines):
@@ -329,7 +329,7 @@ def atomic_write_text(path, lines):
             f.write(line + "\n")
         f.flush()
         os.fsync(f.fileno())
-    tmp.rename(path)
+    tmp.replace(path)  # replace() works on Windows (overwrites existing)
 
 
 def load_seen_keys(checkpoint_dir: Path, agent_key: str) -> Set[str]:
@@ -419,7 +419,7 @@ def fetch_agent(client, agent_cfg, start_date, end_date,
                 f.write(json.dumps(item, ensure_ascii=False) + "\n")
             f.flush()
             os.fsync(f.fileno())
-        tmp.rename(jsonl_path)
+        tmp.replace(jsonl_path)  # replace() works on Windows
         try:
             pd.DataFrame(new_results).to_parquet(
                 output_dir / f"{output_file}.parquet", index=False

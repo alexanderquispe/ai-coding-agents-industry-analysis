@@ -1,0 +1,78 @@
+{
+  "2026-01-01": {
+    "status": "complete",
+    "items": 53086,
+    "reviewed": false,
+    "run": "v20260311_2314",
+    "completed_at": "2026-03-11T23:41:39.585758"
+  },
+  "2026-01-02": {
+    "status": "complete",
+    "items": 63782,
+    "reviewed": false,
+    "run": "v20260311_2314",
+    "completed_at": "2026-03-12T00:15:20.963294"
+  },
+  "2026-01-03": {
+    "status": "complete",
+    "items": 63854,
+    "reviewed": false,
+    "run": "v20260311_2314",
+    "completed_at": "2026-03-12T00:51:34.132704"
+  },
+  "2026-01-04": {
+    "status": "complete",
+    "items": 66085,
+    "reviewed": false,
+    "run": "v20260311_2314",
+    "completed_at": "2026-03-12T01:35:01.022995"
+  },
+  "2026-01-05": {
+    "status": "complete",
+    "items": 69401,
+    "reviewed": false,
+    "run": "v20260311_2314",
+    "completed_at": "2026-03-12T02:22:51.938026"
+  },
+  "2026-01-06": {
+    "status": "complete",
+    "items": 68225,
+    "reviewed": false,
+    "run": "v20260311_2314",
+    "completed_at": "2026-03-12T03:12:43.900137"
+  },
+  "2026-01-07": {
+    "status": "complete",
+    "items": 69793,
+    "reviewed": false,
+    "run": "v20260311_2314",
+    "completed_at": "2026-03-12T04:06:24.079238"
+  },
+  "2026-01-08": {
+    "status": "complete",
+    "items": 74537,
+    "reviewed": false,
+    "run": "v20260311_2314",
+    "completed_at": "2026-03-12T05:09:14.945823"
+  },
+  "2026-01-09": {
+    "status": "complete",
+    "items": 79566,
+    "reviewed": false,
+    "run": "v20260311_2314",
+    "completed_at": "2026-03-12T06:19:46.527408"
+  },
+  "2026-01-10": {
+    "status": "complete",
+    "items": 79093,
+    "reviewed": false,
+    "run": "v20260311_2314",
+    "completed_at": "2026-03-12T07:41:18.328768"
+  },
+  "2026-01-11": {
+    "status": "partial",
+    "items": 0,
+    "reviewed": false,
+    "run": "v20260311_2314"
+  }
+}
