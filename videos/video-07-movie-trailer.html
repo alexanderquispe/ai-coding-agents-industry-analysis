@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video 7: Movie Trailer Epic</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #000;
+      color: #fff;
+      overflow: hidden;
+      width: 1080px;
+      height: 1080px;
+    }
+    .slide {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      text-align: center;
+    }
+    .slide.active { opacity: 1; }
+
+    /* Cinematic Bars */
+    .letterbox {
+      position: fixed;
+      left: 0; right: 0;
+      height: 80px;
+      background: #000;
+      z-index: 100;
+    }
+    .letterbox.top { top: 0; }
+    .letterbox.bottom { bottom: 0; }
+
+    /* Epic Text Styles */
+    .epic-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 140px;
+      letter-spacing: 10px;
+      line-height: 1;
+      opacity: 0;
+      animation: epicReveal 0.8s ease forwards;
+    }
+    .epic-sub {
+      font-size: 32px;
+      color: #666;
+      letter-spacing: 8px;
+      text-transform: uppercase;
+      margin-top: 30px;
+      opacity: 0;
+      animation: fadeIn 0.8s ease forwards 0.5s;
+    }
+
+    /* Dramatic Number */
+    .dramatic-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 300px;
+      letter-spacing: 15px;
+      line-height: 0.8;
+      opacity: 0;
+      animation: slam 0.5s ease forwards;
+    }
+    .dramatic-label {
+      font-size: 28px;
+      letter-spacing: 12px;
+      color: #888;
+      margin-top: 20px;
+      opacity: 0;
+      animation: fadeIn 0.5s ease forwards 0.4s;
+    }
+
+    /* Flash Cuts */
+    .flash-text {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 120px;
+      letter-spacing: 8px;
+      opacity: 0;
+      animation: flash 0.3s ease forwards;
+    }
+
+    /* Agent Reveal */
+    .agent-epic {
+      position: relative;
+    }
+    .agent-bg {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 400px;
+      color: rgba(255,255,255,0.03);
+      position: absolute;
+      opacity: 0;
+      animation: fadeIn 0.5s ease forwards;
+    }
+    .agent-main {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 100px;
+      letter-spacing: 8px;
+      opacity: 0;
+      animation: epicReveal 0.6s ease forwards 0.2s;
+    }
+    .agent-stat {
+      font-size: 180px;
+      font-weight: 900;
+      opacity: 0;
+      animation: slam 0.5s ease forwards 0.5s;
+    }
+    .agent-desc {
+      font-size: 24px;
+      color: #888;
+      margin-top: 20px;
+      opacity: 0;
+      animation: fadeIn 0.5s ease forwards 0.8s;
+    }
+
+    /* Industry Slam */
+    .industry-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    .industry-slam {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 56px;
+      letter-spacing: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 100px;
+      opacity: 0;
+    }
+    .industry-slam .count {
+      font-size: 48px;
+    }
+
+    /* Versus */
+    .versus {
+      display: flex;
+      align-items: center;
+      gap: 60px;
+    }
+    .vs-agent {
+      text-align: center;
+      opacity: 0;
+    }
+    .vs-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 48px;
+      letter-spacing: 4px;
+    }
+    .vs-count {
+      font-size: 80px;
+      font-weight: 900;
+      margin-top: 10px;
+    }
+    .vs-divider {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 100px;
+      color: #333;
+      opacity: 0;
+      animation: pulse 1s ease infinite;
+    }
+
+    /* Final */
+    .final-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 80px;
+      letter-spacing: 6px;
+      opacity: 0;
+      animation: epicReveal 0.8s ease forwards 0.2s;
+    }
+    .final-cta {
+      font-size: 28px;
+      color: #58a6ff;
+      margin-top: 40px;
+      opacity: 0;
+      animation: fadeIn 0.8s ease forwards 0.8s;
+    }
+    .final-question {
+      font-size: 36px;
+      color: #666;
+      margin-top: 30px;
+      opacity: 0;
+      animation: fadeIn 0.8s ease forwards 1.2s;
+    }
+
+    /* Backgrounds */
+    .bg-gradient-purple { background: radial-gradient(circle at center, #2d1050 0%, #000 70%); }
+    .bg-gradient-blue { background: radial-gradient(circle at center, #0a2540 0%, #000 70%); }
+    .bg-gradient-green { background: radial-gradient(circle at center, #0a3020 0%, #000 70%); }
+    .bg-dark { background: #000; }
+
+    /* Scan Lines */
+    .scanlines::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.1) 2px,
+        rgba(0,0,0,0.1) 4px
+      );
+      pointer-events: none;
+    }
+
+    @keyframes epicReveal {
+      0% { opacity: 0; transform: scale(1.2); letter-spacing: 40px; }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    @keyframes slam {
+      0% { opacity: 0; transform: scale(2); }
+      70% { transform: scale(0.95); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    @keyframes flash {
+      0% { opacity: 0; }
+      20% { opacity: 1; }
+      100% { opacity: 1; }
+    }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.6; } }
+
+    .progress { position: fixed; bottom: 80px; left: 0; height: 3px; background: #fff; width: 0; transition: width 0.3s; z-index: 101; }
+  </style>
+</head>
+<body>
+  <div class="letterbox top"></div>
+  <div class="letterbox bottom"></div>
+
+  <!-- Slide 1: Opening -->
+  <div class="slide slide-1 active bg-dark scanlines" data-duration="2500">
+    <div class="epic-sub" style="animation-delay: 0s;">In a world of code...</div>
+  </div>
+
+  <!-- Slide 2: The Scale -->
+  <div class="slide slide-2 bg-dark scanlines" data-duration="3000">
+    <div class="dramatic-number">1M</div>
+    <div class="dramatic-label">repositories analyzed</div>
+  </div>
+
+  <!-- Slide 3: Flash - Industries -->
+  <div class="slide slide-3 bg-dark scanlines" data-duration="2000">
+    <div class="flash-text" style="color: #7c3aed;">19 INDUSTRIES</div>
+  </div>
+
+  <!-- Slide 4: Flash - Agents -->
+  <div class="slide slide-4 bg-dark scanlines" data-duration="2000">
+    <div class="flash-text" style="color: #58a6ff;">4 AI AGENTS</div>
+  </div>
+
+  <!-- Slide 5: Flash - Months -->
+  <div class="slide slide-5 bg-dark scanlines" data-duration="2000">
+    <div class="flash-text" style="color: #3fb950;">15 MONTHS</div>
+  </div>
+
+  <!-- Slide 6: The Question -->
+  <div class="slide slide-6 bg-gradient-purple scanlines" data-duration="3500">
+    <div class="epic-title" style="font-size: 90px;">WHO WILL<br>DOMINATE?</div>
+  </div>
+
+  <!-- Slide 7: Claude Reveal -->
+  <div class="slide slide-7 bg-gradient-purple scanlines" data-duration="4000">
+    <div class="agent-epic">
+      <div class="agent-bg">CLAUDE</div>
+      <div class="agent-main" style="color: #a371f7;">CLAUDE CODE</div>
+      <div class="agent-stat" style="color: #a371f7;">391K</div>
+      <div class="agent-desc">ANTHROPIC • FASTEST GROWTH</div>
+    </div>
+  </div>
+
+  <!-- Slide 8: Industries Slam -->
+  <div class="slide slide-8 bg-dark scanlines" data-duration="4500">
+    <div class="industry-stack">
+      <div class="industry-slam" style="animation: flash 0.3s ease forwards 0.2s; color: #7c3aed;">
+        <span>PROFESSIONAL SERVICES</span>
+        <span class="count">253K</span>
+      </div>
+      <div class="industry-slam" style="animation: flash 0.3s ease forwards 0.5s; color: #2563eb;">
+        <span>INFORMATION</span>
+        <span class="count">210K</span>
+      </div>
+      <div class="industry-slam" style="animation: flash 0.3s ease forwards 0.8s; color: #ca8a04;">
+        <span>FINANCE</span>
+        <span class="count">92K</span>
+      </div>
+      <div class="industry-slam" style="animation: flash 0.3s ease forwards 1.1s; color: #dc2626;">
+        <span>EDUCATION</span>
+        <span class="count">87K</span>
+      </div>
+      <div class="industry-slam" style="animation: flash 0.3s ease forwards 1.4s; color: #db2777;">
+        <span>ENTERTAINMENT</span>
+        <span class="count">82K</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 9: Growth Explosion -->
+  <div class="slide slide-9 bg-gradient-purple scanlines" data-duration="3500">
+    <div class="epic-sub" style="color: #a371f7; animation-delay: 0s;">JANUARY 2026</div>
+    <div class="dramatic-number" style="color: #a371f7; font-size: 200px; animation-delay: 0.3s;">111K+</div>
+    <div class="dramatic-label" style="animation-delay: 0.6s;">NEW REPOS IN ONE MONTH</div>
+  </div>
+
+  <!-- Slide 10: The Winner -->
+  <div class="slide slide-10 bg-gradient-purple scanlines" data-duration="4000">
+    <div class="epic-sub" style="animation-delay: 0s;">THE LEADER</div>
+    <div class="epic-title" style="color: #a371f7; animation-delay: 0.3s;">CLAUDE<br>CODE</div>
+    <div class="epic-sub" style="animation-delay: 0.8s;">2X FASTER GROWTH THAN COMPETITORS</div>
+  </div>
+
+  <!-- Slide 11: CTA -->
+  <div class="slide slide-11 bg-dark scanlines" data-duration="4000">
+    <div class="final-title">THE FULL DATA</div>
+    <div class="final-cta">INTERACTIVE DASHBOARD IN COMMENTS</div>
+    <div class="final-question">WHAT INDUSTRY ARE YOU BUILDING?</div>
+  </div>
+
+  <div class="progress"></div>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const progress = document.querySelector('.progress');
+    let current = 0;
+    let total = Array.from(slides).reduce((a, s) => a + parseInt(s.dataset.duration), 0);
+    let elapsed = 0;
+
+    function next() {
+      elapsed += parseInt(slides[current].dataset.duration);
+      progress.style.width = `${(elapsed/total)*100}%`;
+      current++;
+      if (current < slides.length) {
+        slides.forEach(s => s.classList.remove('active'));
+        slides[current].classList.add('active');
+        setTimeout(next, parseInt(slides[current].dataset.duration));
+      }
+    }
+    setTimeout(() => next(), parseInt(slides[0].dataset.duration));
+  </script>
+</body>
+</html>

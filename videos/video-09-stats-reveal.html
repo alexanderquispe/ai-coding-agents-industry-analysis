@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video 9: Stats Reveal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0a0a0f;
+      color: #fff;
+      overflow: hidden;
+      width: 1080px;
+      height: 1080px;
+    }
+    .slide {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      text-align: center;
+      padding: 100px;
+    }
+    .slide.active { opacity: 1; }
+
+    /* Stat Reveal Style */
+    .stat-category {
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #666;
+      margin-bottom: 30px;
+      opacity: 0;
+      animation: fadeIn 0.5s ease forwards 0.1s;
+    }
+    .stat-main {
+      font-size: 180px;
+      font-weight: 900;
+      line-height: 1;
+      opacity: 0;
+      animation: countReveal 0.8s ease forwards 0.2s;
+    }
+    .stat-unit {
+      font-size: 48px;
+      font-weight: 400;
+      color: #888;
+      margin-top: 20px;
+      opacity: 0;
+      animation: fadeIn 0.5s ease forwards 0.6s;
+    }
+    .stat-context {
+      font-size: 24px;
+      color: #555;
+      margin-top: 30px;
+      max-width: 600px;
+      line-height: 1.5;
+      opacity: 0;
+      animation: fadeIn 0.5s ease forwards 0.8s;
+    }
+
+    /* Icon Badge */
+    .icon-badge {
+      width: 100px;
+      height: 100px;
+      border-radius: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      margin-bottom: 40px;
+      opacity: 0;
+      animation: scaleIn 0.5s ease forwards 0.1s;
+    }
+
+    /* Comparison Stats */
+    .compare-row {
+      display: flex;
+      gap: 80px;
+      margin-top: 50px;
+      opacity: 0;
+      animation: fadeIn 0.6s ease forwards 0.8s;
+    }
+    .compare-item {
+      text-align: center;
+    }
+    .compare-value {
+      font-size: 64px;
+      font-weight: 700;
+    }
+    .compare-label {
+      font-size: 16px;
+      color: #666;
+      margin-top: 10px;
+    }
+
+    /* Progress indicator */
+    .progress-dots {
+      position: absolute;
+      bottom: 80px;
+      display: flex;
+      gap: 12px;
+    }
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #333;
+      transition: all 0.3s ease;
+    }
+    .dot.active {
+      background: #fff;
+      transform: scale(1.3);
+    }
+
+    /* Backgrounds */
+    .bg-purple { background: radial-gradient(circle at center, #2d1050 0%, #0a0a0f 70%); }
+    .bg-blue { background: radial-gradient(circle at center, #0a2540 0%, #0a0a0f 70%); }
+    .bg-green { background: radial-gradient(circle at center, #0a3020 0%, #0a0a0f 70%); }
+    .bg-orange { background: radial-gradient(circle at center, #3d2010 0%, #0a0a0f 70%); }
+    .bg-gold { background: radial-gradient(circle at center, #3d3010 0%, #0a0a0f 70%); }
+    .bg-dark { background: #0a0a0f; }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes scaleIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+    @keyframes countReveal {
+      0% { opacity: 0; transform: translateY(30px) scale(0.9); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .progress { position: fixed; bottom: 0; left: 0; height: 4px; background: linear-gradient(90deg, #a371f7, #58a6ff, #3fb950); width: 0; transition: width 0.3s; }
+  </style>
+</head>
+<body>
+  <!-- Slide 1: Total Repos -->
+  <div class="slide slide-1 active bg-dark" data-duration="4000">
+    <div class="icon-badge" style="background: rgba(163,113,247,0.2);">📊</div>
+    <div class="stat-category">Total Analyzed</div>
+    <div class="stat-main" style="background: linear-gradient(135deg, #a371f7, #58a6ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">1M+</div>
+    <div class="stat-unit">GitHub repositories</div>
+    <div class="stat-context">Classified by industry using the NAICS framework</div>
+    <div class="progress-dots">
+      <div class="dot active"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    </div>
+  </div>
+
+  <!-- Slide 2: Agents -->
+  <div class="slide slide-2 bg-dark" data-duration="3500">
+    <div class="icon-badge" style="background: rgba(88,166,255,0.2);">🤖</div>
+    <div class="stat-category">AI Agents Tracked</div>
+    <div class="stat-main" style="color: #58a6ff;">4</div>
+    <div class="stat-unit">major platforms</div>
+    <div class="stat-context">Claude Code, GitHub Copilot, OpenAI Codex, Cursor AI</div>
+  </div>
+
+  <!-- Slide 3: Industries -->
+  <div class="slide slide-3 bg-dark" data-duration="3500">
+    <div class="icon-badge" style="background: rgba(63,185,80,0.2);">🏢</div>
+    <div class="stat-category">Industries Classified</div>
+    <div class="stat-main" style="color: #3fb950;">19</div>
+    <div class="stat-unit">NAICS sectors</div>
+    <div class="stat-context">From Professional Services to Healthcare to Finance</div>
+  </div>
+
+  <!-- Slide 4: Claude Lead -->
+  <div class="slide slide-4 bg-purple" data-duration="4500">
+    <div class="icon-badge" style="background: #a371f7;">👑</div>
+    <div class="stat-category">Market Leader</div>
+    <div class="stat-main" style="color: #a371f7;">391K</div>
+    <div class="stat-unit">Claude Code repositories</div>
+    <div class="compare-row">
+      <div class="compare-item">
+        <div class="compare-value" style="color: #a371f7;">38%</div>
+        <div class="compare-label">Market share</div>
+      </div>
+      <div class="compare-item">
+        <div class="compare-value" style="color: #a371f7;">#1</div>
+        <div class="compare-label">Growth rank</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 5: Jan Growth -->
+  <div class="slide slide-5 bg-purple" data-duration="4500">
+    <div class="icon-badge" style="background: #a371f7;">📈</div>
+    <div class="stat-category">January 2026</div>
+    <div class="stat-main" style="color: #fff;">111K+</div>
+    <div class="stat-unit">new repos in one month</div>
+    <div class="stat-context">Claude Code's explosive growth — 2x faster than competitors combined</div>
+  </div>
+
+  <!-- Slide 6: Professional Services -->
+  <div class="slide slide-6 bg-dark" data-duration="4500">
+    <div class="icon-badge" style="background: rgba(124,58,237,0.2);">💼</div>
+    <div class="stat-category">#1 Industry</div>
+    <div class="stat-main" style="color: #7c3aed;">253K</div>
+    <div class="stat-unit">Professional Services repos</div>
+    <div class="compare-row">
+      <div class="compare-item">
+        <div class="compare-value" style="color: #7c3aed;">25-28%</div>
+        <div class="compare-label">of all repos</div>
+      </div>
+      <div class="compare-item">
+        <div class="compare-value" style="color: #7c3aed;">#1</div>
+        <div class="compare-label">across all agents</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 7: Finance -->
+  <div class="slide slide-7 bg-gold" data-duration="4000">
+    <div class="icon-badge" style="background: rgba(202,138,4,0.2);">🏦</div>
+    <div class="stat-category">Finance & Insurance</div>
+    <div class="stat-main" style="color: #ca8a04;">92K</div>
+    <div class="stat-unit">repositories</div>
+    <div class="stat-context">Regulated industries embracing AI-assisted coding</div>
+  </div>
+
+  <!-- Slide 8: Healthcare -->
+  <div class="slide slide-8 bg-green" data-duration="4000">
+    <div class="icon-badge" style="background: rgba(22,163,74,0.2);">🏥</div>
+    <div class="stat-category">Healthcare</div>
+    <div class="stat-main" style="color: #16a34a;">29K</div>
+    <div class="stat-unit">repositories</div>
+    <div class="stat-context">Growing trust in AI for compliance-heavy sectors</div>
+  </div>
+
+  <!-- Slide 9: Time Period -->
+  <div class="slide slide-9 bg-dark" data-duration="3500">
+    <div class="icon-badge" style="background: rgba(247,129,102,0.2);">📅</div>
+    <div class="stat-category">Analysis Period</div>
+    <div class="stat-main" style="color: #f78166;">15</div>
+    <div class="stat-unit">months of data</div>
+    <div class="stat-context">January 2025 through March 2026</div>
+  </div>
+
+  <!-- Slide 10: CTA -->
+  <div class="slide slide-10 bg-dark" data-duration="5000">
+    <div class="icon-badge" style="background: linear-gradient(135deg, #a371f7, #58a6ff);">🔗</div>
+    <div class="stat-category">Explore Everything</div>
+    <div class="stat-main" style="font-size: 80px; background: linear-gradient(135deg, #a371f7, #58a6ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Dashboard</div>
+    <div class="stat-unit" style="color: #58a6ff;">Link in comments</div>
+    <div class="compare-row">
+      <div class="compare-item">
+        <div class="compare-value" style="color: #888;">4</div>
+        <div class="compare-label">Agents</div>
+      </div>
+      <div class="compare-item">
+        <div class="compare-value" style="color: #888;">19</div>
+        <div class="compare-label">Industries</div>
+      </div>
+      <div class="compare-item">
+        <div class="compare-value" style="color: #888;">Open</div>
+        <div class="compare-label">Source</div>
+      </div>
+    </div>
+    <div class="stat-context" style="margin-top: 50px; color: #666;">What industry are you building for?</div>
+  </div>
+
+  <div class="progress"></div>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const progress = document.querySelector('.progress');
+    let current = 0;
+    let total = Array.from(slides).reduce((a, s) => a + parseInt(s.dataset.duration), 0);
+    let elapsed = 0;
+
+    function updateDots() {
+      document.querySelectorAll('.dot').forEach((dot, i) => {
+        dot.classList.toggle('active', i === current);
+      });
+    }
+
+    function next() {
+      elapsed += parseInt(slides[current].dataset.duration);
+      progress.style.width = `${(elapsed/total)*100}%`;
+      current++;
+      if (current < slides.length) {
+        slides.forEach(s => s.classList.remove('active'));
+        slides[current].classList.add('active');
+        updateDots();
+        setTimeout(next, parseInt(slides[current].dataset.duration));
+      }
+    }
+    setTimeout(() => next(), parseInt(slides[0].dataset.duration));
+  </script>
+</body>
+</html>

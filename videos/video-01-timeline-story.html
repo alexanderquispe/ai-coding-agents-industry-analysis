@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video 1: The 15-Month AI Revolution</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #000;
+      color: #fff;
+      overflow: hidden;
+      width: 1080px;
+      height: 1080px;
+    }
+    .slide {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 1s ease;
+      padding: 80px;
+      text-align: center;
+    }
+    .slide.active { opacity: 1; }
+
+    /* Slide 1: Opening */
+    .slide-1 { background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%); }
+    .date-range {
+      font-size: 28px;
+      color: #666;
+      letter-spacing: 8px;
+      text-transform: uppercase;
+      margin-bottom: 40px;
+      opacity: 0;
+      animation: fadeIn 1s ease forwards 0.5s;
+    }
+    .main-title {
+      font-size: 72px;
+      font-weight: 900;
+      line-height: 1.1;
+      opacity: 0;
+      animation: fadeInUp 1s ease forwards 0.8s;
+    }
+    .main-title span {
+      background: linear-gradient(135deg, #a371f7, #58a6ff, #3fb950);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Slide 2: The Scale */
+    .slide-2 { background: linear-gradient(135deg, #0a0a15 0%, #15152a 100%); }
+    .scale-number {
+      font-size: 200px;
+      font-weight: 900;
+      background: linear-gradient(135deg, #fff, #ccc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1;
+      opacity: 0;
+      animation: scaleIn 0.8s ease forwards 0.3s;
+    }
+    .scale-label {
+      font-size: 48px;
+      color: #888;
+      margin-top: 20px;
+      opacity: 0;
+      animation: fadeIn 0.8s ease forwards 0.6s;
+    }
+    .scale-sub {
+      font-size: 24px;
+      color: #555;
+      margin-top: 30px;
+      opacity: 0;
+      animation: fadeIn 0.8s ease forwards 0.9s;
+    }
+
+    /* Slide 3: Timeline Visual */
+    .slide-3 {
+      background: linear-gradient(135deg, #0a0a15 0%, #0f1525 100%);
+      justify-content: flex-start;
+      padding-top: 100px;
+    }
+    .timeline-title {
+      font-size: 36px;
+      color: #888;
+      margin-bottom: 60px;
+      opacity: 0;
+      animation: fadeIn 0.6s ease forwards 0.2s;
+    }
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+    }
+    .month-bar {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      opacity: 0;
+    }
+    .month-label {
+      width: 80px;
+      font-size: 14px;
+      color: #666;
+      text-align: right;
+    }
+    .bar-track {
+      flex: 1;
+      height: 28px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      width: 0;
+      transition: width 1.5s ease;
+    }
+    .bar-value {
+      font-size: 14px;
+      font-weight: 600;
+      width: 60px;
+    }
+
+    /* Slide 4: The 4 Agents */
+    .slide-4 { background: linear-gradient(135deg, #0a0a15 0%, #1a1a2e 100%); }
+    .agents-title {
+      font-size: 32px;
+      color: #666;
+      margin-bottom: 60px;
+      opacity: 0;
+      animation: fadeIn 0.6s ease forwards 0.2s;
+    }
+    .agent-row {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+      width: 100%;
+      max-width: 900px;
+      margin-bottom: 25px;
+      opacity: 0;
+    }
+    .agent-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 700;
+    }
+    .agent-info { flex: 1; text-align: left; }
+    .agent-name { font-size: 28px; font-weight: 700; }
+    .agent-company { font-size: 16px; color: #666; }
+    .agent-count {
+      font-size: 36px;
+      font-weight: 700;
+      text-align: right;
+    }
+
+    /* Slide 5: Growth Explosion */
+    .slide-5 { background: linear-gradient(135deg, #1a0a2e 0%, #2d1b4e 100%); }
+    .explosion-label {
+      font-size: 28px;
+      color: #a371f7;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 30px;
+      opacity: 0;
+      animation: fadeIn 0.6s ease forwards 0.2s;
+    }
+    .explosion-month {
+      font-size: 48px;
+      color: #888;
+      margin-bottom: 40px;
+      opacity: 0;
+      animation: fadeIn 0.6s ease forwards 0.4s;
+    }
+    .explosion-number {
+      font-size: 180px;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1;
+      opacity: 0;
+      animation: explode 0.8s ease forwards 0.6s;
+    }
+    .explosion-sub {
+      font-size: 32px;
+      color: #a371f7;
+      margin-top: 20px;
+      opacity: 0;
+      animation: fadeIn 0.6s ease forwards 1s;
+    }
+
+    /* Slide 6: Industry Leaders */
+    .slide-6 {
+      background: linear-gradient(135deg, #0a0a15 0%, #1a1a2e 100%);
+      justify-content: flex-start;
+      padding-top: 80px;
+    }
+    .industry-title {
+      font-size: 36px;
+      font-weight: 600;
+      margin-bottom: 50px;
+      opacity: 0;
+      animation: fadeIn 0.6s ease forwards 0.2s;
+    }
+    .industry-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 25px;
+      width: 100%;
+      max-width: 900px;
+    }
+    .industry-card {
+      background: rgba(255,255,255,0.03);
+      border-radius: 16px;
+      padding: 30px;
+      text-align: left;
+      border-left: 4px solid;
+      opacity: 0;
+    }
+    .industry-rank {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 8px;
+    }
+    .industry-name {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .industry-stat {
+      font-size: 32px;
+      font-weight: 700;
+    }
+    .industry-desc {
+      font-size: 14px;
+      color: #666;
+      margin-top: 8px;
+    }
+
+    /* Slide 7: Key Finding */
+    .slide-7 { background: linear-gradient(135deg, #0a1520 0%, #152535 100%); }
+    .finding-badge {
+      background: rgba(88, 166, 255, 0.2);
+      color: #58a6ff;
+      padding: 10px 30px;
+      border-radius: 30px;
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 50px;
+      opacity: 0;
+      animation: fadeIn 0.6s ease forwards 0.2s;
+    }
+    .finding-text {
+      font-size: 52px;
+      font-weight: 700;
+      line-height: 1.3;
+      max-width: 850px;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease forwards 0.5s;
+    }
+    .finding-text span { color: #3fb950; }
+
+    /* Slide 8: Regulated Industries */
+    .slide-8 { background: linear-gradient(135deg, #0f1a15 0%, #1a2a20 100%); }
+    .regulated-title {
+      font-size: 32px;
+      color: #3fb950;
+      margin-bottom: 60px;
+      opacity: 0;
+      animation: fadeIn 0.6s ease forwards 0.2s;
+    }
+    .regulated-grid {
+      display: flex;
+      gap: 50px;
+    }
+    .regulated-card {
+      text-align: center;
+      opacity: 0;
+    }
+    .regulated-icon {
+      font-size: 64px;
+      margin-bottom: 20px;
+    }
+    .regulated-name {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+    .regulated-stat {
+      font-size: 48px;
+      font-weight: 700;
+      color: #3fb950;
+    }
+    .regulated-growth {
+      font-size: 18px;
+      color: #666;
+      margin-top: 10px;
+    }
+
+    /* Slide 9: The Winner */
+    .slide-9 { background: linear-gradient(135deg, #1a0a2e 0%, #2d1050 100%); }
+    .winner-label {
+      font-size: 24px;
+      color: #666;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      margin-bottom: 40px;
+      opacity: 0;
+      animation: fadeIn 0.6s ease forwards 0.2s;
+    }
+    .winner-name {
+      font-size: 80px;
+      font-weight: 900;
+      color: #a371f7;
+      margin-bottom: 30px;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease forwards 0.4s;
+    }
+    .winner-stat {
+      font-size: 140px;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1;
+      opacity: 0;
+      animation: scaleIn 0.8s ease forwards 0.7s;
+    }
+    .winner-sub {
+      font-size: 28px;
+      color: #888;
+      margin-top: 20px;
+      opacity: 0;
+      animation: fadeIn 0.6s ease forwards 1s;
+    }
+
+    /* Slide 10: CTA */
+    .slide-10 { background: linear-gradient(135deg, #0a0a15 0%, #1a1a2e 100%); }
+    .cta-main {
+      font-size: 48px;
+      font-weight: 700;
+      margin-bottom: 50px;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease forwards 0.3s;
+    }
+    .cta-url {
+      font-size: 28px;
+      color: #58a6ff;
+      margin-bottom: 50px;
+      opacity: 0;
+      animation: fadeIn 0.6s ease forwards 0.6s;
+    }
+    .cta-stack {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 60px;
+      opacity: 0;
+      animation: fadeIn 0.6s ease forwards 0.8s;
+    }
+    .stack-badge {
+      background: rgba(255,255,255,0.1);
+      padding: 12px 24px;
+      border-radius: 30px;
+      font-size: 16px;
+    }
+    .cta-question {
+      font-size: 32px;
+      color: #888;
+      opacity: 0;
+      animation: fadeIn 0.6s ease forwards 1s;
+    }
+
+    /* Animations */
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes scaleIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+    @keyframes explode {
+      0% { opacity: 0; transform: scale(0.5); }
+      50% { transform: scale(1.1); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    .progress { position: fixed; bottom: 0; left: 0; height: 4px; background: linear-gradient(90deg, #a371f7, #58a6ff, #3fb950); width: 0; transition: width 0.3s; }
+  </style>
+</head>
+<body>
+  <!-- Slide 1: Opening -->
+  <div class="slide slide-1 active" data-duration="4000">
+    <div class="date-range">January 2025 — March 2026</div>
+    <div class="main-title">15 Months That Changed<br><span>AI-Assisted Coding</span></div>
+  </div>
+
+  <!-- Slide 2: The Scale -->
+  <div class="slide slide-2" data-duration="4000">
+    <div class="scale-number">1M+</div>
+    <div class="scale-label">GitHub Repositories Analyzed</div>
+    <div class="scale-sub">Classified by industry using NAICS framework</div>
+  </div>
+
+  <!-- Slide 3: Timeline -->
+  <div class="slide slide-3" data-duration="8000">
+    <div class="timeline-title">Monthly Repository Growth (All Agents Combined)</div>
+    <div class="timeline" id="timeline">
+      <!-- Generated by JS -->
+    </div>
+  </div>
+
+  <!-- Slide 4: The 4 Agents -->
+  <div class="slide slide-4" data-duration="5000">
+    <div class="agents-title">4 AI Coding Agents Tracked</div>
+    <div class="agent-row" style="animation: fadeInUp 0.6s ease forwards 0.3s;">
+      <div class="agent-icon" style="background: #a371f7;">C</div>
+      <div class="agent-info">
+        <div class="agent-name" style="color: #a371f7;">Claude Code</div>
+        <div class="agent-company">Anthropic</div>
+      </div>
+      <div class="agent-count" style="color: #a371f7;">391K</div>
+    </div>
+    <div class="agent-row" style="animation: fadeInUp 0.6s ease forwards 0.5s;">
+      <div class="agent-icon" style="background: #3fb950;">X</div>
+      <div class="agent-info">
+        <div class="agent-name" style="color: #3fb950;">OpenAI Codex</div>
+        <div class="agent-company">OpenAI</div>
+      </div>
+      <div class="agent-count" style="color: #3fb950;">249K</div>
+    </div>
+    <div class="agent-row" style="animation: fadeInUp 0.6s ease forwards 0.7s;">
+      <div class="agent-icon" style="background: #58a6ff;">G</div>
+      <div class="agent-info">
+        <div class="agent-name" style="color: #58a6ff;">GitHub Copilot</div>
+        <div class="agent-company">Microsoft</div>
+      </div>
+      <div class="agent-count" style="color: #58a6ff;">248K</div>
+    </div>
+    <div class="agent-row" style="animation: fadeInUp 0.6s ease forwards 0.9s;">
+      <div class="agent-icon" style="background: #f78166;">U</div>
+      <div class="agent-info">
+        <div class="agent-name" style="color: #f78166;">Cursor AI</div>
+        <div class="agent-company">Anysphere</div>
+      </div>
+      <div class="agent-count" style="color: #f78166;">129K</div>
+    </div>
+  </div>
+
+  <!-- Slide 5: Growth Explosion -->
+  <div class="slide slide-5" data-duration="5000">
+    <div class="explosion-label">Claude Code</div>
+    <div class="explosion-month">January 2026</div>
+    <div class="explosion-number">111K+</div>
+    <div class="explosion-sub">new repositories in a single month</div>
+  </div>
+
+  <!-- Slide 6: Industry Leaders -->
+  <div class="slide slide-6" data-duration="6000">
+    <div class="industry-title">Top Industries by AI Agent Adoption</div>
+    <div class="industry-grid">
+      <div class="industry-card" style="border-color: #7c3aed; animation: fadeInUp 0.6s ease forwards 0.3s;">
+        <div class="industry-rank">#1 ACROSS ALL AGENTS</div>
+        <div class="industry-name">Professional Services</div>
+        <div class="industry-stat" style="color: #7c3aed;">253K repos</div>
+        <div class="industry-desc">Software consulting, Legal tech, Engineering</div>
+      </div>
+      <div class="industry-card" style="border-color: #2563eb; animation: fadeInUp 0.6s ease forwards 0.5s;">
+        <div class="industry-rank">#2</div>
+        <div class="industry-name">Information</div>
+        <div class="industry-stat" style="color: #2563eb;">210K repos</div>
+        <div class="industry-desc">SaaS, Media, Data analytics, Telecom</div>
+      </div>
+      <div class="industry-card" style="border-color: #ca8a04; animation: fadeInUp 0.6s ease forwards 0.7s;">
+        <div class="industry-rank">#3</div>
+        <div class="industry-name">Finance & Insurance</div>
+        <div class="industry-stat" style="color: #ca8a04;">92K repos</div>
+        <div class="industry-desc">Fintech, Banking, Trading platforms</div>
+      </div>
+      <div class="industry-card" style="border-color: #dc2626; animation: fadeInUp 0.6s ease forwards 0.9s;">
+        <div class="industry-rank">#4</div>
+        <div class="industry-name">Education</div>
+        <div class="industry-stat" style="color: #dc2626;">87K repos</div>
+        <div class="industry-desc">EdTech, LMS, Online courses</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 7: Key Finding -->
+  <div class="slide slide-7" data-duration="5000">
+    <div class="finding-badge">KEY FINDING</div>
+    <div class="finding-text">Professional Services dominates with <span>25-28%</span> of all repositories across every single agent</div>
+  </div>
+
+  <!-- Slide 8: Regulated Industries -->
+  <div class="slide slide-8" data-duration="5000">
+    <div class="regulated-title">Regulated Industries Are Accelerating</div>
+    <div class="regulated-grid">
+      <div class="regulated-card" style="animation: fadeInUp 0.6s ease forwards 0.3s;">
+        <div class="regulated-icon">🏦</div>
+        <div class="regulated-name">Finance</div>
+        <div class="regulated-stat">92K</div>
+        <div class="regulated-growth">repos across all agents</div>
+      </div>
+      <div class="regulated-card" style="animation: fadeInUp 0.6s ease forwards 0.6s;">
+        <div class="regulated-icon">🏥</div>
+        <div class="regulated-name">Healthcare</div>
+        <div class="regulated-stat">29K</div>
+        <div class="regulated-growth">repos across all agents</div>
+      </div>
+      <div class="regulated-card" style="animation: fadeInUp 0.6s ease forwards 0.9s;">
+        <div class="regulated-icon">🏛️</div>
+        <div class="regulated-name">Public Admin</div>
+        <div class="regulated-stat">32K</div>
+        <div class="regulated-growth">repos across all agents</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 9: The Winner -->
+  <div class="slide slide-9" data-duration="5000">
+    <div class="winner-label">Fastest Growing Agent</div>
+    <div class="winner-name">Claude Code</div>
+    <div class="winner-stat">391K</div>
+    <div class="winner-sub">repositories — 2x faster growth than competitors</div>
+  </div>
+
+  <!-- Slide 10: CTA -->
+  <div class="slide slide-10" data-duration="5000">
+    <div class="cta-main">Explore the full interactive dashboard</div>
+    <div class="cta-url">Link in comments</div>
+    <div class="cta-stack">
+      <span class="stack-badge">Next.js 16</span>
+      <span class="stack-badge">Recharts</span>
+      <span class="stack-badge">19 Industries</span>
+      <span class="stack-badge">Open Source</span>
+    </div>
+    <div class="cta-question">What industry should I analyze next?</div>
+  </div>
+
+  <div class="progress"></div>
+
+  <script>
+    // Generate timeline
+    const months = ['Jan 25','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan 26','Feb','Mar'];
+    const values = [76, 243, 1070, 1627, 6693, 33889, 62898, 95647, 120076, 160632, 198985, 244755, 317854, 344286, 345091];
+    const maxVal = Math.max(...values);
+    const timeline = document.getElementById('timeline');
+
+    months.forEach((m, i) => {
+      const pct = (values[i] / maxVal) * 100;
+      const bar = document.createElement('div');
+      bar.className = 'month-bar';
+      bar.style.animation = `fadeIn 0.3s ease forwards ${0.3 + i * 0.15}s`;
+      bar.innerHTML = `
+        <div class="month-label">${m}</div>
+        <div class="bar-track">
+          <div class="bar-fill" style="background: linear-gradient(90deg, #a371f7, #58a6ff); width: 0;" data-width="${pct}%"></div>
+        </div>
+        <div class="bar-value" style="color: ${i >= 12 ? '#3fb950' : '#888'}">${(values[i]/1000).toFixed(0)}K</div>
+      `;
+      timeline.appendChild(bar);
+    });
+
+    // Slideshow
+    const slides = document.querySelectorAll('.slide');
+    const progress = document.querySelector('.progress');
+    let current = 0;
+    let total = Array.from(slides).reduce((a, s) => a + parseInt(s.dataset.duration), 0);
+    let elapsed = 0;
+
+    function animateBars() {
+      document.querySelectorAll('.bar-fill').forEach(bar => {
+        setTimeout(() => { bar.style.width = bar.dataset.width; }, 500);
+      });
+    }
+
+    function next() {
+      elapsed += parseInt(slides[current].dataset.duration);
+      progress.style.width = `${(elapsed/total)*100}%`;
+      current++;
+      if (current < slides.length) {
+        slides.forEach(s => s.classList.remove('active'));
+        slides[current].classList.add('active');
+        if (current === 2) setTimeout(animateBars, 500);
+        setTimeout(next, parseInt(slides[current].dataset.duration));
+      }
+    }
+    setTimeout(() => next(), parseInt(slides[0].dataset.duration));
+  </script>
+</body>
+</html>

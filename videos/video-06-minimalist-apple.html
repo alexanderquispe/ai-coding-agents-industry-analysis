@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video 6: Minimalist Apple Style</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #000;
+      color: #fff;
+      overflow: hidden;
+      width: 1080px;
+      height: 1080px;
+    }
+    .slide {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 1.2s ease;
+      text-align: center;
+      padding: 100px;
+    }
+    .slide.active { opacity: 1; }
+
+    /* Typography */
+    .hero-text {
+      font-size: 72px;
+      font-weight: 600;
+      letter-spacing: -2px;
+      line-height: 1.1;
+      opacity: 0;
+      animation: fadeIn 1.5s ease forwards 0.3s;
+    }
+    .hero-text .gradient {
+      background: linear-gradient(90deg, #a371f7, #58a6ff, #3fb950);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .sub-text {
+      font-size: 28px;
+      font-weight: 300;
+      color: #86868b;
+      margin-top: 30px;
+      opacity: 0;
+      animation: fadeIn 1.5s ease forwards 0.8s;
+    }
+
+    /* Big Number */
+    .big-number {
+      font-size: 200px;
+      font-weight: 700;
+      letter-spacing: -10px;
+      opacity: 0;
+      animation: scaleIn 1s ease forwards 0.3s;
+    }
+    .number-label {
+      font-size: 32px;
+      font-weight: 400;
+      color: #86868b;
+      margin-top: 20px;
+      opacity: 0;
+      animation: fadeIn 1s ease forwards 0.8s;
+    }
+
+    /* Agent Pills */
+    .agent-pills {
+      display: flex;
+      gap: 30px;
+      margin-top: 60px;
+      opacity: 0;
+      animation: fadeIn 1s ease forwards 1s;
+    }
+    .agent-pill {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+    .pill-circle {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      font-weight: 600;
+    }
+    .pill-name {
+      font-size: 16px;
+      color: #86868b;
+    }
+    .pill-count {
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    /* Simple List */
+    .simple-list {
+      text-align: left;
+      opacity: 0;
+      animation: fadeIn 1s ease forwards 0.5s;
+    }
+    .list-item {
+      display: flex;
+      align-items: baseline;
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+    .list-num {
+      font-size: 48px;
+      font-weight: 700;
+      color: #86868b;
+      width: 80px;
+    }
+    .list-content {
+      flex: 1;
+    }
+    .list-title {
+      font-size: 36px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .list-sub {
+      font-size: 20px;
+      color: #86868b;
+    }
+
+    /* Highlight Card */
+    .highlight-card {
+      background: linear-gradient(135deg, rgba(163,113,247,0.15), rgba(163,113,247,0.05));
+      border-radius: 30px;
+      padding: 60px 80px;
+      margin-top: 40px;
+      opacity: 0;
+      animation: fadeIn 1s ease forwards 0.8s;
+    }
+    .highlight-label {
+      font-size: 18px;
+      color: #a371f7;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-bottom: 20px;
+    }
+    .highlight-value {
+      font-size: 80px;
+      font-weight: 700;
+      color: #a371f7;
+    }
+    .highlight-desc {
+      font-size: 24px;
+      color: #86868b;
+      margin-top: 15px;
+    }
+
+    /* Simple Bar */
+    .simple-bars {
+      width: 100%;
+      max-width: 700px;
+      margin-top: 60px;
+    }
+    .simple-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 25px;
+      margin-bottom: 30px;
+      opacity: 0;
+    }
+    .bar-label {
+      width: 180px;
+      font-size: 20px;
+      font-weight: 500;
+      text-align: right;
+    }
+    .bar-track {
+      flex: 1;
+      height: 12px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: 6px;
+      width: 0;
+      transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Footer */
+    .slide-footer {
+      position: absolute;
+      bottom: 60px;
+      font-size: 16px;
+      color: #48484a;
+      opacity: 0;
+      animation: fadeIn 1s ease forwards 1.2s;
+    }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes scaleIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+
+    .progress { position: fixed; bottom: 0; left: 0; height: 3px; background: linear-gradient(90deg, #a371f7, #58a6ff); width: 0; transition: width 0.5s ease; }
+  </style>
+</head>
+<body>
+  <!-- Slide 1: Opening -->
+  <div class="slide slide-1 active" data-duration="4500">
+    <div class="hero-text">One million<br><span class="gradient">repositories.</span></div>
+    <div class="sub-text">Analyzed. Classified. Visualized.</div>
+  </div>
+
+  <!-- Slide 2: The Question -->
+  <div class="slide slide-2" data-duration="4000">
+    <div class="hero-text" style="font-size: 56px;">Which AI coding agent<br>is winning each industry?</div>
+  </div>
+
+  <!-- Slide 3: The Agents -->
+  <div class="slide slide-3" data-duration="5500">
+    <div class="hero-text" style="font-size: 48px; margin-bottom: 20px;">Four agents. Four stories.</div>
+    <div class="agent-pills">
+      <div class="agent-pill">
+        <div class="pill-circle" style="background: #a371f7;">C</div>
+        <div class="pill-name">Claude Code</div>
+        <div class="pill-count" style="color: #a371f7;">391K</div>
+      </div>
+      <div class="agent-pill">
+        <div class="pill-circle" style="background: #3fb950;">X</div>
+        <div class="pill-name">OpenAI Codex</div>
+        <div class="pill-count" style="color: #3fb950;">249K</div>
+      </div>
+      <div class="agent-pill">
+        <div class="pill-circle" style="background: #58a6ff;">G</div>
+        <div class="pill-name">GitHub Copilot</div>
+        <div class="pill-count" style="color: #58a6ff;">248K</div>
+      </div>
+      <div class="agent-pill">
+        <div class="pill-circle" style="background: #f78166;">U</div>
+        <div class="pill-name">Cursor AI</div>
+        <div class="pill-count" style="color: #f78166;">129K</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 4: Industries -->
+  <div class="slide slide-4" data-duration="5500">
+    <div class="hero-text" style="font-size: 48px; margin-bottom: 50px;">19 industries.<br>One clear leader.</div>
+    <div class="simple-bars">
+      <div class="simple-bar-row" style="animation: fadeIn 0.8s ease forwards 0.4s;">
+        <div class="bar-label" style="color: #7c3aed;">Professional Services</div>
+        <div class="bar-track"><div class="bar-fill" data-width="100%" style="background: #7c3aed;"></div></div>
+      </div>
+      <div class="simple-bar-row" style="animation: fadeIn 0.8s ease forwards 0.6s;">
+        <div class="bar-label" style="color: #2563eb;">Information</div>
+        <div class="bar-track"><div class="bar-fill" data-width="83%" style="background: #2563eb;"></div></div>
+      </div>
+      <div class="simple-bar-row" style="animation: fadeIn 0.8s ease forwards 0.8s;">
+        <div class="bar-label" style="color: #ca8a04;">Finance</div>
+        <div class="bar-track"><div class="bar-fill" data-width="36%" style="background: #ca8a04;"></div></div>
+      </div>
+      <div class="simple-bar-row" style="animation: fadeIn 0.8s ease forwards 1s;">
+        <div class="bar-label" style="color: #dc2626;">Education</div>
+        <div class="bar-track"><div class="bar-fill" data-width="34%" style="background: #dc2626;"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 5: The Insight -->
+  <div class="slide slide-5" data-duration="5000">
+    <div class="hero-text" style="font-size: 42px;">Professional Services dominates.</div>
+    <div class="sub-text">25-28% of all repositories. Across every agent.</div>
+    <div class="highlight-card">
+      <div class="highlight-label">Total Repos</div>
+      <div class="highlight-value">253K</div>
+      <div class="highlight-desc">Software consulting, legal tech, engineering firms</div>
+    </div>
+  </div>
+
+  <!-- Slide 6: Claude Growth -->
+  <div class="slide slide-6" data-duration="5000">
+    <div class="sub-text" style="animation-delay: 0.2s; margin-bottom: 30px;">January 2026</div>
+    <div class="big-number" style="color: #a371f7;">111K+</div>
+    <div class="number-label">new repositories for Claude Code</div>
+    <div class="sub-text" style="animation-delay: 1s; margin-top: 40px;">2x faster than competitors</div>
+  </div>
+
+  <!-- Slide 7: Key Findings -->
+  <div class="slide slide-7" data-duration="6000">
+    <div class="simple-list">
+      <div class="list-item">
+        <div class="list-num">01</div>
+        <div class="list-content">
+          <div class="list-title" style="color: #a371f7;">Claude Code leads</div>
+          <div class="list-sub">391K repositories, fastest growth</div>
+        </div>
+      </div>
+      <div class="list-item">
+        <div class="list-num">02</div>
+        <div class="list-content">
+          <div class="list-title" style="color: #7c3aed;">Professional Services dominates</div>
+          <div class="list-sub">25-28% across all agents</div>
+        </div>
+      </div>
+      <div class="list-item">
+        <div class="list-num">03</div>
+        <div class="list-content">
+          <div class="list-title" style="color: #16a34a;">Finance is accelerating</div>
+          <div class="list-sub">Regulated industries embracing AI</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 8: CTA -->
+  <div class="slide slide-8" data-duration="4500">
+    <div class="hero-text" style="font-size: 48px;">Explore the data.</div>
+    <div class="sub-text">Full interactive dashboard in comments.</div>
+    <div class="sub-text" style="animation-delay: 1.2s; margin-top: 60px; color: #58a6ff;">What industry are you building for?</div>
+    <div class="slide-footer">Built with Next.js • Open Source</div>
+  </div>
+
+  <div class="progress"></div>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const progress = document.querySelector('.progress');
+    let current = 0;
+    let total = Array.from(slides).reduce((a, s) => a + parseInt(s.dataset.duration), 0);
+    let elapsed = 0;
+
+    function animateBars() {
+      document.querySelectorAll('.bar-fill').forEach(bar => {
+        setTimeout(() => { bar.style.width = bar.dataset.width; }, 400);
+      });
+    }
+
+    function next() {
+      elapsed += parseInt(slides[current].dataset.duration);
+      progress.style.width = `${(elapsed/total)*100}%`;
+      current++;
+      if (current < slides.length) {
+        slides.forEach(s => s.classList.remove('active'));
+        slides[current].classList.add('active');
+        if (current === 3) setTimeout(animateBars, 500);
+        setTimeout(next, parseInt(slides[current].dataset.duration));
+      }
+    }
+    setTimeout(() => next(), parseInt(slides[0].dataset.duration));
+  </script>
+</body>
+</html>

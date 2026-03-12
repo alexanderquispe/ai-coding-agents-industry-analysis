@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Coding Agents - Video Presentation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0a0a0f;
+      color: #fff;
+      overflow: hidden;
+      width: 1080px;
+      height: 1080px;
+    }
+
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      transform: scale(0.95);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+      padding: 60px;
+      text-align: center;
+    }
+
+    .slide.active {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Slide 1: Hook */
+    .slide-1 {
+      background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+    }
+
+    .big-number {
+      font-size: 180px;
+      font-weight: 900;
+      background: linear-gradient(135deg, #a371f7 0%, #58a6ff 50%, #3fb950 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 1s ease forwards;
+      animation-delay: 0.3s;
+    }
+
+    .subtitle {
+      font-size: 42px;
+      color: #888;
+      margin-top: 20px;
+      opacity: 0;
+      animation: fadeInUp 1s ease forwards;
+      animation-delay: 0.6s;
+    }
+
+    /* Slide 2: The Question */
+    .slide-2 {
+      background: linear-gradient(135deg, #0a0a0f 0%, #16213e 100%);
+    }
+
+    .question {
+      font-size: 56px;
+      font-weight: 700;
+      line-height: 1.3;
+      max-width: 900px;
+      opacity: 0;
+      animation: fadeInUp 1s ease forwards;
+      animation-delay: 0.3s;
+    }
+
+    .question span {
+      background: linear-gradient(135deg, #a371f7, #58a6ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Slide 3: Agents */
+    .slide-3 {
+      background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+    }
+
+    .agents-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 40px;
+      width: 100%;
+      max-width: 800px;
+    }
+
+    .agent-card {
+      background: rgba(255,255,255,0.05);
+      border-radius: 20px;
+      padding: 40px;
+      border: 2px solid transparent;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .agent-card:nth-child(1) { animation: fadeInUp 0.6s ease forwards; animation-delay: 0.2s; border-color: #a371f7; }
+    .agent-card:nth-child(2) { animation: fadeInUp 0.6s ease forwards; animation-delay: 0.4s; border-color: #58a6ff; }
+    .agent-card:nth-child(3) { animation: fadeInUp 0.6s ease forwards; animation-delay: 0.6s; border-color: #3fb950; }
+    .agent-card:nth-child(4) { animation: fadeInUp 0.6s ease forwards; animation-delay: 0.8s; border-color: #f78166; }
+
+    .agent-name {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .agent-company {
+      font-size: 18px;
+      color: #666;
+    }
+
+    .agent-repos {
+      font-size: 36px;
+      font-weight: 700;
+      margin-top: 15px;
+    }
+
+    /* Slide 4: Professional Services Dominates */
+    .slide-4 {
+      background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+    }
+
+    .finding-number {
+      font-size: 120px;
+      font-weight: 900;
+      color: #333;
+      position: absolute;
+      top: 80px;
+      left: 80px;
+      opacity: 0;
+      animation: fadeIn 0.5s ease forwards;
+      animation-delay: 0.2s;
+    }
+
+    .finding-title {
+      font-size: 52px;
+      font-weight: 700;
+      margin-bottom: 30px;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease forwards;
+      animation-delay: 0.4s;
+    }
+
+    .finding-stat {
+      font-size: 140px;
+      font-weight: 900;
+      background: linear-gradient(135deg, #7c3aed, #2563eb);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease forwards;
+      animation-delay: 0.6s;
+    }
+
+    .finding-label {
+      font-size: 32px;
+      color: #888;
+      margin-top: 10px;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease forwards;
+      animation-delay: 0.8s;
+    }
+
+    /* Slide 5: Claude Growth */
+    .slide-5 {
+      background: linear-gradient(135deg, #0a0a0f 0%, #2d1b4e 100%);
+    }
+
+    .growth-container {
+      text-align: center;
+    }
+
+    .claude-highlight {
+      font-size: 48px;
+      font-weight: 700;
+      color: #a371f7;
+      margin-bottom: 30px;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease forwards;
+      animation-delay: 0.3s;
+    }
+
+    .growth-stat {
+      font-size: 160px;
+      font-weight: 900;
+      color: #fff;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease forwards;
+      animation-delay: 0.5s;
+    }
+
+    .growth-label {
+      font-size: 36px;
+      color: #a371f7;
+      margin-top: 10px;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease forwards;
+      animation-delay: 0.7s;
+    }
+
+    .growth-comparison {
+      margin-top: 50px;
+      font-size: 28px;
+      color: #888;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease forwards;
+      animation-delay: 0.9s;
+    }
+
+    .growth-comparison span {
+      color: #3fb950;
+    }
+
+    /* Slide 6: Industries Bar */
+    .slide-6 {
+      background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+      align-items: flex-start;
+      padding-top: 100px;
+    }
+
+    .bars-title {
+      font-size: 36px;
+      font-weight: 600;
+      margin-bottom: 50px;
+      opacity: 0;
+      animation: fadeInUp 0.6s ease forwards;
+      animation-delay: 0.2s;
+    }
+
+    .industry-bars {
+      width: 100%;
+      max-width: 900px;
+    }
+
+    .industry-bar {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      opacity: 0;
+    }
+
+    .industry-bar:nth-child(1) { animation: fadeInLeft 0.6s ease forwards; animation-delay: 0.4s; }
+    .industry-bar:nth-child(2) { animation: fadeInLeft 0.6s ease forwards; animation-delay: 0.6s; }
+    .industry-bar:nth-child(3) { animation: fadeInLeft 0.6s ease forwards; animation-delay: 0.8s; }
+    .industry-bar:nth-child(4) { animation: fadeInLeft 0.6s ease forwards; animation-delay: 1.0s; }
+    .industry-bar:nth-child(5) { animation: fadeInLeft 0.6s ease forwards; animation-delay: 1.2s; }
+
+    .industry-label {
+      width: 200px;
+      font-size: 20px;
+      text-align: right;
+      padding-right: 20px;
+      color: #ccc;
+    }
+
+    .bar-container {
+      flex: 1;
+      height: 50px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 8px;
+      animation: growBar 1.5s ease forwards;
+      animation-delay: inherit;
+    }
+
+    .bar-value {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    /* Slide 7: CTA */
+    .slide-7 {
+      background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+    }
+
+    .cta-content {
+      text-align: center;
+    }
+
+    .cta-title {
+      font-size: 42px;
+      font-weight: 600;
+      margin-bottom: 40px;
+      color: #888;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease forwards;
+      animation-delay: 0.3s;
+    }
+
+    .cta-url {
+      font-size: 32px;
+      font-weight: 700;
+      color: #58a6ff;
+      margin-bottom: 60px;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease forwards;
+      animation-delay: 0.5s;
+    }
+
+    .tech-stack {
+      display: flex;
+      gap: 30px;
+      justify-content: center;
+      margin-bottom: 60px;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease forwards;
+      animation-delay: 0.7s;
+    }
+
+    .tech-badge {
+      background: rgba(255,255,255,0.1);
+      padding: 12px 24px;
+      border-radius: 30px;
+      font-size: 18px;
+      color: #ccc;
+    }
+
+    .cta-question {
+      font-size: 36px;
+      font-weight: 600;
+      color: #fff;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease forwards;
+      animation-delay: 0.9s;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes growBar {
+      from { width: 0; }
+    }
+
+    /* Progress bar */
+    .progress-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      height: 6px;
+      background: linear-gradient(90deg, #a371f7, #58a6ff, #3fb950);
+      width: 0;
+      transition: width 0.3s ease;
+    }
+
+    /* Slide counter */
+    .slide-counter {
+      position: fixed;
+      bottom: 30px;
+      right: 40px;
+      font-size: 18px;
+      color: #444;
+    }
+  </style>
+</head>
+<body>
+  <!-- Slide 1: Hook -->
+  <div class="slide slide-1 active" data-duration="4000">
+    <div class="big-number">1,015,689</div>
+    <div class="subtitle">GitHub repositories analyzed</div>
+  </div>
+
+  <!-- Slide 2: The Question -->
+  <div class="slide slide-2" data-duration="4000">
+    <div class="question">
+      Which <span>AI coding agent</span> is winning in each industry?
+    </div>
+  </div>
+
+  <!-- Slide 3: The 4 Agents -->
+  <div class="slide slide-3" data-duration="5000">
+    <div class="agents-grid">
+      <div class="agent-card">
+        <div class="agent-name" style="color: #a371f7">Claude Code</div>
+        <div class="agent-company">Anthropic</div>
+        <div class="agent-repos" style="color: #a371f7">391K repos</div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-name" style="color: #58a6ff">GitHub Copilot</div>
+        <div class="agent-company">Microsoft</div>
+        <div class="agent-repos" style="color: #58a6ff">247K repos</div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-name" style="color: #3fb950">OpenAI Codex</div>
+        <div class="agent-company">OpenAI</div>
+        <div class="agent-repos" style="color: #3fb950">249K repos</div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-name" style="color: #f78166">Cursor AI</div>
+        <div class="agent-company">Anysphere</div>
+        <div class="agent-repos" style="color: #f78166">129K repos</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 4: Professional Services Finding -->
+  <div class="slide slide-4" data-duration="5000">
+    <div class="finding-number">01</div>
+    <div class="finding-title">Professional Services Dominates</div>
+    <div class="finding-stat">28%</div>
+    <div class="finding-label">of all repositories across every agent</div>
+  </div>
+
+  <!-- Slide 5: Claude Growth -->
+  <div class="slide slide-5" data-duration="6000">
+    <div class="growth-container">
+      <div class="claude-highlight">Claude Code</div>
+      <div class="growth-stat">111K+</div>
+      <div class="growth-label">new repos in January 2026 alone</div>
+      <div class="growth-comparison">
+        <span>2x faster</span> than Copilot and Codex combined
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 6: Top Industries -->
+  <div class="slide slide-6" data-duration="6000">
+    <div class="bars-title">Top Industries by Adoption</div>
+    <div class="industry-bars">
+      <div class="industry-bar">
+        <div class="industry-label">Professional Services</div>
+        <div class="bar-container">
+          <div class="bar-fill" style="width: 100%; background: linear-gradient(90deg, #7c3aed, #a371f7);"></div>
+          <div class="bar-value">109K</div>
+        </div>
+      </div>
+      <div class="industry-bar">
+        <div class="industry-label">Information</div>
+        <div class="bar-container">
+          <div class="bar-fill" style="width: 73%; background: linear-gradient(90deg, #2563eb, #58a6ff);"></div>
+          <div class="bar-value">80K</div>
+        </div>
+      </div>
+      <div class="industry-bar">
+        <div class="industry-label">Finance & Insurance</div>
+        <div class="bar-container">
+          <div class="bar-fill" style="width: 30%; background: linear-gradient(90deg, #ca8a04, #fbbf24);"></div>
+          <div class="bar-value">33K</div>
+        </div>
+      </div>
+      <div class="industry-bar">
+        <div class="industry-label">Education</div>
+        <div class="bar-container">
+          <div class="bar-fill" style="width: 28%; background: linear-gradient(90deg, #dc2626, #f87171);"></div>
+          <div class="bar-value">31K</div>
+        </div>
+      </div>
+      <div class="industry-bar">
+        <div class="industry-label">Entertainment</div>
+        <div class="bar-container">
+          <div class="bar-fill" style="width: 27%; background: linear-gradient(90deg, #db2777, #f472b6);"></div>
+          <div class="bar-value">30K</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 7: CTA -->
+  <div class="slide slide-7" data-duration="5000">
+    <div class="cta-content">
+      <div class="cta-title">Full interactive dashboard</div>
+      <div class="cta-url">Link in comments</div>
+      <div class="tech-stack">
+        <span class="tech-badge">Next.js 16</span>
+        <span class="tech-badge">Recharts</span>
+        <span class="tech-badge">Open Source</span>
+      </div>
+      <div class="cta-question">What industry should I analyze next?</div>
+    </div>
+  </div>
+
+  <div class="progress-bar"></div>
+  <div class="slide-counter">1 / 7</div>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const progressBar = document.querySelector('.progress-bar');
+    const counter = document.querySelector('.slide-counter');
+    let currentSlide = 0;
+    let totalDuration = 0;
+    let elapsed = 0;
+
+    // Calculate total duration
+    slides.forEach(slide => {
+      totalDuration += parseInt(slide.dataset.duration);
+    });
+
+    function showSlide(index) {
+      slides.forEach((slide, i) => {
+        slide.classList.remove('active');
+        // Reset animations by cloning
+        if (i === index) {
+          const clone = slide.cloneNode(true);
+          slide.parentNode.replaceChild(clone, slide);
+          slides[i] = clone;
+          clone.classList.add('active');
+        }
+      });
+      counter.textContent = `${index + 1} / ${slides.length}`;
+    }
+
+    function nextSlide() {
+      const duration = parseInt(slides[currentSlide].dataset.duration);
+      elapsed += duration;
+      progressBar.style.width = `${(elapsed / totalDuration) * 100}%`;
+
+      currentSlide++;
+      if (currentSlide < slides.length) {
+        showSlide(currentSlide);
+        setTimeout(nextSlide, parseInt(slides[currentSlide].dataset.duration));
+      }
+    }
+
+    // Start after 1 second
+    setTimeout(() => {
+      setTimeout(nextSlide, parseInt(slides[0].dataset.duration));
+    }, 1000);
+  </script>
+</body>
+</html>
