@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video 6 Enhanced: Minimalist Apple Style with Agent Distributions</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #000;
+      color: #fff;
+      overflow: hidden;
+      width: 1080px;
+      height: 1080px;
+    }
+    .slide {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 1.2s ease;
+      text-align: center;
+      padding: 80px;
+    }
+    .slide.active { opacity: 1; }
+
+    /* Typography */
+    .hero-text {
+      font-size: 72px;
+      font-weight: 600;
+      letter-spacing: -2px;
+      line-height: 1.1;
+      opacity: 0;
+      animation: fadeIn 1.5s ease forwards 0.3s;
+    }
+    .hero-text .gradient {
+      background: linear-gradient(90deg, #a371f7, #58a6ff, #3fb950);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .sub-text {
+      font-size: 28px;
+      font-weight: 300;
+      color: #86868b;
+      margin-top: 30px;
+      opacity: 0;
+      animation: fadeIn 1.5s ease forwards 0.8s;
+    }
+
+    /* Mega Opening Number */
+    .mega-number {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 20px;
+      opacity: 0;
+      animation: megaReveal 1.5s ease forwards 0.2s;
+    }
+    .mega-one {
+      font-size: 350px;
+      font-weight: 700;
+      letter-spacing: -15px;
+      line-height: 0.8;
+    }
+    .mega-million {
+      font-size: 160px;
+      font-weight: 700;
+      letter-spacing: -5px;
+    }
+    .mega-subtitle {
+      font-size: 36px;
+      font-weight: 400;
+      color: #86868b;
+      margin-top: 20px;
+      opacity: 0;
+      animation: fadeIn 1s ease forwards 1s;
+    }
+
+    /* Big Number */
+    .big-number {
+      font-size: 200px;
+      font-weight: 700;
+      letter-spacing: -10px;
+      opacity: 0;
+      animation: scaleIn 1s ease forwards 0.3s;
+    }
+    .number-label {
+      font-size: 32px;
+      font-weight: 400;
+      color: #86868b;
+      margin-top: 20px;
+      opacity: 0;
+      animation: fadeIn 1s ease forwards 0.8s;
+    }
+
+    /* Agent Header */
+    .agent-header {
+      display: flex;
+      align-items: center;
+      gap: 25px;
+      margin-bottom: 30px;
+      opacity: 0;
+      animation: fadeIn 0.8s ease forwards 0.2s;
+    }
+    .agent-logo {
+      width: 80px;
+      height: 80px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      font-weight: 700;
+    }
+    .agent-info {
+      text-align: left;
+    }
+    .agent-name {
+      font-size: 42px;
+      font-weight: 600;
+    }
+    .agent-company {
+      font-size: 18px;
+      color: #86868b;
+    }
+
+    /* Month Display */
+    .month-display {
+      font-size: 24px;
+      font-weight: 500;
+      color: #86868b;
+      margin-bottom: 20px;
+      opacity: 0;
+      animation: fadeIn 0.5s ease forwards 0.4s;
+    }
+    .month-highlight {
+      font-size: 48px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+
+    /* Distribution Bars */
+    .distribution-container {
+      width: 100%;
+      max-width: 800px;
+      opacity: 0;
+      animation: fadeIn 0.8s ease forwards 0.5s;
+    }
+    .dist-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 12px;
+      height: 36px;
+    }
+    .dist-label {
+      width: 160px;
+      font-size: 14px;
+      font-weight: 500;
+      text-align: right;
+      color: #86868b;
+    }
+    .dist-bar-track {
+      flex: 1;
+      height: 20px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .dist-bar-fill {
+      height: 100%;
+      border-radius: 10px;
+      transition: width 0.3s ease;
+      min-width: 2px;
+    }
+    .dist-value {
+      width: 70px;
+      font-size: 14px;
+      font-weight: 500;
+      text-align: right;
+    }
+    .dist-pct {
+      width: 50px;
+      font-size: 12px;
+      color: #86868b;
+      text-align: right;
+    }
+
+    /* Total Counter */
+    .total-counter {
+      margin-top: 30px;
+      text-align: center;
+      opacity: 0;
+      animation: fadeIn 0.8s ease forwards 0.6s;
+    }
+    .total-value {
+      font-size: 64px;
+      font-weight: 700;
+    }
+    .total-label {
+      font-size: 16px;
+      color: #86868b;
+    }
+
+    /* Stats Summary */
+    .stats-row {
+      display: flex;
+      gap: 60px;
+      margin-top: 40px;
+      opacity: 0;
+      animation: fadeIn 1s ease forwards 1s;
+    }
+    .stat-item {
+      text-align: center;
+    }
+    .stat-value {
+      font-size: 48px;
+      font-weight: 600;
+    }
+    .stat-label {
+      font-size: 14px;
+      color: #86868b;
+      margin-top: 5px;
+    }
+
+    /* Agent Pills */
+    .agent-pills {
+      display: flex;
+      gap: 30px;
+      margin-top: 60px;
+      opacity: 0;
+      animation: fadeIn 1s ease forwards 1s;
+    }
+    .agent-pill {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+    .pill-circle {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      font-weight: 600;
+    }
+    .pill-name {
+      font-size: 16px;
+      color: #86868b;
+    }
+    .pill-count {
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    /* Simple Bar */
+    .simple-bars {
+      width: 100%;
+      max-width: 700px;
+      margin-top: 60px;
+    }
+    .simple-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 25px;
+      margin-bottom: 30px;
+      opacity: 0;
+    }
+    .bar-label {
+      width: 180px;
+      font-size: 20px;
+      font-weight: 500;
+      text-align: right;
+    }
+    .bar-track {
+      flex: 1;
+      height: 12px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: 6px;
+      width: 0;
+      transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Footer */
+    .slide-footer {
+      position: absolute;
+      bottom: 60px;
+      font-size: 16px;
+      color: #48484a;
+      opacity: 0;
+      animation: fadeIn 1s ease forwards 1.2s;
+    }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes scaleIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+    @keyframes megaReveal {
+      0% { opacity: 0; transform: scale(0.7); }
+      60% { opacity: 1; transform: scale(1.05); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    .progress { position: fixed; bottom: 0; left: 0; height: 3px; background: linear-gradient(90deg, #a371f7, #58a6ff); width: 0; transition: width 0.5s ease; }
+  </style>
+</head>
+<body>
+  <!-- Slide 1: Opening - Big Impact -->
+  <div class="slide slide-1 active" data-duration="4500">
+    <div class="mega-number">
+      <span class="mega-one">1</span>
+      <span class="mega-million gradient">Million</span>
+    </div>
+    <div class="mega-subtitle">GitHub repositories analyzed</div>
+    <div class="sub-text" style="margin-top: 40px;">Classified by industry. Visualized over time.</div>
+  </div>
+
+  <!-- Slide 2: The Question -->
+  <div class="slide slide-2" data-duration="3500">
+    <div class="hero-text" style="font-size: 56px;">Which AI coding agent<br>is winning each industry?</div>
+  </div>
+
+  <!-- Slide 3: The Agents -->
+  <div class="slide slide-3" data-duration="5000">
+    <div class="hero-text" style="font-size: 48px; margin-bottom: 20px;">Four agents. Four stories.</div>
+    <div class="agent-pills">
+      <div class="agent-pill">
+        <div class="pill-circle" style="background: #a371f7;">C</div>
+        <div class="pill-name">Claude Code</div>
+        <div class="pill-count" style="color: #a371f7;">391K</div>
+      </div>
+      <div class="agent-pill">
+        <div class="pill-circle" style="background: #3fb950;">X</div>
+        <div class="pill-name">OpenAI Codex</div>
+        <div class="pill-count" style="color: #3fb950;">249K</div>
+      </div>
+      <div class="agent-pill">
+        <div class="pill-circle" style="background: #58a6ff;">G</div>
+        <div class="pill-name">GitHub Copilot</div>
+        <div class="pill-count" style="color: #58a6ff;">248K</div>
+      </div>
+      <div class="agent-pill">
+        <div class="pill-circle" style="background: #f78166;">U</div>
+        <div class="pill-name">Cursor AI</div>
+        <div class="pill-count" style="color: #f78166;">129K</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 4: Claude Code Distribution -->
+  <div class="slide slide-4" data-duration="5000" data-agent="claude">
+    <div class="agent-header">
+      <div class="agent-logo" style="background: #a371f7;">C</div>
+      <div class="agent-info">
+        <div class="agent-name" style="color: #a371f7;">Claude Code</div>
+        <div class="agent-company">Anthropic</div>
+      </div>
+    </div>
+    <div class="month-display">
+      <div class="month-highlight" id="claude-month">January 2025</div>
+      <div>Industry Distribution</div>
+    </div>
+    <div class="distribution-container" id="claude-dist">
+      <!-- Generated by JS -->
+    </div>
+    <div class="total-counter">
+      <div class="total-value" style="color: #a371f7;" id="claude-total">0</div>
+      <div class="total-label">total repositories</div>
+    </div>
+  </div>
+
+  <!-- Slide 5: Copilot Distribution -->
+  <div class="slide slide-5" data-duration="5000" data-agent="copilot">
+    <div class="agent-header">
+      <div class="agent-logo" style="background: #58a6ff;">G</div>
+      <div class="agent-info">
+        <div class="agent-name" style="color: #58a6ff;">GitHub Copilot</div>
+        <div class="agent-company">Microsoft</div>
+      </div>
+    </div>
+    <div class="month-display">
+      <div class="month-highlight" id="copilot-month">January 2025</div>
+      <div>Industry Distribution</div>
+    </div>
+    <div class="distribution-container" id="copilot-dist">
+      <!-- Generated by JS -->
+    </div>
+    <div class="total-counter">
+      <div class="total-value" style="color: #58a6ff;" id="copilot-total">0</div>
+      <div class="total-label">total repositories</div>
+    </div>
+  </div>
+
+  <!-- Slide 6: Codex Distribution -->
+  <div class="slide slide-6" data-duration="5000" data-agent="codex">
+    <div class="agent-header">
+      <div class="agent-logo" style="background: #3fb950;">X</div>
+      <div class="agent-info">
+        <div class="agent-name" style="color: #3fb950;">OpenAI Codex</div>
+        <div class="agent-company">OpenAI</div>
+      </div>
+    </div>
+    <div class="month-display">
+      <div class="month-highlight" id="codex-month">January 2025</div>
+      <div>Industry Distribution</div>
+    </div>
+    <div class="distribution-container" id="codex-dist">
+      <!-- Generated by JS -->
+    </div>
+    <div class="total-counter">
+      <div class="total-value" style="color: #3fb950;" id="codex-total">0</div>
+      <div class="total-label">total repositories</div>
+    </div>
+  </div>
+
+  <!-- Slide 7: Cursor Distribution -->
+  <div class="slide slide-7" data-duration="5000" data-agent="cursor">
+    <div class="agent-header">
+      <div class="agent-logo" style="background: #f78166;">U</div>
+      <div class="agent-info">
+        <div class="agent-name" style="color: #f78166;">Cursor AI</div>
+        <div class="agent-company">Anysphere</div>
+      </div>
+    </div>
+    <div class="month-display">
+      <div class="month-highlight" id="cursor-month">January 2025</div>
+      <div>Industry Distribution</div>
+    </div>
+    <div class="distribution-container" id="cursor-dist">
+      <!-- Generated by JS -->
+    </div>
+    <div class="total-counter">
+      <div class="total-value" style="color: #f78166;" id="cursor-total">0</div>
+      <div class="total-label">total repositories</div>
+    </div>
+  </div>
+
+  <!-- Slide 8: Industries Summary -->
+  <div class="slide slide-8" data-duration="5000">
+    <div class="hero-text" style="font-size: 48px; margin-bottom: 50px;">19 industries.<br>One clear leader.</div>
+    <div class="simple-bars">
+      <div class="simple-bar-row" style="animation: fadeIn 0.8s ease forwards 0.4s;">
+        <div class="bar-label" style="color: #7c3aed;">Professional Services</div>
+        <div class="bar-track"><div class="bar-fill" data-width="100%" style="background: #7c3aed;"></div></div>
+      </div>
+      <div class="simple-bar-row" style="animation: fadeIn 0.8s ease forwards 0.6s;">
+        <div class="bar-label" style="color: #2563eb;">Information</div>
+        <div class="bar-track"><div class="bar-fill" data-width="83%" style="background: #2563eb;"></div></div>
+      </div>
+      <div class="simple-bar-row" style="animation: fadeIn 0.8s ease forwards 0.8s;">
+        <div class="bar-label" style="color: #ca8a04;">Finance</div>
+        <div class="bar-track"><div class="bar-fill" data-width="36%" style="background: #ca8a04;"></div></div>
+      </div>
+      <div class="simple-bar-row" style="animation: fadeIn 0.8s ease forwards 1s;">
+        <div class="bar-label" style="color: #dc2626;">Education</div>
+        <div class="bar-track"><div class="bar-fill" data-width="34%" style="background: #dc2626;"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 9: The Insight -->
+  <div class="slide slide-9" data-duration="4500">
+    <div class="hero-text" style="font-size: 42px;">Professional Services dominates.</div>
+    <div class="sub-text">25-28% of all repositories. Across every agent.</div>
+    <div class="stats-row">
+      <div class="stat-item">
+        <div class="stat-value" style="color: #a371f7;">28%</div>
+        <div class="stat-label">Claude Code</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value" style="color: #58a6ff;">25%</div>
+        <div class="stat-label">GitHub Copilot</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value" style="color: #3fb950;">22%</div>
+        <div class="stat-label">OpenAI Codex</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value" style="color: #f78166;">23%</div>
+        <div class="stat-label">Cursor AI</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 10: Claude Growth -->
+  <div class="slide slide-10" data-duration="4500">
+    <div class="sub-text" style="animation-delay: 0.2s; margin-bottom: 30px;">January 2026</div>
+    <div class="big-number" style="color: #a371f7;">111K+</div>
+    <div class="number-label">new repositories for Claude Code</div>
+    <div class="sub-text" style="animation-delay: 1s; margin-top: 40px;">2x faster than competitors</div>
+  </div>
+
+  <!-- Slide 11: CTA -->
+  <div class="slide slide-11" data-duration="4500">
+    <div class="hero-text" style="font-size: 48px;">Explore the data.</div>
+    <div class="sub-text">Full interactive dashboard in comments.</div>
+    <div class="sub-text" style="animation-delay: 1.2s; margin-top: 60px; color: #58a6ff;">What industry are you building for?</div>
+    <div class="slide-footer">Built with Next.js • Open Source</div>
+  </div>
+
+  <div class="progress"></div>
+
+  <script>
+    // Industry data for each agent (top 8 industries)
+    const months = ['Jan 2025','Feb 2025','Mar 2025','Apr 2025','May 2025','Jun 2025','Jul 2025','Aug 2025','Sep 2025','Oct 2025','Nov 2025','Dec 2025','Jan 2026'];
+
+    const industries = [
+      { code: '54', name: 'Prof. Services', color: '#7c3aed' },
+      { code: '51', name: 'Information', color: '#2563eb' },
+      { code: '52', name: 'Finance', color: '#ca8a04' },
+      { code: '61', name: 'Education', color: '#dc2626' },
+      { code: '71', name: 'Entertainment', color: '#db2777' },
+      { code: '56', name: 'Admin Services', color: '#16a34a' },
+      { code: '62', name: 'Healthcare', color: '#ea580c' },
+      { code: '48-49', name: 'Transportation', color: '#7c3aed' },
+    ];
+
+    // Claude data (cumulative values for each month, top 8 industries)
+    const claudeData = {
+      '54': [3, 109, 678, 1028, 2026, 6660, 14674, 24232, 32661, 45193, 59177, 77458, 108872],
+      '51': [1, 82, 484, 741, 1448, 5199, 11106, 18118, 24335, 33372, 43852, 57573, 80086],
+      '52': [2, 27, 164, 247, 501, 1784, 3985, 6974, 9712, 13975, 18280, 23479, 32627],
+      '61': [1, 32, 166, 248, 483, 1726, 3799, 6366, 8802, 12591, 16795, 22188, 31066],
+      '71': [0, 40, 208, 288, 539, 1823, 3883, 6554, 8924, 12395, 16251, 21188, 29616],
+      '56': [0, 21, 130, 198, 389, 1291, 2971, 5266, 7198, 10196, 13493, 17518, 24498],
+      '62': [0, 6, 41, 60, 132, 539, 1190, 2102, 3009, 4337, 5866, 7585, 10361],
+      '48-49': [1, 13, 62, 89, 166, 631, 1406, 2367, 3402, 4789, 6333, 8396, 12015],
+    };
+
+    // Copilot data
+    const copilotData = {
+      '54': [20, 49, 83, 118, 572, 1483, 4686, 9289, 16077, 24359, 34800, 44930, 55798],
+      '51': [20, 33, 51, 71, 374, 1067, 3815, 7639, 13257, 20014, 28919, 37665, 46869],
+      '52': [6, 11, 14, 21, 97, 280, 1215, 2485, 4561, 7243, 10548, 13838, 17235],
+      '61': [10, 22, 34, 53, 208, 473, 1755, 3594, 6754, 10602, 15582, 20232, 24981],
+      '71': [7, 14, 16, 22, 122, 303, 1232, 2636, 4729, 7260, 10803, 14228, 17586],
+      '56': [5, 14, 23, 28, 118, 277, 912, 1902, 3382, 5180, 7441, 9612, 11975],
+      '62': [0, 1, 1, 2, 25, 61, 381, 829, 1634, 2561, 3838, 4984, 6139],
+      '48-49': [2, 5, 11, 16, 59, 149, 518, 1032, 1835, 2869, 4193, 5450, 6839],
+    };
+
+    // Codex data
+    const codexData = {
+      '54': [2, 3, 5, 13, 2178, 13828, 18807, 24193, 29141, 35450, 40857, 45252, 49886],
+      '51': [1, 3, 4, 7, 1648, 12660, 17357, 22634, 27627, 34076, 39530, 44024, 49185],
+      '52': [1, 3, 3, 5, 708, 5760, 7950, 10650, 13008, 16318, 19098, 21242, 23853],
+      '61': [2, 3, 3, 7, 527, 4391, 5991, 7760, 9352, 11589, 13470, 14957, 16573],
+      '71': [1, 3, 4, 7, 662, 5396, 7404, 9878, 12049, 14863, 17279, 19322, 21588],
+      '56': [0, 0, 0, 1, 401, 3300, 4574, 5915, 7117, 8672, 9996, 11071, 12251],
+      '62': [0, 0, 0, 0, 203, 1608, 2280, 2978, 3622, 4580, 5449, 6068, 6759],
+      '48-49': [0, 0, 1, 1, 216, 1621, 2215, 2952, 3628, 4479, 5272, 5834, 6508],
+    };
+
+    // Cursor data
+    const cursorData = {
+      '54': [237, 273, 326, 369, 444, 868, 4028, 8429, 10433, 13128, 14359, 15544, 17497],
+      '51': [245, 272, 300, 346, 396, 688, 3739, 8195, 10052, 12639, 13733, 14662, 16173],
+      '52': [54, 60, 70, 79, 91, 234, 1741, 4100, 5043, 6526, 7082, 7580, 8396],
+      '61': [96, 109, 135, 149, 161, 256, 1572, 3628, 4405, 5722, 6151, 6554, 7113],
+      '71': [103, 109, 124, 144, 168, 278, 1374, 2940, 3546, 4488, 4874, 5268, 5856],
+      '56': [24, 32, 42, 50, 62, 154, 1004, 2270, 2800, 3535, 3814, 4010, 4498],
+      '62': [14, 14, 17, 19, 21, 42, 446, 1101, 1373, 1809, 1959, 2085, 2341],
+      '48-49': [15, 17, 19, 20, 25, 56, 430, 906, 1156, 1483, 1644, 1788, 1996],
+    };
+
+    const agentConfigs = {
+      claude: { data: claudeData, color: '#a371f7', container: 'claude-dist', monthEl: 'claude-month', totalEl: 'claude-total' },
+      copilot: { data: copilotData, color: '#58a6ff', container: 'copilot-dist', monthEl: 'copilot-month', totalEl: 'copilot-total' },
+      codex: { data: codexData, color: '#3fb950', container: 'codex-dist', monthEl: 'codex-month', totalEl: 'codex-total' },
+      cursor: { data: cursorData, color: '#f78166', container: 'cursor-dist', monthEl: 'cursor-month', totalEl: 'cursor-total' },
+    };
+
+    // Create distribution bars for each agent
+    Object.keys(agentConfigs).forEach(agent => {
+      const config = agentConfigs[agent];
+      const container = document.getElementById(config.container);
+
+      industries.forEach(ind => {
+        const row = document.createElement('div');
+        row.className = 'dist-bar-row';
+        row.innerHTML = `
+          <div class="dist-label">${ind.name}</div>
+          <div class="dist-bar-track">
+            <div class="dist-bar-fill" id="${agent}-bar-${ind.code}" style="background: ${ind.color}; width: 0%;"></div>
+          </div>
+          <div class="dist-value" id="${agent}-val-${ind.code}" style="color: ${ind.color};">0</div>
+          <div class="dist-pct" id="${agent}-pct-${ind.code}">0%</div>
+        `;
+        container.appendChild(row);
+      });
+    });
+
+    // Animate distribution for an agent
+    function animateAgent(agent) {
+      const config = agentConfigs[agent];
+      let monthIndex = 0;
+      const interval = 260; // ms per month (3x faster)
+
+      function updateMonth() {
+        if (monthIndex >= months.length) return;
+
+        // Update month display
+        document.getElementById(config.monthEl).textContent = months[monthIndex];
+
+        // Calculate total for this month
+        let total = 0;
+        industries.forEach(ind => {
+          total += config.data[ind.code][monthIndex];
+        });
+
+        // Update bars
+        industries.forEach(ind => {
+          const value = config.data[ind.code][monthIndex];
+          const maxValue = Math.max(...Object.values(config.data).map(d => d[monthIndex]));
+          const pct = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+          const barWidth = maxValue > 0 ? (value / maxValue) * 100 : 0;
+
+          document.getElementById(`${agent}-bar-${ind.code}`).style.width = `${barWidth}%`;
+          document.getElementById(`${agent}-val-${ind.code}`).textContent = value >= 1000 ? `${(value/1000).toFixed(1)}K` : value;
+          document.getElementById(`${agent}-pct-${ind.code}`).textContent = `${pct}%`;
+        });
+
+        // Update total
+        document.getElementById(config.totalEl).textContent = total >= 1000 ? `${(total/1000).toFixed(1)}K` : total;
+
+        monthIndex++;
+        if (monthIndex < months.length) {
+          setTimeout(updateMonth, interval);
+        }
+      }
+
+      // Start after a brief delay
+      setTimeout(updateMonth, 500);
+    }
+
+    // Slideshow logic
+    const slides = document.querySelectorAll('.slide');
+    const progress = document.querySelector('.progress');
+    let current = 0;
+    let total = Array.from(slides).reduce((a, s) => a + parseInt(s.dataset.duration), 0);
+    let elapsed = 0;
+
+    function animateSimpleBars() {
+      document.querySelectorAll('.bar-fill').forEach(bar => {
+        setTimeout(() => { bar.style.width = bar.dataset.width; }, 400);
+      });
+    }
+
+    function next() {
+      elapsed += parseInt(slides[current].dataset.duration);
+      progress.style.width = `${(elapsed/total)*100}%`;
+      current++;
+      if (current < slides.length) {
+        slides.forEach(s => s.classList.remove('active'));
+        slides[current].classList.add('active');
+
+        // Check if this slide has agent animation
+        const agentType = slides[current].dataset.agent;
+        if (agentType) {
+          animateAgent(agentType);
+        }
+
+        // Animate simple bars on slide 8
+        if (current === 7) setTimeout(animateSimpleBars, 500);
+
+        setTimeout(next, parseInt(slides[current].dataset.duration));
+      }
+    }
+
+    setTimeout(() => next(), parseInt(slides[0].dataset.duration));
+  </script>
+</body>
+</html>

@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video 10: The Complete Story</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #000;
+      color: #fff;
+      overflow: hidden;
+      width: 1080px;
+      height: 1080px;
+    }
+    .slide {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+      text-align: center;
+      padding: 70px;
+    }
+    .slide.active { opacity: 1; }
+
+    /* Typography */
+    .section-label {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #666;
+      margin-bottom: 25px;
+      opacity: 0;
+      animation: fadeIn 0.6s ease forwards 0.1s;
+    }
+    .main-title {
+      font-size: 64px;
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease forwards 0.2s;
+    }
+    .subtitle {
+      font-size: 24px;
+      color: #888;
+      opacity: 0;
+      animation: fadeIn 0.6s ease forwards 0.5s;
+    }
+
+    /* Mega Stat */
+    .mega-stat {
+      font-size: 200px;
+      font-weight: 900;
+      line-height: 1;
+      opacity: 0;
+      animation: scaleIn 0.8s ease forwards 0.2s;
+    }
+    .mega-label {
+      font-size: 32px;
+      color: #888;
+      margin-top: 20px;
+      opacity: 0;
+      animation: fadeIn 0.6s ease forwards 0.6s;
+    }
+
+    /* Grid Stats */
+    .stats-grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 25px;
+      width: 100%;
+      margin: 40px 0;
+    }
+    .stat-box {
+      background: rgba(255,255,255,0.03);
+      border-radius: 20px;
+      padding: 30px;
+      text-align: center;
+      opacity: 0;
+    }
+    .stat-icon {
+      font-size: 36px;
+      margin-bottom: 15px;
+    }
+    .stat-value {
+      font-size: 42px;
+      font-weight: 900;
+    }
+    .stat-label {
+      font-size: 14px;
+      color: #666;
+      margin-top: 8px;
+    }
+
+    /* Agent Cards */
+    .agents-row {
+      display: flex;
+      gap: 20px;
+      width: 100%;
+      margin: 30px 0;
+    }
+    .agent-card {
+      flex: 1;
+      background: rgba(255,255,255,0.03);
+      border-radius: 20px;
+      padding: 30px;
+      text-align: center;
+      opacity: 0;
+      border-top: 4px solid;
+    }
+    .agent-logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      font-weight: 900;
+      margin: 0 auto 15px;
+    }
+    .agent-name {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+    .agent-company {
+      font-size: 12px;
+      color: #666;
+    }
+    .agent-count {
+      font-size: 32px;
+      font-weight: 900;
+      margin-top: 15px;
+    }
+    .agent-share {
+      font-size: 14px;
+      color: #666;
+    }
+
+    /* Industry Bars */
+    .industry-section {
+      width: 100%;
+      text-align: left;
+    }
+    .industry-row {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 15px;
+      opacity: 0;
+    }
+    .ind-rank {
+      font-size: 16px;
+      font-weight: 700;
+      color: #444;
+      width: 30px;
+    }
+    .ind-name {
+      width: 180px;
+      font-size: 16px;
+    }
+    .ind-bar-track {
+      flex: 1;
+      height: 30px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .ind-bar-fill {
+      height: 100%;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 15px;
+      font-size: 14px;
+      font-weight: 600;
+      width: 0;
+      transition: width 1.2s ease;
+    }
+
+    /* Highlight Box */
+    .highlight-box {
+      background: linear-gradient(135deg, rgba(163,113,247,0.15), rgba(163,113,247,0.05));
+      border-radius: 25px;
+      padding: 40px;
+      width: 100%;
+      margin: 30px 0;
+      opacity: 0;
+      animation: fadeIn 0.6s ease forwards 0.4s;
+    }
+    .highlight-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .highlight-text {
+      text-align: left;
+    }
+    .highlight-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: #a371f7;
+    }
+    .highlight-desc {
+      font-size: 18px;
+      color: #888;
+      margin-top: 8px;
+    }
+    .highlight-stat {
+      font-size: 72px;
+      font-weight: 900;
+      color: #a371f7;
+    }
+
+    /* Findings Grid */
+    .findings-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      width: 100%;
+      margin: 30px 0;
+    }
+    .finding-card {
+      background: rgba(255,255,255,0.03);
+      border-radius: 15px;
+      padding: 25px;
+      text-align: left;
+      border-left: 4px solid;
+      opacity: 0;
+    }
+    .finding-num {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 8px;
+    }
+    .finding-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .finding-desc {
+      font-size: 14px;
+      color: #888;
+    }
+
+    /* CTA */
+    .cta-section {
+      text-align: center;
+      margin-top: 30px;
+    }
+    .cta-title {
+      font-size: 42px;
+      font-weight: 700;
+      margin-bottom: 25px;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease forwards 0.2s;
+    }
+    .cta-link {
+      font-size: 28px;
+      color: #58a6ff;
+      margin-bottom: 40px;
+      opacity: 0;
+      animation: fadeIn 0.6s ease forwards 0.5s;
+    }
+    .cta-badges {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-bottom: 40px;
+      opacity: 0;
+      animation: fadeIn 0.6s ease forwards 0.7s;
+    }
+    .cta-badge {
+      background: rgba(255,255,255,0.1);
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-size: 16px;
+    }
+    .cta-question {
+      font-size: 28px;
+      color: #666;
+      opacity: 0;
+      animation: fadeIn 0.6s ease forwards 0.9s;
+    }
+
+    /* Backgrounds */
+    .bg-dark { background: linear-gradient(135deg, #0a0a0f 0%, #0f0f1a 100%); }
+    .bg-purple { background: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 100%); }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(25px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes scaleIn { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }
+
+    .progress { position: fixed; bottom: 0; left: 0; height: 4px; background: linear-gradient(90deg, #a371f7, #58a6ff, #3fb950, #f78166); width: 0; transition: width 0.3s; }
+  </style>
+</head>
+<body>
+  <!-- Slide 1: Opening -->
+  <div class="slide slide-1 active bg-dark" data-duration="4000">
+    <div class="section-label">Research Study</div>
+    <div class="main-title">AI Coding Agents<br><span style="background: linear-gradient(135deg, #a371f7, #58a6ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Industry Analysis</span></div>
+    <div class="subtitle">A comprehensive study of 1 million GitHub repositories</div>
+  </div>
+
+  <!-- Slide 2: The Scale -->
+  <div class="slide slide-2 bg-dark" data-duration="4500">
+    <div class="section-label">Scale of Analysis</div>
+    <div class="mega-stat" style="background: linear-gradient(135deg, #a371f7, #58a6ff, #3fb950); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">1,019,887</div>
+    <div class="mega-label">repositories analyzed</div>
+    <div class="stats-grid-4" style="margin-top: 50px;">
+      <div class="stat-box" style="animation: fadeIn 0.4s ease forwards 0.8s;">
+        <div class="stat-icon">🤖</div>
+        <div class="stat-value" style="color: #a371f7;">4</div>
+        <div class="stat-label">AI Agents</div>
+      </div>
+      <div class="stat-box" style="animation: fadeIn 0.4s ease forwards 0.95s;">
+        <div class="stat-icon">🏢</div>
+        <div class="stat-value" style="color: #58a6ff;">19</div>
+        <div class="stat-label">Industries</div>
+      </div>
+      <div class="stat-box" style="animation: fadeIn 0.4s ease forwards 1.1s;">
+        <div class="stat-icon">📅</div>
+        <div class="stat-value" style="color: #3fb950;">15</div>
+        <div class="stat-label">Months</div>
+      </div>
+      <div class="stat-box" style="animation: fadeIn 0.4s ease forwards 1.25s;">
+        <div class="stat-icon">📊</div>
+        <div class="stat-value" style="color: #f78166;">NAICS</div>
+        <div class="stat-label">Classification</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 3: The Agents -->
+  <div class="slide slide-3 bg-dark" data-duration="6000">
+    <div class="section-label">The Competitors</div>
+    <div class="main-title" style="font-size: 48px; margin-bottom: 30px;">4 Major AI Coding Agents</div>
+    <div class="agents-row">
+      <div class="agent-card" style="border-color: #a371f7; animation: fadeInUp 0.5s ease forwards 0.3s;">
+        <div class="agent-logo" style="background: #a371f7;">C</div>
+        <div class="agent-name" style="color: #a371f7;">Claude Code</div>
+        <div class="agent-company">Anthropic</div>
+        <div class="agent-count" style="color: #a371f7;">391K</div>
+        <div class="agent-share">38.4% share</div>
+      </div>
+      <div class="agent-card" style="border-color: #3fb950; animation: fadeInUp 0.5s ease forwards 0.45s;">
+        <div class="agent-logo" style="background: #3fb950;">X</div>
+        <div class="agent-name" style="color: #3fb950;">OpenAI Codex</div>
+        <div class="agent-company">OpenAI</div>
+        <div class="agent-count" style="color: #3fb950;">249K</div>
+        <div class="agent-share">24.4% share</div>
+      </div>
+      <div class="agent-card" style="border-color: #58a6ff; animation: fadeInUp 0.5s ease forwards 0.6s;">
+        <div class="agent-logo" style="background: #58a6ff;">G</div>
+        <div class="agent-name" style="color: #58a6ff;">GitHub Copilot</div>
+        <div class="agent-company">Microsoft</div>
+        <div class="agent-count" style="color: #58a6ff;">248K</div>
+        <div class="agent-share">24.3% share</div>
+      </div>
+      <div class="agent-card" style="border-color: #f78166; animation: fadeInUp 0.5s ease forwards 0.75s;">
+        <div class="agent-logo" style="background: #f78166;">U</div>
+        <div class="agent-name" style="color: #f78166;">Cursor AI</div>
+        <div class="agent-company">Anysphere</div>
+        <div class="agent-count" style="color: #f78166;">129K</div>
+        <div class="agent-share">12.7% share</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 4: Top Industries -->
+  <div class="slide slide-4 bg-dark" data-duration="7000">
+    <div class="section-label">Industry Breakdown</div>
+    <div class="main-title" style="font-size: 42px; margin-bottom: 30px;">Top Industries by Adoption</div>
+    <div class="industry-section">
+      <div class="industry-row" style="animation: fadeIn 0.4s ease forwards 0.3s;">
+        <div class="ind-rank">#1</div>
+        <div class="ind-name" style="color: #7c3aed;">Professional Services</div>
+        <div class="ind-bar-track"><div class="ind-bar-fill" data-width="100%" style="background: linear-gradient(90deg, #7c3aed, #a371f7);">253K</div></div>
+      </div>
+      <div class="industry-row" style="animation: fadeIn 0.4s ease forwards 0.45s;">
+        <div class="ind-rank">#2</div>
+        <div class="ind-name" style="color: #2563eb;">Information</div>
+        <div class="ind-bar-track"><div class="ind-bar-fill" data-width="83%" style="background: linear-gradient(90deg, #2563eb, #58a6ff);">210K</div></div>
+      </div>
+      <div class="industry-row" style="animation: fadeIn 0.4s ease forwards 0.6s;">
+        <div class="ind-rank">#3</div>
+        <div class="ind-name" style="color: #ca8a04;">Finance & Insurance</div>
+        <div class="ind-bar-track"><div class="ind-bar-fill" data-width="36%" style="background: linear-gradient(90deg, #ca8a04, #fbbf24);">92K</div></div>
+      </div>
+      <div class="industry-row" style="animation: fadeIn 0.4s ease forwards 0.75s;">
+        <div class="ind-rank">#4</div>
+        <div class="ind-name" style="color: #dc2626;">Education</div>
+        <div class="ind-bar-track"><div class="ind-bar-fill" data-width="34%" style="background: linear-gradient(90deg, #dc2626, #f87171);">87K</div></div>
+      </div>
+      <div class="industry-row" style="animation: fadeIn 0.4s ease forwards 0.9s;">
+        <div class="ind-rank">#5</div>
+        <div class="ind-name" style="color: #db2777;">Entertainment</div>
+        <div class="ind-bar-track"><div class="ind-bar-fill" data-width="32%" style="background: linear-gradient(90deg, #db2777, #f472b6);">82K</div></div>
+      </div>
+      <div class="industry-row" style="animation: fadeIn 0.4s ease forwards 1.05s;">
+        <div class="ind-rank">#6</div>
+        <div class="ind-name" style="color: #16a34a;">Admin Services</div>
+        <div class="ind-bar-track"><div class="ind-bar-fill" data-width="23%" style="background: linear-gradient(90deg, #16a34a, #4ade80);">59K</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 5: Claude Growth -->
+  <div class="slide slide-5 bg-purple" data-duration="5500">
+    <div class="section-label">Growth Leader</div>
+    <div class="main-title" style="font-size: 48px; margin-bottom: 20px;">Claude Code's<br><span style="color: #a371f7;">Explosive Growth</span></div>
+    <div class="highlight-box">
+      <div class="highlight-row">
+        <div class="highlight-text">
+          <div class="highlight-title">January 2026</div>
+          <div class="highlight-desc">New repositories in a single month</div>
+        </div>
+        <div class="highlight-stat">111K+</div>
+      </div>
+    </div>
+    <div class="stats-grid-4" style="grid-template-columns: repeat(3, 1fr);">
+      <div class="stat-box" style="animation: fadeIn 0.4s ease forwards 0.7s;">
+        <div class="stat-value" style="color: #a371f7;">2x</div>
+        <div class="stat-label">Faster than competitors</div>
+      </div>
+      <div class="stat-box" style="animation: fadeIn 0.4s ease forwards 0.85s;">
+        <div class="stat-value" style="color: #a371f7;">#1</div>
+        <div class="stat-label">Growth rank</div>
+      </div>
+      <div class="stat-box" style="animation: fadeIn 0.4s ease forwards 1s;">
+        <div class="stat-value" style="color: #a371f7;">38%</div>
+        <div class="stat-label">Market share</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 6: Key Findings -->
+  <div class="slide slide-6 bg-dark" data-duration="7000">
+    <div class="section-label">Key Findings</div>
+    <div class="main-title" style="font-size: 42px; margin-bottom: 30px;">What the Data Reveals</div>
+    <div class="findings-grid">
+      <div class="finding-card" style="border-color: #a371f7; animation: fadeInUp 0.5s ease forwards 0.3s;">
+        <div class="finding-num">01</div>
+        <div class="finding-title" style="color: #a371f7;">Claude Code Leads</div>
+        <div class="finding-desc">391K repos with fastest growth trajectory across all metrics</div>
+      </div>
+      <div class="finding-card" style="border-color: #7c3aed; animation: fadeInUp 0.5s ease forwards 0.45s;">
+        <div class="finding-num">02</div>
+        <div class="finding-title" style="color: #7c3aed;">Prof. Services Dominates</div>
+        <div class="finding-desc">25-28% of all repositories across every single agent</div>
+      </div>
+      <div class="finding-card" style="border-color: #16a34a; animation: fadeInUp 0.5s ease forwards 0.6s;">
+        <div class="finding-num">03</div>
+        <div class="finding-title" style="color: #16a34a;">Finance Accelerating</div>
+        <div class="finding-desc">Regulated industries showing growing trust in AI tools</div>
+      </div>
+      <div class="finding-card" style="border-color: #58a6ff; animation: fadeInUp 0.5s ease forwards 0.75s;">
+        <div class="finding-num">04</div>
+        <div class="finding-title" style="color: #58a6ff;">Enterprise Adoption</div>
+        <div class="finding-desc">Healthcare & Public Admin signals mainstream enterprise use</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 7: CTA -->
+  <div class="slide slide-7 bg-dark" data-duration="5500">
+    <div class="section-label">Explore</div>
+    <div class="cta-section">
+      <div class="cta-title">Full Interactive Dashboard</div>
+      <div class="cta-link">Link in comments</div>
+      <div class="cta-badges">
+        <span class="cta-badge">4 Agents</span>
+        <span class="cta-badge">19 Industries</span>
+        <span class="cta-badge">15 Months</span>
+        <span class="cta-badge">Open Source</span>
+      </div>
+      <div class="cta-question">What industry are you building for?</div>
+    </div>
+  </div>
+
+  <div class="progress"></div>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const progress = document.querySelector('.progress');
+    let current = 0;
+    let total = Array.from(slides).reduce((a, s) => a + parseInt(s.dataset.duration), 0);
+    let elapsed = 0;
+
+    function animateBars() {
+      document.querySelectorAll('.ind-bar-fill').forEach(bar => {
+        setTimeout(() => { bar.style.width = bar.dataset.width; }, 400);
+      });
+    }
+
+    function next() {
+      elapsed += parseInt(slides[current].dataset.duration);
+      progress.style.width = `${(elapsed/total)*100}%`;
+      current++;
+      if (current < slides.length) {
+        slides.forEach(s => s.classList.remove('active'));
+        slides[current].classList.add('active');
+        if (current === 3) setTimeout(animateBars, 500);
+        setTimeout(next, parseInt(slides[current].dataset.duration));
+      }
+    }
+    setTimeout(() => next(), parseInt(slides[0].dataset.duration));
+  </script>
+</body>
+</html>

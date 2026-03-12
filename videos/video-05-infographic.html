@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video 5: Infographic Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0a0a0f;
+      color: #fff;
+      overflow: hidden;
+      width: 1080px;
+      height: 1080px;
+    }
+    .slide {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+      padding: 50px;
+      display: flex;
+      flex-direction: column;
+    }
+    .slide.active { opacity: 1; }
+
+    /* Title Section */
+    .slide-title {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 30px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .title-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+
+    /* Grid Layouts */
+    .grid-2x2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 25px;
+      flex: 1;
+    }
+    .grid-3x2 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      gap: 20px;
+      flex: 1;
+    }
+    .grid-4x1 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    /* Cards */
+    .card {
+      background: rgba(255,255,255,0.03);
+      border-radius: 20px;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+    .card-title {
+      font-size: 16px;
+      color: #888;
+    }
+    .card-value {
+      font-size: 56px;
+      font-weight: 900;
+      line-height: 1;
+    }
+    .card-sub {
+      font-size: 14px;
+      color: #666;
+      margin-top: 10px;
+    }
+
+    /* Mini Charts */
+    .mini-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: auto;
+    }
+    .mini-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .mini-bar-label {
+      width: 80px;
+      font-size: 12px;
+      color: #888;
+    }
+    .mini-bar-track {
+      flex: 1;
+      height: 12px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .mini-bar-fill {
+      height: 100%;
+      border-radius: 6px;
+      width: 0;
+      transition: width 1s ease;
+    }
+
+    /* Donut Chart */
+    .donut-container {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      margin: auto;
+    }
+    .donut {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: conic-gradient(
+        #a371f7 0deg 138deg,
+        #3fb950 138deg 226deg,
+        #58a6ff 226deg 314deg,
+        #f78166 314deg 360deg
+      );
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .donut-hole {
+      width: 120px;
+      height: 120px;
+      background: #0a0a0f;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .donut-value {
+      font-size: 36px;
+      font-weight: 900;
+    }
+    .donut-label {
+      font-size: 12px;
+      color: #888;
+    }
+    .donut-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+    }
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    /* Stats Row */
+    .stats-row {
+      display: flex;
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .stat-pill {
+      flex: 1;
+      background: rgba(255,255,255,0.05);
+      border-radius: 12px;
+      padding: 15px 20px;
+      text-align: center;
+    }
+    .pill-value {
+      font-size: 24px;
+      font-weight: 700;
+    }
+    .pill-label {
+      font-size: 11px;
+      color: #666;
+      margin-top: 4px;
+    }
+
+    /* Agent Card Special */
+    .agent-card {
+      display: flex;
+      flex-direction: column;
+    }
+    .agent-logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      font-weight: 900;
+      margin-bottom: 15px;
+    }
+    .agent-name {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+    .agent-company {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 20px;
+    }
+    .agent-stat {
+      margin-top: auto;
+    }
+    .agent-stat-value {
+      font-size: 42px;
+      font-weight: 900;
+    }
+    .agent-stat-label {
+      font-size: 12px;
+      color: #666;
+    }
+
+    /* Industry List */
+    .industry-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .industry-row {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 12px 15px;
+      background: rgba(255,255,255,0.02);
+      border-radius: 10px;
+      opacity: 0;
+    }
+    .industry-rank {
+      font-size: 14px;
+      font-weight: 700;
+      color: #666;
+      width: 30px;
+    }
+    .industry-name {
+      flex: 1;
+      font-size: 16px;
+    }
+    .industry-value {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    /* Comparison Grid */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+    }
+    .compare-cell {
+      background: rgba(255,255,255,0.03);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      opacity: 0;
+    }
+    .compare-agent {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+    .compare-value {
+      font-size: 28px;
+      font-weight: 700;
+    }
+    .compare-label {
+      font-size: 11px;
+      color: #666;
+      margin-top: 5px;
+    }
+
+    /* Footer */
+    .slide-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .footer-logo {
+      font-size: 14px;
+      color: #666;
+    }
+    .footer-page {
+      font-size: 14px;
+      color: #444;
+    }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes countUp { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+
+    .progress { position: fixed; bottom: 0; left: 0; height: 4px; background: linear-gradient(90deg, #a371f7, #58a6ff, #3fb950); width: 0; transition: width 0.3s; }
+  </style>
+</head>
+<body>
+  <!-- Slide 1: Overview -->
+  <div class="slide slide-1 active" data-duration="5500">
+    <div class="slide-title">
+      <div class="title-icon" style="background: linear-gradient(135deg, #a371f7, #58a6ff);">📊</div>
+      AI Coding Agents: Industry Analysis
+    </div>
+    <div class="grid-2x2">
+      <div class="card" style="animation: fadeInUp 0.5s ease forwards 0.2s;">
+        <div class="card-header">
+          <div class="card-icon" style="background: rgba(163,113,247,0.2);">📁</div>
+          <div class="card-title">Total Repositories</div>
+        </div>
+        <div class="card-value" style="color: #a371f7;">1,019,887</div>
+        <div class="card-sub">Analyzed from GitHub</div>
+      </div>
+      <div class="card" style="animation: fadeInUp 0.5s ease forwards 0.4s;">
+        <div class="card-header">
+          <div class="card-icon" style="background: rgba(88,166,255,0.2);">🏢</div>
+          <div class="card-title">Industries</div>
+        </div>
+        <div class="card-value" style="color: #58a6ff;">19</div>
+        <div class="card-sub">NAICS Sectors Classified</div>
+      </div>
+      <div class="card" style="animation: fadeInUp 0.5s ease forwards 0.6s;">
+        <div class="card-header">
+          <div class="card-icon" style="background: rgba(63,185,80,0.2);">🤖</div>
+          <div class="card-title">AI Agents</div>
+        </div>
+        <div class="card-value" style="color: #3fb950;">4</div>
+        <div class="card-sub">Major Platforms Tracked</div>
+      </div>
+      <div class="card" style="animation: fadeInUp 0.5s ease forwards 0.8s;">
+        <div class="card-header">
+          <div class="card-icon" style="background: rgba(247,129,102,0.2);">📅</div>
+          <div class="card-title">Time Period</div>
+        </div>
+        <div class="card-value" style="color: #f78166;">15</div>
+        <div class="card-sub">Months (Jan 2025 - Mar 2026)</div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <div class="footer-logo">AI Coding Agents Study</div>
+      <div class="footer-page">1/6</div>
+    </div>
+  </div>
+
+  <!-- Slide 2: Agent Distribution -->
+  <div class="slide slide-2" data-duration="6000">
+    <div class="slide-title">
+      <div class="title-icon" style="background: linear-gradient(135deg, #7c3aed, #a371f7);">🎯</div>
+      Market Share by Agent
+    </div>
+    <div class="grid-2x2">
+      <div class="card" style="animation: fadeInUp 0.5s ease forwards 0.2s; grid-column: span 1; grid-row: span 2;">
+        <div class="card-title" style="margin-bottom: 20px;">Distribution</div>
+        <div class="donut-container">
+          <div class="donut">
+            <div class="donut-hole">
+              <div class="donut-value">1M+</div>
+              <div class="donut-label">Total</div>
+            </div>
+          </div>
+        </div>
+        <div class="donut-legend">
+          <div class="legend-item"><div class="legend-dot" style="background: #a371f7;"></div>Claude 38%</div>
+          <div class="legend-item"><div class="legend-dot" style="background: #3fb950;"></div>Codex 24%</div>
+          <div class="legend-item"><div class="legend-dot" style="background: #58a6ff;"></div>Copilot 24%</div>
+          <div class="legend-item"><div class="legend-dot" style="background: #f78166;"></div>Cursor 13%</div>
+        </div>
+      </div>
+      <div class="card agent-card" style="animation: fadeInUp 0.5s ease forwards 0.3s;">
+        <div class="agent-logo" style="background: #a371f7;">C</div>
+        <div class="agent-name" style="color: #a371f7;">Claude Code</div>
+        <div class="agent-company">Anthropic</div>
+        <div class="agent-stat">
+          <div class="agent-stat-value" style="color: #a371f7;">391K</div>
+          <div class="agent-stat-label">repositories</div>
+        </div>
+      </div>
+      <div class="card agent-card" style="animation: fadeInUp 0.5s ease forwards 0.4s;">
+        <div class="agent-logo" style="background: #3fb950;">X</div>
+        <div class="agent-name" style="color: #3fb950;">OpenAI Codex</div>
+        <div class="agent-company">OpenAI</div>
+        <div class="agent-stat">
+          <div class="agent-stat-value" style="color: #3fb950;">249K</div>
+          <div class="agent-stat-label">repositories</div>
+        </div>
+      </div>
+      <div class="card agent-card" style="animation: fadeInUp 0.5s ease forwards 0.5s;">
+        <div class="agent-logo" style="background: #58a6ff;">G</div>
+        <div class="agent-name" style="color: #58a6ff;">GitHub Copilot</div>
+        <div class="agent-company">Microsoft</div>
+        <div class="agent-stat">
+          <div class="agent-stat-value" style="color: #58a6ff;">248K</div>
+          <div class="agent-stat-label">repositories</div>
+        </div>
+      </div>
+      <div class="card agent-card" style="animation: fadeInUp 0.5s ease forwards 0.6s;">
+        <div class="agent-logo" style="background: #f78166;">U</div>
+        <div class="agent-name" style="color: #f78166;">Cursor AI</div>
+        <div class="agent-company">Anysphere</div>
+        <div class="agent-stat">
+          <div class="agent-stat-value" style="color: #f78166;">129K</div>
+          <div class="agent-stat-label">repositories</div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <div class="footer-logo">AI Coding Agents Study</div>
+      <div class="footer-page">2/6</div>
+    </div>
+  </div>
+
+  <!-- Slide 3: Top Industries -->
+  <div class="slide slide-3" data-duration="6000">
+    <div class="slide-title">
+      <div class="title-icon" style="background: linear-gradient(135deg, #2563eb, #7c3aed);">🏆</div>
+      Top Industries by Adoption
+    </div>
+    <div style="display: flex; gap: 25px; flex: 1;">
+      <div class="card" style="flex: 1.2; animation: fadeInUp 0.5s ease forwards 0.2s;">
+        <div class="card-title" style="margin-bottom: 20px;">Industry Rankings</div>
+        <div class="industry-list" id="industryList"></div>
+      </div>
+      <div class="card" style="flex: 0.8; animation: fadeInUp 0.5s ease forwards 0.4s;">
+        <div class="card-title" style="margin-bottom: 20px;">Key Insight</div>
+        <div style="font-size: 48px; font-weight: 900; color: #7c3aed; margin-bottom: 15px;">25-28%</div>
+        <div style="font-size: 18px; color: #888; line-height: 1.5;">Professional Services dominates across ALL four agents</div>
+        <div class="mini-bars" style="margin-top: 30px;">
+          <div class="mini-bar-row">
+            <div class="mini-bar-label">Claude</div>
+            <div class="mini-bar-track"><div class="mini-bar-fill" data-width="100%" style="background: #a371f7;"></div></div>
+          </div>
+          <div class="mini-bar-row">
+            <div class="mini-bar-label">Copilot</div>
+            <div class="mini-bar-track"><div class="mini-bar-fill" data-width="56%" style="background: #58a6ff;"></div></div>
+          </div>
+          <div class="mini-bar-row">
+            <div class="mini-bar-label">Codex</div>
+            <div class="mini-bar-track"><div class="mini-bar-fill" data-width="49%" style="background: #3fb950;"></div></div>
+          </div>
+          <div class="mini-bar-row">
+            <div class="mini-bar-label">Cursor</div>
+            <div class="mini-bar-track"><div class="mini-bar-fill" data-width="27%" style="background: #f78166;"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <div class="footer-logo">AI Coding Agents Study</div>
+      <div class="footer-page">3/6</div>
+    </div>
+  </div>
+
+  <!-- Slide 4: Growth -->
+  <div class="slide slide-4" data-duration="5500">
+    <div class="slide-title">
+      <div class="title-icon" style="background: linear-gradient(135deg, #a371f7, #c9a0ff);">📈</div>
+      Growth Leaders
+    </div>
+    <div class="grid-2x2">
+      <div class="card" style="animation: fadeInUp 0.5s ease forwards 0.2s; grid-column: span 2; background: linear-gradient(135deg, rgba(163,113,247,0.1), rgba(163,113,247,0.05));">
+        <div class="card-header">
+          <div class="card-icon" style="background: #a371f7;">👑</div>
+          <div class="card-title">Fastest Growing Agent</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 40px;">
+          <div>
+            <div style="font-size: 48px; font-weight: 900; color: #a371f7;">Claude Code</div>
+            <div style="font-size: 20px; color: #888; margin-top: 10px;">January 2026: 111K+ new repositories</div>
+          </div>
+          <div style="margin-left: auto; text-align: right;">
+            <div style="font-size: 72px; font-weight: 900; color: #a371f7;">2x</div>
+            <div style="font-size: 14px; color: #666;">faster than competitors</div>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="animation: fadeInUp 0.5s ease forwards 0.4s;">
+        <div class="card-header">
+          <div class="card-icon" style="background: rgba(22,163,74,0.2);">🏦</div>
+          <div class="card-title">Fastest Growing Industry</div>
+        </div>
+        <div class="card-value" style="color: #16a34a; font-size: 36px;">Finance</div>
+        <div class="card-sub">Regulated industries accelerating</div>
+        <div class="stats-row">
+          <div class="stat-pill">
+            <div class="pill-value" style="color: #16a34a;">92K</div>
+            <div class="pill-label">Finance</div>
+          </div>
+          <div class="stat-pill">
+            <div class="pill-value" style="color: #16a34a;">29K</div>
+            <div class="pill-label">Healthcare</div>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="animation: fadeInUp 0.5s ease forwards 0.6s;">
+        <div class="card-header">
+          <div class="card-icon" style="background: rgba(247,129,102,0.2);">🚀</div>
+          <div class="card-title">Rising Star</div>
+        </div>
+        <div class="card-value" style="color: #f78166; font-size: 36px;">Cursor AI</div>
+        <div class="card-sub">Feb 2026 explosion</div>
+        <div class="stats-row">
+          <div class="stat-pill">
+            <div class="pill-value" style="color: #f78166;">50K+</div>
+            <div class="pill-label">Feb Spike</div>
+          </div>
+          <div class="stat-pill">
+            <div class="pill-value" style="color: #f78166;">129K</div>
+            <div class="pill-label">Total</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <div class="footer-logo">AI Coding Agents Study</div>
+      <div class="footer-page">4/6</div>
+    </div>
+  </div>
+
+  <!-- Slide 5: Comparison Matrix -->
+  <div class="slide slide-5" data-duration="6000">
+    <div class="slide-title">
+      <div class="title-icon" style="background: linear-gradient(135deg, #58a6ff, #2563eb);">⚖️</div>
+      Agent Comparison Matrix
+    </div>
+    <div class="card" style="flex: 1; animation: fadeInUp 0.5s ease forwards 0.2s;">
+      <div class="compare-grid" id="compareGrid">
+        <!-- Header Row -->
+        <div class="compare-cell" style="opacity: 1; background: none;"></div>
+        <div class="compare-cell" style="opacity: 1; background: none;"><div class="compare-agent" style="color: #a371f7;">Claude</div></div>
+        <div class="compare-cell" style="opacity: 1; background: none;"><div class="compare-agent" style="color: #58a6ff;">Copilot</div></div>
+        <div class="compare-cell" style="opacity: 1; background: none;"><div class="compare-agent" style="color: #3fb950;">Codex</div></div>
+        <!-- Total Repos -->
+        <div class="compare-cell" style="animation: fadeIn 0.4s ease forwards 0.3s;"><div class="compare-label">Total Repos</div></div>
+        <div class="compare-cell" style="animation: fadeIn 0.4s ease forwards 0.4s;"><div class="compare-value" style="color: #a371f7;">391K</div></div>
+        <div class="compare-cell" style="animation: fadeIn 0.4s ease forwards 0.5s;"><div class="compare-value" style="color: #58a6ff;">248K</div></div>
+        <div class="compare-cell" style="animation: fadeIn 0.4s ease forwards 0.6s;"><div class="compare-value" style="color: #3fb950;">249K</div></div>
+        <!-- Prof Services -->
+        <div class="compare-cell" style="animation: fadeIn 0.4s ease forwards 0.5s;"><div class="compare-label">Prof. Services %</div></div>
+        <div class="compare-cell" style="animation: fadeIn 0.4s ease forwards 0.6s;"><div class="compare-value" style="color: #a371f7;">28%</div></div>
+        <div class="compare-cell" style="animation: fadeIn 0.4s ease forwards 0.7s;"><div class="compare-value" style="color: #58a6ff;">25%</div></div>
+        <div class="compare-cell" style="animation: fadeIn 0.4s ease forwards 0.8s;"><div class="compare-value" style="color: #3fb950;">22%</div></div>
+        <!-- Finance -->
+        <div class="compare-cell" style="animation: fadeIn 0.4s ease forwards 0.7s;"><div class="compare-label">Finance Repos</div></div>
+        <div class="compare-cell" style="animation: fadeIn 0.4s ease forwards 0.8s;"><div class="compare-value" style="color: #a371f7;">33K</div></div>
+        <div class="compare-cell" style="animation: fadeIn 0.4s ease forwards 0.9s;"><div class="compare-value" style="color: #58a6ff;">19K</div></div>
+        <div class="compare-cell" style="animation: fadeIn 0.4s ease forwards 1s;"><div class="compare-value" style="color: #3fb950;">26K</div></div>
+        <!-- Growth Rank -->
+        <div class="compare-cell" style="animation: fadeIn 0.4s ease forwards 0.9s;"><div class="compare-label">Growth Rank</div></div>
+        <div class="compare-cell" style="animation: fadeIn 0.4s ease forwards 1s;"><div class="compare-value" style="color: #a371f7;">#1</div></div>
+        <div class="compare-cell" style="animation: fadeIn 0.4s ease forwards 1.1s;"><div class="compare-value" style="color: #58a6ff;">#2</div></div>
+        <div class="compare-cell" style="animation: fadeIn 0.4s ease forwards 1.2s;"><div class="compare-value" style="color: #3fb950;">#3</div></div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <div class="footer-logo">AI Coding Agents Study</div>
+      <div class="footer-page">5/6</div>
+    </div>
+  </div>
+
+  <!-- Slide 6: CTA -->
+  <div class="slide slide-6" data-duration="5000">
+    <div class="slide-title">
+      <div class="title-icon" style="background: linear-gradient(135deg, #3fb950, #16a34a);">🔗</div>
+      Explore the Full Dashboard
+    </div>
+    <div class="card" style="flex: 1; animation: fadeInUp 0.5s ease forwards 0.2s; text-align: center; justify-content: center;">
+      <div style="font-size: 48px; font-weight: 700; margin-bottom: 40px;">Interactive dashboard with all data</div>
+      <div style="font-size: 28px; color: #58a6ff; margin-bottom: 50px;">Link in comments</div>
+      <div class="grid-4x1" style="max-width: 800px; margin: 0 auto;">
+        <div class="stat-pill">
+          <div class="pill-value" style="color: #a371f7;">4</div>
+          <div class="pill-label">Agents</div>
+        </div>
+        <div class="stat-pill">
+          <div class="pill-value" style="color: #58a6ff;">19</div>
+          <div class="pill-label">Industries</div>
+        </div>
+        <div class="stat-pill">
+          <div class="pill-value" style="color: #3fb950;">15</div>
+          <div class="pill-label">Months</div>
+        </div>
+        <div class="stat-pill">
+          <div class="pill-value" style="color: #f78166;">Open</div>
+          <div class="pill-label">Source</div>
+        </div>
+      </div>
+      <div style="font-size: 32px; color: #666; margin-top: 50px;">Which industry are you building for?</div>
+    </div>
+    <div class="slide-footer">
+      <div class="footer-logo">AI Coding Agents Study</div>
+      <div class="footer-page">6/6</div>
+    </div>
+  </div>
+
+  <div class="progress"></div>
+
+  <script>
+    // Generate industry list
+    const industries = [
+      { name: 'Professional Services', count: '253K', color: '#7c3aed' },
+      { name: 'Information', count: '210K', color: '#2563eb' },
+      { name: 'Finance & Insurance', count: '92K', color: '#ca8a04' },
+      { name: 'Education', count: '87K', color: '#dc2626' },
+      { name: 'Entertainment', count: '82K', color: '#db2777' },
+      { name: 'Admin Services', count: '59K', color: '#16a34a' },
+    ];
+
+    const list = document.getElementById('industryList');
+    industries.forEach((ind, i) => {
+      const row = document.createElement('div');
+      row.className = 'industry-row';
+      row.style.animation = `fadeIn 0.3s ease forwards ${0.4 + i * 0.12}s`;
+      row.innerHTML = `
+        <div class="industry-rank">#${i + 1}</div>
+        <div class="industry-name">${ind.name}</div>
+        <div class="industry-value" style="color: ${ind.color}">${ind.count}</div>
+      `;
+      list.appendChild(row);
+    });
+
+    // Slideshow
+    const slides = document.querySelectorAll('.slide');
+    const progress = document.querySelector('.progress');
+    let current = 0;
+    let total = Array.from(slides).reduce((a, s) => a + parseInt(s.dataset.duration), 0);
+    let elapsed = 0;
+
+    function animateBars() {
+      document.querySelectorAll('.mini-bar-fill').forEach(bar => {
+        setTimeout(() => { bar.style.width = bar.dataset.width; }, 500);
+      });
+    }
+
+    function next() {
+      elapsed += parseInt(slides[current].dataset.duration);
+      progress.style.width = `${(elapsed/total)*100}%`;
+      current++;
+      if (current < slides.length) {
+        slides.forEach(s => s.classList.remove('active'));
+        slides[current].classList.add('active');
+        if (current === 2) setTimeout(animateBars, 800);
+        setTimeout(next, parseInt(slides[current].dataset.duration));
+      }
+    }
+    setTimeout(() => next(), parseInt(slides[0].dataset.duration));
+  </script>
+</body>
+</html>

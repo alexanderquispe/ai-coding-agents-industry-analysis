@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Presentations - AI Coding Agents</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0a0a0f;
+      color: #fff;
+      min-height: 100vh;
+      padding: 60px;
+    }
+    h1 {
+      font-size: 48px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #a371f7, #58a6ff, #3fb950);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .subtitle {
+      font-size: 20px;
+      color: #888;
+      margin-bottom: 50px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 30px;
+    }
+    .card {
+      background: rgba(255,255,255,0.03);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    }
+    .card-preview {
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+    }
+    .card-content {
+      padding: 25px;
+    }
+    .card-number {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 8px;
+    }
+    .card-title {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .card-desc {
+      font-size: 14px;
+      color: #888;
+      line-height: 1.5;
+    }
+    .card-meta {
+      display: flex;
+      gap: 15px;
+      margin-top: 15px;
+    }
+    .meta-badge {
+      background: rgba(255,255,255,0.1);
+      padding: 6px 12px;
+      border-radius: 15px;
+      font-size: 12px;
+      color: #888;
+    }
+    .instructions {
+      margin-top: 60px;
+      padding: 40px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 20px;
+    }
+    .instructions h2 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    .instructions ol {
+      margin-left: 25px;
+      line-height: 2;
+      color: #888;
+    }
+    .instructions code {
+      background: rgba(255,255,255,0.1);
+      padding: 3px 8px;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <h1>12 Video Presentations</h1>
+  <p class="subtitle">Click any card to open the auto-playing presentation. Screen record at 1080x1080 for social media.</p>
+
+  <div class="grid">
+    <a href="video-01-timeline-story.html" class="card">
+      <div class="card-preview" style="background: linear-gradient(135deg, #1a0a2e, #0a0a15);">📈</div>
+      <div class="card-content">
+        <div class="card-number">VIDEO 01</div>
+        <div class="card-title" style="color: #a371f7;">Timeline Story</div>
+        <div class="card-desc">15 months of AI agent adoption shown through an animated timeline. Great for showing the growth journey.</div>
+        <div class="card-meta">
+          <span class="meta-badge">~52 seconds</span>
+          <span class="meta-badge">10 slides</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="video-02-agent-battle.html" class="card">
+      <div class="card-preview" style="background: linear-gradient(135deg, #1a1a2e, #0a0a15);">⚔️</div>
+      <div class="card-content">
+        <div class="card-number">VIDEO 02</div>
+        <div class="card-title" style="color: #58a6ff;">Agent Battle</div>
+        <div class="card-desc">Head-to-head comparison of all 4 AI agents. VS-style intro with individual agent showcases.</div>
+        <div class="card-meta">
+          <span class="meta-badge">~47 seconds</span>
+          <span class="meta-badge">10 slides</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="video-03-industry-deepdive.html" class="card">
+      <div class="card-preview" style="background: linear-gradient(135deg, #0a1525, #0a0a15);">🏢</div>
+      <div class="card-content">
+        <div class="card-number">VIDEO 03</div>
+        <div class="card-title" style="color: #2563eb;">Industry Deep Dive</div>
+        <div class="card-desc">Focus on the top 5 industries with detailed breakdowns. Shows NAICS classification and use cases.</div>
+        <div class="card-meta">
+          <span class="meta-badge">~57 seconds</span>
+          <span class="meta-badge">10 slides</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="video-04-breaking-news.html" class="card">
+      <div class="card-preview" style="background: linear-gradient(135deg, #2a0a0a, #0a0a15);">📺</div>
+      <div class="card-content">
+        <div class="card-number">VIDEO 04</div>
+        <div class="card-title" style="color: #dc2626;">Breaking News</div>
+        <div class="card-desc">News broadcast style with tickers, lower thirds, and breaking headlines. Very attention-grabbing.</div>
+        <div class="card-meta">
+          <span class="meta-badge">~36 seconds</span>
+          <span class="meta-badge">7 slides</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="video-05-infographic.html" class="card">
+      <div class="card-preview" style="background: linear-gradient(135deg, #0f1a25, #0a0a15);">📊</div>
+      <div class="card-content">
+        <div class="card-number">VIDEO 05</div>
+        <div class="card-title" style="color: #3fb950;">Infographic Dashboard</div>
+        <div class="card-desc">Data-rich infographic style with cards, charts, and statistics. Professional and information-dense.</div>
+        <div class="card-meta">
+          <span class="meta-badge">~34 seconds</span>
+          <span class="meta-badge">6 slides</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="video-06-minimalist-apple.html" class="card">
+      <div class="card-preview" style="background: linear-gradient(135deg, #0a0a0a, #000);">✨</div>
+      <div class="card-content">
+        <div class="card-number">VIDEO 06</div>
+        <div class="card-title" style="color: #fff;">Minimalist Apple</div>
+        <div class="card-desc">Clean, elegant Apple-style presentation. Simple typography, smooth transitions. Very premium feel.</div>
+        <div class="card-meta">
+          <span class="meta-badge">~40 seconds</span>
+          <span class="meta-badge">8 slides</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="video-07-movie-trailer.html" class="card">
+      <div class="card-preview" style="background: linear-gradient(135deg, #1a0a2e, #000);">🎬</div>
+      <div class="card-content">
+        <div class="card-number">VIDEO 07</div>
+        <div class="card-title" style="color: #f78166;">Movie Trailer Epic</div>
+        <div class="card-desc">Dramatic movie trailer style with quick cuts, big text slams, and cinematic letterboxing. Most exciting.</div>
+        <div class="card-meta">
+          <span class="meta-badge">~35 seconds</span>
+          <span class="meta-badge">11 slides</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="video-08-data-journalist.html" class="card">
+      <div class="card-preview" style="background: linear-gradient(135deg, #f5f5f0, #e5e5e0); color: #1a1a1a;">📰</div>
+      <div class="card-content">
+        <div class="card-number">VIDEO 08</div>
+        <div class="card-title" style="color: #ca8a04;">Data Journalist</div>
+        <div class="card-desc">Bloomberg/Financial Times style. Light background, serif headlines, data tables. Very professional.</div>
+        <div class="card-meta">
+          <span class="meta-badge">~33 seconds</span>
+          <span class="meta-badge">6 slides</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="video-09-stats-reveal.html" class="card">
+      <div class="card-preview" style="background: linear-gradient(135deg, #0f0f1a, #0a0a0f);">🔢</div>
+      <div class="card-content">
+        <div class="card-number">VIDEO 09</div>
+        <div class="card-title" style="color: #db2777;">Stats Reveal</div>
+        <div class="card-desc">One impactful stat per slide with dramatic reveals. Simple but powerful for quick consumption.</div>
+        <div class="card-meta">
+          <span class="meta-badge">~41 seconds</span>
+          <span class="meta-badge">10 slides</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="video-10-complete-story.html" class="card">
+      <div class="card-preview" style="background: linear-gradient(135deg, #1a0a2e, #0a1a25, #0a0a15);">🏆</div>
+      <div class="card-content">
+        <div class="card-number">VIDEO 10</div>
+        <div class="card-title" style="background: linear-gradient(135deg, #a371f7, #58a6ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">The Complete Story</div>
+        <div class="card-desc">Most comprehensive. Combines all key information: agents, industries, growth, findings. Best for LinkedIn.</div>
+        <div class="card-meta">
+          <span class="meta-badge">~40 seconds</span>
+          <span class="meta-badge">7 slides</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="video-06-minimalist-apple-enhanced.html" class="card">
+      <div class="card-preview" style="background: linear-gradient(135deg, #0a0a0a, #000);">📊</div>
+      <div class="card-content">
+        <div class="card-number">VIDEO 11</div>
+        <div class="card-title" style="color: #a371f7;">Apple Enhanced (Top 8)</div>
+        <div class="card-desc">Minimalist Apple style with animated industry distributions over 13 months. Shows top 8 industries per agent.</div>
+        <div class="card-meta">
+          <span class="meta-badge">~49 seconds</span>
+          <span class="meta-badge">11 slides</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="video-06-minimalist-apple-full.html" class="card">
+      <div class="card-preview" style="background: linear-gradient(135deg, #0a0a0a, #000);">🏛️</div>
+      <div class="card-content">
+        <div class="card-number">VIDEO 12</div>
+        <div class="card-title" style="color: #58a6ff;">Apple Full (All 19 NAICS)</div>
+        <div class="card-desc">Complete NAICS coverage! Shows all 19 industry categories with animated distributions. Most data-rich version.</div>
+        <div class="card-meta">
+          <span class="meta-badge">~49 seconds</span>
+          <span class="meta-badge">10 slides</span>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <div class="instructions">
+    <h2>How to Record</h2>
+    <ol>
+      <li>Click any video card above to open it</li>
+      <li>Press <code>F12</code> to open DevTools, then <code>Ctrl+Shift+M</code> for device mode</li>
+      <li>Set dimensions to <code>1080 x 1080</code> (square for social media)</li>
+      <li>Start your screen recorder (Windows: <code>Win+G</code>, or use OBS/Loom)</li>
+      <li>Press <code>F5</code> to refresh and restart the animation</li>
+      <li>Record until the progress bar reaches 100%</li>
+    </ol>
+  </div>
+</body>
+</html>

@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video 3: Industry Deep Dive</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0a0a0f;
+      color: #fff;
+      overflow: hidden;
+      width: 1080px;
+      height: 1080px;
+    }
+    .slide {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+      padding: 80px;
+      text-align: center;
+    }
+    .slide.active { opacity: 1; }
+
+    /* Slide 1: Opening */
+    .slide-1 { background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%); }
+    .open-badge {
+      background: rgba(255,255,255,0.1);
+      padding: 12px 30px;
+      border-radius: 30px;
+      font-size: 16px;
+      color: #888;
+      margin-bottom: 40px;
+      opacity: 0;
+      animation: fadeIn 0.6s ease forwards 0.2s;
+    }
+    .open-title {
+      font-size: 64px;
+      font-weight: 900;
+      line-height: 1.2;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease forwards 0.4s;
+    }
+    .open-title span {
+      background: linear-gradient(135deg, #7c3aed, #2563eb, #ca8a04);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .open-sub {
+      font-size: 28px;
+      color: #666;
+      margin-top: 30px;
+      opacity: 0;
+      animation: fadeIn 0.6s ease forwards 0.7s;
+    }
+
+    /* Slide 2: NAICS Explanation */
+    .slide-2 { background: linear-gradient(135deg, #0a0a15 0%, #15152a 100%); }
+    .naics-title {
+      font-size: 48px;
+      font-weight: 700;
+      margin-bottom: 50px;
+      opacity: 0;
+      animation: fadeInUp 0.6s ease forwards 0.2s;
+    }
+    .naics-full {
+      font-size: 24px;
+      color: #58a6ff;
+      margin-bottom: 40px;
+      opacity: 0;
+      animation: fadeIn 0.6s ease forwards 0.4s;
+    }
+    .naics-stats {
+      display: flex;
+      gap: 60px;
+      opacity: 0;
+      animation: fadeIn 0.6s ease forwards 0.6s;
+    }
+    .naics-stat {
+      text-align: center;
+    }
+    .naics-stat-num {
+      font-size: 72px;
+      font-weight: 900;
+      color: #fff;
+    }
+    .naics-stat-label {
+      font-size: 18px;
+      color: #666;
+    }
+
+    /* Industry Slides */
+    .industry-slide {
+      justify-content: flex-start;
+      padding-top: 80px;
+      text-align: left;
+    }
+    .ind-header {
+      display: flex;
+      align-items: center;
+      gap: 25px;
+      margin-bottom: 40px;
+      opacity: 0;
+      animation: fadeInUp 0.6s ease forwards 0.2s;
+    }
+    .ind-rank {
+      font-size: 80px;
+      font-weight: 900;
+      opacity: 0.3;
+    }
+    .ind-info h1 {
+      font-size: 48px;
+      font-weight: 700;
+    }
+    .ind-info p {
+      font-size: 20px;
+      color: #666;
+      margin-top: 5px;
+    }
+    .ind-total {
+      font-size: 100px;
+      font-weight: 900;
+      margin: 30px 0;
+      opacity: 0;
+      animation: scaleIn 0.6s ease forwards 0.4s;
+    }
+    .ind-total span {
+      font-size: 32px;
+      color: #666;
+      font-weight: 400;
+    }
+    .ind-breakdown {
+      width: 100%;
+      margin-top: 30px;
+    }
+    .ind-agent-row {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 18px;
+      opacity: 0;
+    }
+    .ind-agent-name {
+      width: 140px;
+      font-size: 16px;
+      text-align: right;
+    }
+    .ind-agent-bar {
+      flex: 1;
+      height: 35px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .ind-agent-fill {
+      height: 100%;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      padding-left: 15px;
+      font-size: 14px;
+      font-weight: 600;
+      width: 0;
+      transition: width 1s ease;
+    }
+    .ind-examples {
+      margin-top: 40px;
+      padding: 25px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 15px;
+      opacity: 0;
+      animation: fadeIn 0.6s ease forwards 1.2s;
+    }
+    .ind-examples-title {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 12px;
+    }
+    .ind-examples-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .ind-example {
+      background: rgba(255,255,255,0.1);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+    }
+
+    /* Slide 8: All Industries */
+    .slide-8 {
+      background: linear-gradient(135deg, #0a0a15 0%, #15152a 100%);
+      justify-content: flex-start;
+      padding: 60px;
+    }
+    .all-title {
+      font-size: 32px;
+      margin-bottom: 40px;
+      opacity: 0;
+      animation: fadeIn 0.5s ease forwards 0.2s;
+    }
+    .all-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      width: 100%;
+    }
+    .all-item {
+      background: rgba(255,255,255,0.03);
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      border-left: 3px solid;
+      opacity: 0;
+    }
+    .all-item-name {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .all-item-count {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    /* Slide 9: Key Insight */
+    .slide-9 { background: linear-gradient(135deg, #1a0a2e 0%, #0a0a15 100%); }
+    .insight-icon {
+      font-size: 80px;
+      margin-bottom: 40px;
+      opacity: 0;
+      animation: fadeIn 0.5s ease forwards 0.2s;
+    }
+    .insight-title {
+      font-size: 48px;
+      font-weight: 700;
+      margin-bottom: 30px;
+      opacity: 0;
+      animation: fadeInUp 0.6s ease forwards 0.4s;
+    }
+    .insight-text {
+      font-size: 28px;
+      color: #888;
+      line-height: 1.5;
+      max-width: 800px;
+      opacity: 0;
+      animation: fadeIn 0.6s ease forwards 0.7s;
+    }
+    .insight-text span { color: #a371f7; font-weight: 600; }
+
+    /* Slide 10: CTA */
+    .slide-10 { background: linear-gradient(135deg, #0a0a15 0%, #1a1a2e 100%); }
+    .cta-title {
+      font-size: 48px;
+      font-weight: 700;
+      margin-bottom: 50px;
+      opacity: 0;
+      animation: fadeInUp 0.6s ease forwards 0.2s;
+    }
+    .cta-industries {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
+      max-width: 800px;
+      margin-bottom: 50px;
+      opacity: 0;
+      animation: fadeIn 0.5s ease forwards 0.5s;
+    }
+    .cta-ind {
+      background: rgba(255,255,255,0.05);
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-size: 16px;
+    }
+    .cta-link {
+      font-size: 28px;
+      color: #58a6ff;
+      margin-bottom: 40px;
+      opacity: 0;
+      animation: fadeIn 0.5s ease forwards 0.7s;
+    }
+    .cta-question {
+      font-size: 32px;
+      color: #666;
+      opacity: 0;
+      animation: fadeIn 0.5s ease forwards 0.9s;
+    }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes scaleIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+
+    .progress { position: fixed; bottom: 0; left: 0; height: 4px; background: linear-gradient(90deg, #7c3aed, #2563eb, #ca8a04, #dc2626); width: 0; transition: width 0.3s; }
+  </style>
+</head>
+<body>
+  <!-- Slide 1: Opening -->
+  <div class="slide slide-1 active" data-duration="4000">
+    <div class="open-badge">INDUSTRY ANALYSIS</div>
+    <div class="open-title">Where is <span>AI-Assisted Coding</span><br>Making the Biggest Impact?</div>
+    <div class="open-sub">1 million repos classified by industry</div>
+  </div>
+
+  <!-- Slide 2: NAICS -->
+  <div class="slide slide-2" data-duration="4500">
+    <div class="naics-title">Classification Method</div>
+    <div class="naics-full">NAICS — North American Industry Classification System</div>
+    <div class="naics-stats">
+      <div class="naics-stat">
+        <div class="naics-stat-num">19</div>
+        <div class="naics-stat-label">Industry Sectors</div>
+      </div>
+      <div class="naics-stat">
+        <div class="naics-stat-num">1M+</div>
+        <div class="naics-stat-label">Repositories</div>
+      </div>
+      <div class="naics-stat">
+        <div class="naics-stat-num">4</div>
+        <div class="naics-stat-label">AI Agents</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 3: Professional Services -->
+  <div class="slide slide-3 industry-slide" data-duration="6000" style="background: linear-gradient(135deg, #1a0f2e 0%, #0a0a15 100%);">
+    <div class="ind-header">
+      <div class="ind-rank" style="color: #7c3aed;">#1</div>
+      <div class="ind-info">
+        <h1 style="color: #7c3aed;">Professional Services</h1>
+        <p>NAICS 54 — Professional, Scientific & Technical Services</p>
+      </div>
+    </div>
+    <div class="ind-total" style="color: #7c3aed;">253K <span>repositories</span></div>
+    <div class="ind-breakdown">
+      <div class="ind-agent-row" style="animation: fadeIn 0.5s ease forwards 0.5s;">
+        <div class="ind-agent-name" style="color: #a371f7;">Claude Code</div>
+        <div class="ind-agent-bar"><div class="ind-agent-fill" data-width="100%" style="background: #a371f7;">109K</div></div>
+      </div>
+      <div class="ind-agent-row" style="animation: fadeIn 0.5s ease forwards 0.65s;">
+        <div class="ind-agent-name" style="color: #58a6ff;">Copilot</div>
+        <div class="ind-agent-bar"><div class="ind-agent-fill" data-width="56%" style="background: #58a6ff;">61K</div></div>
+      </div>
+      <div class="ind-agent-row" style="animation: fadeIn 0.5s ease forwards 0.8s;">
+        <div class="ind-agent-name" style="color: #3fb950;">Codex</div>
+        <div class="ind-agent-bar"><div class="ind-agent-fill" data-width="49%" style="background: #3fb950;">54K</div></div>
+      </div>
+      <div class="ind-agent-row" style="animation: fadeIn 0.5s ease forwards 0.95s;">
+        <div class="ind-agent-name" style="color: #f78166;">Cursor</div>
+        <div class="ind-agent-bar"><div class="ind-agent-fill" data-width="27%" style="background: #f78166;">29K</div></div>
+      </div>
+    </div>
+    <div class="ind-examples">
+      <div class="ind-examples-title">COMMON USE CASES</div>
+      <div class="ind-examples-list">
+        <span class="ind-example">Software Consulting</span>
+        <span class="ind-example">Legal Tech</span>
+        <span class="ind-example">Engineering Firms</span>
+        <span class="ind-example">Accounting Tools</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 4: Information -->
+  <div class="slide slide-4 industry-slide" data-duration="5500" style="background: linear-gradient(135deg, #0a1525 0%, #0a0a15 100%);">
+    <div class="ind-header">
+      <div class="ind-rank" style="color: #2563eb;">#2</div>
+      <div class="ind-info">
+        <h1 style="color: #2563eb;">Information</h1>
+        <p>NAICS 51 — Publishing, Broadcasting, Telecommunications</p>
+      </div>
+    </div>
+    <div class="ind-total" style="color: #2563eb;">210K <span>repositories</span></div>
+    <div class="ind-breakdown">
+      <div class="ind-agent-row" style="animation: fadeIn 0.5s ease forwards 0.5s;">
+        <div class="ind-agent-name" style="color: #a371f7;">Claude Code</div>
+        <div class="ind-agent-bar"><div class="ind-agent-fill" data-width="100%" style="background: #a371f7;">80K</div></div>
+      </div>
+      <div class="ind-agent-row" style="animation: fadeIn 0.5s ease forwards 0.65s;">
+        <div class="ind-agent-name" style="color: #3fb950;">Codex</div>
+        <div class="ind-agent-bar"><div class="ind-agent-fill" data-width="67%" style="background: #3fb950;">54K</div></div>
+      </div>
+      <div class="ind-agent-row" style="animation: fadeIn 0.5s ease forwards 0.8s;">
+        <div class="ind-agent-name" style="color: #58a6ff;">Copilot</div>
+        <div class="ind-agent-bar"><div class="ind-agent-fill" data-width="64%" style="background: #58a6ff;">51K</div></div>
+      </div>
+      <div class="ind-agent-row" style="animation: fadeIn 0.5s ease forwards 0.95s;">
+        <div class="ind-agent-name" style="color: #f78166;">Cursor</div>
+        <div class="ind-agent-bar"><div class="ind-agent-fill" data-width="31%" style="background: #f78166;">25K</div></div>
+      </div>
+    </div>
+    <div class="ind-examples">
+      <div class="ind-examples-title">COMMON USE CASES</div>
+      <div class="ind-examples-list">
+        <span class="ind-example">SaaS Platforms</span>
+        <span class="ind-example">Media Companies</span>
+        <span class="ind-example">Data Analytics</span>
+        <span class="ind-example">Telecom</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 5: Finance -->
+  <div class="slide slide-5 industry-slide" data-duration="5500" style="background: linear-gradient(135deg, #1a1505 0%, #0a0a15 100%);">
+    <div class="ind-header">
+      <div class="ind-rank" style="color: #ca8a04;">#3</div>
+      <div class="ind-info">
+        <h1 style="color: #ca8a04;">Finance & Insurance</h1>
+        <p>NAICS 52 — Banks, Investment, Insurance Carriers</p>
+      </div>
+    </div>
+    <div class="ind-total" style="color: #ca8a04;">92K <span>repositories</span></div>
+    <div class="ind-breakdown">
+      <div class="ind-agent-row" style="animation: fadeIn 0.5s ease forwards 0.5s;">
+        <div class="ind-agent-name" style="color: #a371f7;">Claude Code</div>
+        <div class="ind-agent-bar"><div class="ind-agent-fill" data-width="100%" style="background: #a371f7;">33K</div></div>
+      </div>
+      <div class="ind-agent-row" style="animation: fadeIn 0.5s ease forwards 0.65s;">
+        <div class="ind-agent-name" style="color: #3fb950;">Codex</div>
+        <div class="ind-agent-bar"><div class="ind-agent-fill" data-width="79%" style="background: #3fb950;">26K</div></div>
+      </div>
+      <div class="ind-agent-row" style="animation: fadeIn 0.5s ease forwards 0.8s;">
+        <div class="ind-agent-name" style="color: #58a6ff;">Copilot</div>
+        <div class="ind-agent-bar"><div class="ind-agent-fill" data-width="57%" style="background: #58a6ff;">19K</div></div>
+      </div>
+      <div class="ind-agent-row" style="animation: fadeIn 0.5s ease forwards 0.95s;">
+        <div class="ind-agent-name" style="color: #f78166;">Cursor</div>
+        <div class="ind-agent-bar"><div class="ind-agent-fill" data-width="42%" style="background: #f78166;">14K</div></div>
+      </div>
+    </div>
+    <div class="ind-examples">
+      <div class="ind-examples-title">COMMON USE CASES</div>
+      <div class="ind-examples-list">
+        <span class="ind-example">Fintech Apps</span>
+        <span class="ind-example">Banking Platforms</span>
+        <span class="ind-example">Trading Tools</span>
+        <span class="ind-example">Insurance Tech</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 6: Education -->
+  <div class="slide slide-6 industry-slide" data-duration="5000" style="background: linear-gradient(135deg, #1a0a0a 0%, #0a0a15 100%);">
+    <div class="ind-header">
+      <div class="ind-rank" style="color: #dc2626;">#4</div>
+      <div class="ind-info">
+        <h1 style="color: #dc2626;">Education</h1>
+        <p>NAICS 61 — Schools, Colleges, Training Centers</p>
+      </div>
+    </div>
+    <div class="ind-total" style="color: #dc2626;">87K <span>repositories</span></div>
+    <div class="ind-breakdown">
+      <div class="ind-agent-row" style="animation: fadeIn 0.5s ease forwards 0.5s;">
+        <div class="ind-agent-name" style="color: #a371f7;">Claude Code</div>
+        <div class="ind-agent-bar"><div class="ind-agent-fill" data-width="100%" style="background: #a371f7;">31K</div></div>
+      </div>
+      <div class="ind-agent-row" style="animation: fadeIn 0.5s ease forwards 0.65s;">
+        <div class="ind-agent-name" style="color: #58a6ff;">Copilot</div>
+        <div class="ind-agent-bar"><div class="ind-agent-fill" data-width="87%" style="background: #58a6ff;">27K</div></div>
+      </div>
+      <div class="ind-agent-row" style="animation: fadeIn 0.5s ease forwards 0.8s;">
+        <div class="ind-agent-name" style="color: #3fb950;">Codex</div>
+        <div class="ind-agent-bar"><div class="ind-agent-fill" data-width="58%" style="background: #3fb950;">18K</div></div>
+      </div>
+      <div class="ind-agent-row" style="animation: fadeIn 0.5s ease forwards 0.95s;">
+        <div class="ind-agent-name" style="color: #f78166;">Cursor</div>
+        <div class="ind-agent-bar"><div class="ind-agent-fill" data-width="34%" style="background: #f78166;">11K</div></div>
+      </div>
+    </div>
+    <div class="ind-examples">
+      <div class="ind-examples-title">COMMON USE CASES</div>
+      <div class="ind-examples-list">
+        <span class="ind-example">EdTech</span>
+        <span class="ind-example">LMS Platforms</span>
+        <span class="ind-example">Online Courses</span>
+        <span class="ind-example">University Projects</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 7: Entertainment -->
+  <div class="slide slide-7 industry-slide" data-duration="5000" style="background: linear-gradient(135deg, #1a0520 0%, #0a0a15 100%);">
+    <div class="ind-header">
+      <div class="ind-rank" style="color: #db2777;">#5</div>
+      <div class="ind-info">
+        <h1 style="color: #db2777;">Entertainment</h1>
+        <p>NAICS 71 — Performing Arts, Sports, Gaming</p>
+      </div>
+    </div>
+    <div class="ind-total" style="color: #db2777;">82K <span>repositories</span></div>
+    <div class="ind-breakdown">
+      <div class="ind-agent-row" style="animation: fadeIn 0.5s ease forwards 0.5s;">
+        <div class="ind-agent-name" style="color: #a371f7;">Claude Code</div>
+        <div class="ind-agent-bar"><div class="ind-agent-fill" data-width="100%" style="background: #a371f7;">30K</div></div>
+      </div>
+      <div class="ind-agent-row" style="animation: fadeIn 0.5s ease forwards 0.65s;">
+        <div class="ind-agent-name" style="color: #3fb950;">Codex</div>
+        <div class="ind-agent-bar"><div class="ind-agent-fill" data-width="78%" style="background: #3fb950;">23K</div></div>
+      </div>
+      <div class="ind-agent-row" style="animation: fadeIn 0.5s ease forwards 0.8s;">
+        <div class="ind-agent-name" style="color: #58a6ff;">Copilot</div>
+        <div class="ind-agent-bar"><div class="ind-agent-fill" data-width="64%" style="background: #58a6ff;">19K</div></div>
+      </div>
+      <div class="ind-agent-row" style="animation: fadeIn 0.5s ease forwards 0.95s;">
+        <div class="ind-agent-name" style="color: #f78166;">Cursor</div>
+        <div class="ind-agent-bar"><div class="ind-agent-fill" data-width="32%" style="background: #f78166;">10K</div></div>
+      </div>
+    </div>
+    <div class="ind-examples">
+      <div class="ind-examples-title">COMMON USE CASES</div>
+      <div class="ind-examples-list">
+        <span class="ind-example">Gaming</span>
+        <span class="ind-example">Streaming</span>
+        <span class="ind-example">Sports Analytics</span>
+        <span class="ind-example">VR/AR</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 8: All Industries -->
+  <div class="slide slide-8" data-duration="6000">
+    <div class="all-title">All 19 Industries Tracked</div>
+    <div class="all-grid" id="allGrid"></div>
+  </div>
+
+  <!-- Slide 9: Key Insight -->
+  <div class="slide slide-9" data-duration="5000">
+    <div class="insight-icon">💡</div>
+    <div class="insight-title">The Big Picture</div>
+    <div class="insight-text">
+      <span>Professional Services dominates</span> with 25-28% of repositories across all agents.
+      But <span>Finance & Healthcare</span> are accelerating fast —
+      signaling growing trust in AI for regulated industries.
+    </div>
+  </div>
+
+  <!-- Slide 10: CTA -->
+  <div class="slide slide-10" data-duration="5000">
+    <div class="cta-title">Explore all 19 industries</div>
+    <div class="cta-industries">
+      <span class="cta-ind">Healthcare</span>
+      <span class="cta-ind">Manufacturing</span>
+      <span class="cta-ind">Retail</span>
+      <span class="cta-ind">Transportation</span>
+      <span class="cta-ind">Public Admin</span>
+      <span class="cta-ind">Construction</span>
+      <span class="cta-ind">+ 13 more</span>
+    </div>
+    <div class="cta-link">Full dashboard in comments</div>
+    <div class="cta-question">Which industry are you building for?</div>
+  </div>
+
+  <div class="progress"></div>
+
+  <script>
+    // Generate all industries grid
+    const industries = [
+      { name: 'Prof. Services', count: '253K', color: '#7c3aed' },
+      { name: 'Information', count: '210K', color: '#2563eb' },
+      { name: 'Finance', count: '92K', color: '#ca8a04' },
+      { name: 'Education', count: '87K', color: '#dc2626' },
+      { name: 'Entertainment', count: '82K', color: '#db2777' },
+      { name: 'Admin Services', count: '59K', color: '#16a34a' },
+      { name: 'Other Services', count: '36K', color: '#0891b2' },
+      { name: 'Transportation', count: '34K', color: '#7c3aed' },
+      { name: 'Public Admin', count: '32K', color: '#0284c7' },
+      { name: 'Healthcare', count: '29K', color: '#ea580c' },
+      { name: 'Retail Trade', count: '28K', color: '#0d9488' },
+      { name: 'Manufacturing', count: '25K', color: '#475569' },
+      { name: 'Agriculture', count: '17K', color: '#65a30d' },
+      { name: 'Accommodation', count: '14K', color: '#e11d48' },
+      { name: 'Utilities', count: '8K', color: '#4f46e5' },
+      { name: 'Real Estate', count: '7K', color: '#059669' },
+      { name: 'Construction', count: '4K', color: '#d97706' },
+      { name: 'Wholesale', count: '3K', color: '#57534e' },
+      { name: 'Mining', count: '2K', color: '#78350f' },
+    ];
+
+    const grid = document.getElementById('allGrid');
+    industries.forEach((ind, i) => {
+      const item = document.createElement('div');
+      item.className = 'all-item';
+      item.style.borderColor = ind.color;
+      item.style.animation = `fadeIn 0.3s ease forwards ${0.3 + i * 0.08}s`;
+      item.innerHTML = `
+        <div class="all-item-name">${ind.name}</div>
+        <div class="all-item-count" style="color: ${ind.color}">${ind.count}</div>
+      `;
+      grid.appendChild(item);
+    });
+
+    // Slideshow
+    const slides = document.querySelectorAll('.slide');
+    const progress = document.querySelector('.progress');
+    let current = 0;
+    let total = Array.from(slides).reduce((a, s) => a + parseInt(s.dataset.duration), 0);
+    let elapsed = 0;
+
+    function animateBars(slideNum) {
+      const slide = slides[slideNum];
+      if (slide) {
+        slide.querySelectorAll('.ind-agent-fill').forEach(bar => {
+          setTimeout(() => { bar.style.width = bar.dataset.width; }, 400);
+        });
+      }
+    }
+
+    function next() {
+      elapsed += parseInt(slides[current].dataset.duration);
+      progress.style.width = `${(elapsed/total)*100}%`;
+      current++;
+      if (current < slides.length) {
+        slides.forEach(s => s.classList.remove('active'));
+        slides[current].classList.add('active');
+        if (current >= 2 && current <= 6) animateBars(current);
+        setTimeout(next, parseInt(slides[current].dataset.duration));
+      }
+    }
+    setTimeout(() => next(), parseInt(slides[0].dataset.duration));
+  </script>
+</body>
+</html>
