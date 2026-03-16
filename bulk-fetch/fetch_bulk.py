@@ -74,6 +74,33 @@ AGENTS = {
         "extract_fn": "extract_jules_commit",
         "output_file": "jules_commits",
     },
+    "cursor_commits": {
+        "search_url": "https://api.github.com/search/commits",
+        "search_query": '"Co-authored-by" "cursoragent@cursor.com"',
+        "date_field": "committer-date",
+        "sort_field": "committer-date",
+        "key_field": "sha",
+        "extract_fn": "extract_commit",
+        "output_file": "cursor_commits",
+    },
+    "copilot_commits": {
+        "search_url": "https://api.github.com/search/commits",
+        "search_query": '"Co-authored-by" "copilot"',
+        "date_field": "committer-date",
+        "sort_field": "committer-date",
+        "key_field": "sha",
+        "extract_fn": "extract_commit",
+        "output_file": "copilot_commits",
+    },
+    "codex_commits": {
+        "search_url": "https://api.github.com/search/commits",
+        "search_query": '"Co-authored-by: Codex"',
+        "date_field": "committer-date",
+        "sort_field": "committer-date",
+        "key_field": "sha",
+        "extract_fn": "extract_commit",
+        "output_file": "codex_commits",
+    },
 }
 
 
