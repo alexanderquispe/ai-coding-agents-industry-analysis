@@ -4,8 +4,9 @@ Bulk fetch of PRs/commits from GitHub API for all AI coding agents.
 Multi-token rotation, recursive date-splitting, checkpoint/resume.
 
 Usage:
-    export GH_TOKENS=ghp_aaa,ghp_bbb,ghp_ccc
     python fetch_bulk.py --agent claude --start 2026-01-01 --end 2026-03-11
+
+Tokens are loaded from .env file in project root or GH_TOKENS env var.
 """
 
 import argparse
@@ -21,6 +22,36 @@ from typing import List, Set
 import pandas as pd
 import requests
 from tqdm.auto import tqdm
+
+
+# ══════════════════════════════════════════════════════════════
+# Load .env file (no external dependencies)
+# ══════════════════════════════════════════════════════════════
+def load_dotenv():
+    """Load .env file from project root into os.environ."""
+    # Look for .env in script's parent directory (project root)
+    script_dir = Path(__file__).resolve().parent
+    env_paths = [
+        script_dir.parent / ".env",  # project root
+        script_dir / ".env",          # bulk-fetch dir
+        Path.cwd() / ".env",          # current working dir
+    ]
+    for env_path in env_paths:
+        if env_path.exists():
+            with open(env_path) as f:
+                for line in f:
+                    line = line.strip()
+                    if line and not line.startswith("#") and "=" in line:
+                        key, _, value = line.partition("=")
+                        key = key.strip()
+                        value = value.strip().strip('"').strip("'")
+                        if key and value and key not in os.environ:
+                            os.environ[key] = value
+            print(f"  Loaded tokens from: {env_path}")
+            return
+    print("  No .env file found, using environment variables")
+
+load_dotenv()
 
 
 # ══════════════════════════════════════════════════════════════
@@ -340,23 +371,46 @@ def paginated_search(client, query, sort_field, extract_fn, max_pages=10):
 # ══════════════════════════════════════════════════════════════
 # Checkpoint helpers
 # ══════════════════════════════════════════════════════════════
+def _replace_with_retry(tmp_path: Path, target_path: Path, max_retries: int = 5):
+    """Replace target with tmp file, retrying on Windows permission errors."""
+    for attempt in range(max_retries):
+        try:
+            tmp_path.replace(target_path)
+            return  # Success
+        except PermissionError as e:
+            if attempt < max_retries - 1:
+                # Exponential backoff: 0.1, 0.2, 0.4, 0.8, 1.6 seconds
+                wait_time = 0.1 * (2 ** attempt)
+                time.sleep(wait_time)
+            else:
+                # Last attempt failed, try alternative approach
+                try:
+                    # Delete target first, then rename
+                    if target_path.exists():
+                        target_path.unlink()
+                    tmp_path.rename(target_path)
+                    return
+                except Exception:
+                    raise e  # Re-raise original error
+
+
 def atomic_write_json(path, data):
     tmp = path.with_suffix(".json.tmp")
     with open(tmp, "w") as f:
         json.dump(data, f, indent=2)
         f.flush()
         os.fsync(f.fileno())
-    tmp.replace(path)  # replace() works on Windows (overwrites existing)
+    _replace_with_retry(tmp, path)
 
 
 def atomic_write_text(path, lines):
     tmp = path.with_suffix(".txt.tmp")
     with open(tmp, "w") as f:
         for line in lines:
-            f.write(line + "\n")
+            f.write(str(line) + "\n")
         f.flush()
         os.fsync(f.fileno())
-    tmp.replace(path)  # replace() works on Windows (overwrites existing)
+    _replace_with_retry(tmp, path)
 
 
 def load_seen_keys(checkpoint_dir: Path, agent_key: str) -> Set[str]:
@@ -406,6 +460,17 @@ def fetch_agent(client, agent_cfg, start_date, end_date,
     initial_keys = len(seen_keys)
     manifest = load_manifest(checkpoint_dir, agent_key)
 
+    # Load existing results from JSONL so we APPEND instead of overwriting
+    all_results = []
+    jsonl_existing = output_dir / f"{output_file}.jsonl"
+    if jsonl_existing.exists():
+        with open(jsonl_existing, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if line:
+                    all_results.append(json.loads(line))
+        print(f"  EXISTING RESULTS LOADED: {len(all_results):,} from {jsonl_existing.name}")
+
     new_results = []
     last_save_count = 0
     days_completed_this_run = []
@@ -439,24 +504,35 @@ def fetch_agent(client, agent_cfg, start_date, end_date,
     day_new_count = 0
 
     def save_checkpoint():
+        combined = all_results + new_results
         jsonl_path = output_dir / f"{output_file}.jsonl"
         tmp = jsonl_path.with_suffix(".jsonl.tmp")
         with open(tmp, "w", encoding="utf-8") as f:
-            for item in new_results:
+            for item in combined:
                 f.write(json.dumps(item, ensure_ascii=False) + "\n")
             f.flush()
             os.fsync(f.fileno())
-        tmp.replace(jsonl_path)  # replace() works on Windows
-        try:
-            pd.DataFrame(new_results).to_parquet(
-                output_dir / f"{output_file}.parquet", index=False
-            )
-        except Exception as ex:
-            print(f"  Warning parquet: {ex}")
+        _replace_with_retry(tmp, jsonl_path)
+        # Write parquet with retry for Windows file locking
+        parquet_path = output_dir / f"{output_file}.parquet"
+        parquet_tmp = parquet_path.with_suffix(".parquet.tmp")
+        for attempt in range(3):
+            try:
+                pd.DataFrame(combined).to_parquet(parquet_tmp, index=False)
+                _replace_with_retry(parquet_tmp, parquet_path)
+                break
+            except PermissionError:
+                if attempt < 2:
+                    time.sleep(0.2 * (attempt + 1))
+                else:
+                    print(f"  Warning: parquet write failed after retries")
+            except Exception as ex:
+                print(f"  Warning parquet: {ex}")
+                break
         atomic_write_text(checkpoint_dir / f"seen_keys_{agent_key}.txt", list(seen_keys))
         atomic_write_json(checkpoint_dir / f"manifest_{agent_key}.json", manifest)
         size_mb = jsonl_path.stat().st_size / 1024 / 1024
-        print(f"  Saved: {len(new_results):,} new items ({size_mb:.1f} MB)")
+        print(f"  Saved: {len(combined):,} total items ({len(new_results):,} new, {size_mb:.1f} MB)")
 
     def finalize_day(day_str, new_count):
         if day_str not in manifest:
@@ -607,7 +683,18 @@ def fetch_agent(client, agent_cfg, start_date, end_date,
                                 current = interval_end + timedelta(seconds=1)
                             for interval in reversed(intervals):
                                 ranges.insert(0, interval)
+                        elif total_seconds > 1:
+                            # Split into 1-second intervals for very high volume
+                            intervals = []
+                            current = s
+                            while current < e:
+                                interval_end = min(current + timedelta(seconds=1) - timedelta(microseconds=1), e)
+                                intervals.append((current, interval_end, True))
+                                current = interval_end + timedelta(microseconds=1)
+                            for interval in reversed(intervals):
+                                ranges.insert(0, interval)
                         else:
+                            # ≤1 second window still has >1000 results - fetch max and move on
                             pbar.set_description(f"{agent_name} {s.date()} {s.hour:02d}:{s.minute:02d}:{s.second:02d} (>1000, max)")
                             items = paginated_search(client, query, sort_field, extract_fn, max_pages=10)
                             for item in items:
@@ -630,6 +717,7 @@ def fetch_agent(client, agent_cfg, start_date, end_date,
     save_checkpoint()
 
     total = initial_keys + len(new_results)
+    combined_count = len(all_results) + len(new_results)
     summary = {
         "run": run_id, "agent": agent_name,
         "started_at": run_start.isoformat(),
@@ -637,16 +725,17 @@ def fetch_agent(client, agent_cfg, start_date, end_date,
         "elapsed": str(datetime.now() - run_start).split(".")[0],
         "days_completed": days_completed_this_run,
         "new_items": len(new_results), "total_items": total,
+        "output_items": combined_count,
     }
     log_path = checkpoint_dir / f"run_log_{agent_key}.jsonl"
     with open(log_path, "a") as f:
         f.write(json.dumps(summary) + "\n")
 
-    print(f"\n  DONE {agent_name.upper()}: {total:,} total (+{len(new_results):,} new)")
+    print(f"\n  DONE {agent_name.upper()}: {combined_count:,} in output (+{len(new_results):,} new this run)")
     print(f"  Time: {str(datetime.now() - run_start).split('.')[0]}")
     print(f"  Days completed: {len(days_completed_this_run)}")
     print(f"  {client.get_rate_info()}")
-    return new_results
+    return all_results + new_results
 
 
 # ══════════════════════════════════════════════════════════════

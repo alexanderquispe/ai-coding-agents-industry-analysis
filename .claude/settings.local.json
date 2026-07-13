@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "Bash(python -c \"import jupyter\")",
+      "Bash(pdflatex --version)",
+      "Bash(where pdflatex:*)",
+      "Bash(where xelatex:*)",
+      "Bash(where lualatex:*)",
+      "Bash(where miktex:*)",
+      "Read(//c/Program Files/**)",
+      "Bash(awk 'BEGIN{b=0; e=0} /\\\\\\\\begin\\\\{/{b++} /\\\\\\\\end\\\\{/{e++} END{print \"begin:\", b, \"end:\", e}' model_bayesian_learning.tex)",
+      "Bash(awk 'BEGIN{b=0; e=0} /[\\\\\\\\]begin[{]/{b++} /[\\\\\\\\]end[{]/{e++} END{print \"begin:\", b, \"end:\", e}' model_bayesian_learning.tex)",
+      "Bash(grep -oP '\\\\\\\\begin\\\\{\\\\K[^}]+' model_bayesian_learning.tex)",
+      "Bash(grep -oP '\\\\\\\\end\\\\{\\\\K[^}]+' model_bayesian_learning.tex)",
+      "Bash(rm -f model_bayesian_learning.pdf)",
+      "Bash(echo \"delete result: $?\")",
+      "Bash(mv *)"
+    ]
+  }
+}

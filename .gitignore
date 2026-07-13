@@ -83,3 +83,7 @@ next-env.d.ts
 figures/sistema-completo.excalidraw
 figures/sistema-completo.png
 figures/sistema-completo.svg
+.env
+checkpoints/seen_keys_Claude.txt
+checkpoints/seen_keys_Claude.txt
+checkpoints/seen_keys_Claude.txt
