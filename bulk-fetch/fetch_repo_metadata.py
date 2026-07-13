@@ -6,10 +6,9 @@ Reads parquet files from fetch_bulk.py, extracts unique repos,
 fetches 33 columns of metadata using GraphQL batched queries.
 
 Usage:
+    export GH_TOKENS=ghp_aaa,ghp_bbb,ghp_ccc
     python fetch_repo_metadata.py --input output/claude_commits.parquet
     python fetch_repo_metadata.py --input output/cursor_commits.parquet output/cursor_prs.parquet
-
-Tokens are loaded from .env file in project root or GH_TOKENS env var.
 """
 
 import argparse
@@ -24,35 +23,6 @@ from typing import Dict, List, Optional, Set
 import pandas as pd
 import requests
 from tqdm.auto import tqdm
-
-
-# ══════════════════════════════════════════════════════════════
-# Load .env file (no external dependencies)
-# ══════════════════════════════════════════════════════════════
-def load_dotenv():
-    """Load .env file from project root into os.environ."""
-    script_dir = Path(__file__).resolve().parent
-    env_paths = [
-        script_dir.parent / ".env",  # project root
-        script_dir / ".env",          # bulk-fetch dir
-        Path.cwd() / ".env",          # current working dir
-    ]
-    for env_path in env_paths:
-        if env_path.exists():
-            with open(env_path) as f:
-                for line in f:
-                    line = line.strip()
-                    if line and not line.startswith("#") and "=" in line:
-                        key, _, value = line.partition("=")
-                        key = key.strip()
-                        value = value.strip().strip('"').strip("'")
-                        if key and value and key not in os.environ:
-                            os.environ[key] = value
-            print(f"  Loaded tokens from: {env_path}")
-            return
-    print("  No .env file found, using environment variables")
-
-load_dotenv()
 
 
 # ══════════════════════════════════════════════════════════════

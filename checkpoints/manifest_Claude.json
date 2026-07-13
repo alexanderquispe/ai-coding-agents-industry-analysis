@@ -1,219 +1,78 @@
 {
   "2026-01-01": {
     "status": "complete",
-    "items": 54876,
+    "items": 53086,
     "reviewed": false,
-    "run": "v20260316_2302",
-    "completed_at": "2026-03-16T23:30:43.191223"
+    "run": "v20260311_2314",
+    "completed_at": "2026-03-11T23:41:39.585758"
   },
   "2026-01-02": {
     "status": "complete",
-    "items": 63442,
+    "items": 63782,
     "reviewed": false,
-    "run": "v20260316_2302",
-    "completed_at": "2026-03-17T00:04:25.373307"
+    "run": "v20260311_2314",
+    "completed_at": "2026-03-12T00:15:20.963294"
   },
   "2026-01-03": {
     "status": "complete",
-    "items": 63684,
+    "items": 63854,
     "reviewed": false,
-    "run": "v20260316_2302",
-    "completed_at": "2026-03-17T00:40:53.469443"
+    "run": "v20260311_2314",
+    "completed_at": "2026-03-12T00:51:34.132704"
   },
   "2026-01-04": {
     "status": "complete",
-    "items": 65921,
+    "items": 66085,
     "reviewed": false,
-    "run": "v20260316_2302",
-    "completed_at": "2026-03-17T01:23:57.893501"
+    "run": "v20260311_2314",
+    "completed_at": "2026-03-12T01:35:01.022995"
   },
   "2026-01-05": {
     "status": "complete",
-    "items": 69190,
+    "items": 69401,
     "reviewed": false,
-    "run": "v20260316_2302",
-    "completed_at": "2026-03-17T02:09:33.699273"
+    "run": "v20260311_2314",
+    "completed_at": "2026-03-12T02:22:51.938026"
   },
   "2026-01-06": {
     "status": "complete",
-    "items": 68134,
+    "items": 68225,
     "reviewed": false,
-    "run": "v20260316_2302",
-    "completed_at": "2026-03-17T02:57:40.766259"
+    "run": "v20260311_2314",
+    "completed_at": "2026-03-12T03:12:43.900137"
   },
   "2026-01-07": {
     "status": "complete",
-    "items": 69895,
+    "items": 69793,
     "reviewed": false,
-    "run": "v20260316_2302",
-    "completed_at": "2026-03-17T03:50:32.383464"
+    "run": "v20260311_2314",
+    "completed_at": "2026-03-12T04:06:24.079238"
   },
   "2026-01-08": {
     "status": "complete",
-    "items": 74466,
+    "items": 74537,
     "reviewed": false,
-    "run": "v20260316_2302",
-    "completed_at": "2026-03-17T04:50:00.187730"
+    "run": "v20260311_2314",
+    "completed_at": "2026-03-12T05:09:14.945823"
   },
   "2026-01-09": {
     "status": "complete",
-    "items": 79416,
+    "items": 79566,
     "reviewed": false,
-    "run": "v20260316_2302",
-    "completed_at": "2026-03-17T05:58:08.718237"
+    "run": "v20260311_2314",
+    "completed_at": "2026-03-12T06:19:46.527408"
   },
   "2026-01-10": {
     "status": "complete",
-    "items": 78560,
+    "items": 79093,
     "reviewed": false,
-    "run": "v20260316_2302",
-    "completed_at": "2026-03-17T07:20:14.591234"
+    "run": "v20260311_2314",
+    "completed_at": "2026-03-12T07:41:18.328768"
   },
   "2026-01-11": {
-    "status": "complete",
-    "items": 83179,
+    "status": "partial",
+    "items": 0,
     "reviewed": false,
-    "run": "v20260316_2302",
-    "completed_at": "2026-03-17T08:36:48.544229"
-  },
-  "2026-01-12": {
-    "status": "complete",
-    "items": 82240,
-    "reviewed": false,
-    "run": "v20260317_1553",
-    "completed_at": "2026-03-17T16:39:34.033632"
-  },
-  "2026-01-13": {
-    "status": "complete",
-    "items": 89953,
-    "reviewed": false,
-    "run": "v20260317_1553",
-    "completed_at": "2026-03-17T17:30:12.752903"
-  },
-  "2026-01-14": {
-    "status": "complete",
-    "items": 88450,
-    "reviewed": false,
-    "run": "v20260317_1553",
-    "completed_at": "2026-03-17T18:22:46.411827"
-  },
-  "2026-01-15": {
-    "status": "complete",
-    "items": 92241,
-    "reviewed": false,
-    "run": "v20260317_1553",
-    "completed_at": "2026-03-17T19:23:20.895243"
-  },
-  "2026-01-16": {
-    "status": "complete",
-    "items": 94527,
-    "reviewed": false,
-    "run": "v20260317_1553",
-    "completed_at": "2026-03-17T20:32:56.128229"
-  },
-  "2026-01-17": {
-    "status": "complete",
-    "items": 90034,
-    "reviewed": false,
-    "run": "v20260317_1553",
-    "completed_at": "2026-03-17T21:37:10.015949"
-  },
-  "2026-01-18": {
-    "status": "complete",
-    "items": 97842,
-    "reviewed": false,
-    "run": "v20260317_1553",
-    "completed_at": "2026-03-17T22:50:14.376303"
-  },
-  "2026-01-19": {
-    "status": "complete",
-    "items": 106503,
-    "reviewed": false,
-    "run": "v20260317_1553",
-    "completed_at": "2026-03-18T00:14:29.451240"
-  },
-  "2026-01-20": {
-    "status": "complete",
-    "items": 104740,
-    "reviewed": false,
-    "run": "v20260317_1553",
-    "completed_at": "2026-03-18T01:45:03.077568"
-  },
-  "2026-01-21": {
-    "status": "complete",
-    "items": 102980,
-    "reviewed": false,
-    "run": "v20260317_1553",
-    "completed_at": "2026-03-18T03:24:11.595169"
-  },
-  "2026-01-22": {
-    "status": "complete",
-    "items": 102756,
-    "reviewed": false,
-    "run": "v20260317_1553",
-    "completed_at": "2026-03-18T05:06:29.824201"
-  },
-  "2026-01-23": {
-    "status": "complete",
-    "items": 110316,
-    "reviewed": false,
-    "run": "v20260317_1553",
-    "completed_at": "2026-03-18T07:06:20.916880"
-  },
-  "2026-01-24": {
-    "status": "complete",
-    "items": 108601,
-    "reviewed": false,
-    "run": "v20260317_1553",
-    "completed_at": "2026-03-18T09:10:07.764431"
-  },
-  "2026-01-25": {
-    "status": "complete",
-    "items": 112990,
-    "reviewed": false,
-    "run": "v20260318_1022",
-    "completed_at": "2026-03-18T11:45:52.150124"
-  },
-  "2026-01-26": {
-    "status": "complete",
-    "items": 120118,
-    "reviewed": false,
-    "run": "v20260318_1022",
-    "completed_at": "2026-03-18T13:14:19.853474"
-  },
-  "2026-01-27": {
-    "status": "complete",
-    "items": 117930,
-    "reviewed": false,
-    "run": "v20260318_1022",
-    "completed_at": "2026-03-18T14:47:39.552431"
-  },
-  "2026-01-28": {
-    "status": "complete",
-    "items": 119209,
-    "reviewed": false,
-    "run": "v20260318_1022",
-    "completed_at": "2026-03-18T16:23:13.246913"
-  },
-  "2026-01-29": {
-    "status": "complete",
-    "items": 124913,
-    "reviewed": false,
-    "run": "v20260318_1022",
-    "completed_at": "2026-03-18T18:00:04.396241"
-  },
-  "2026-01-30": {
-    "status": "complete",
-    "items": 61417,
-    "reviewed": false,
-    "run": "v20260318_2223",
-    "completed_at": "2026-03-18T23:26:04.745847"
-  },
-  "2026-01-31": {
-    "status": "complete",
-    "items": 114944,
-    "reviewed": false,
-    "run": "v20260318_2223",
-    "completed_at": "2026-03-19T00:34:39.021437"
+    "run": "v20260311_2314"
   }
 }
